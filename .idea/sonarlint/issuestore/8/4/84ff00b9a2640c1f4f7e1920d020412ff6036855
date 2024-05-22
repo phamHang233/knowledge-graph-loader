@@ -1,0 +1,7 @@
+
+apython:S1192Â"HDefine a constant instead of duplicating this literal '$exists' 4 times.(²Ü˜º
+_python:S1192”	"GDefine a constant instead of duplicating this literal "$unset" 3 times.(É±Y
+gpython:S1192í"IDefine a constant instead of duplicating this literal "$exists" 11 times.(ì—”Şşÿÿÿÿ
+rpython:S3776Á	"TRefactor this function to reduce its Cognitive Complexity from 29 to the 15 allowed.(ª—é©øÿÿÿÿ
+°python:S1515„
+"–Add a parameter to the parent lambda function and use variable "day" as its default value; The value of "day" might change at the next loop iteration.(Ë–öÉ
