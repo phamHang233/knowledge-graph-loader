@@ -45,11 +45,11 @@ def update_nft_info_stream(
 
     _db = BlockchainETL(db_prefix=db_prefix)
     logger.info(f'Connect to importer: {_db.connection_url}')
-
+    dp_collector_id = f"{db_prefix}-{collector_id}"
     streamer_adapter = UpdateNftInfoAdapter(
         exporter=_exporter,
         importer=_db,
-        collector_id=collector_id,
+        collector_id=dp_collector_id,
         chain_id=chain_id,
         batch_size=batch_size,
         max_workers=8

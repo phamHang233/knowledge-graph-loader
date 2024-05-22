@@ -19,12 +19,8 @@ class BlockchainETL:
 
         self.connection_url = connection_url.split('@')[-1]
         self.connection = MongoClient(connection_url)
-        if db_prefix:
-            self.db_name = db_prefix + "_" + BlockchainETLConfig.DATABASE
-        else:
-            self.db_name = BlockchainETLConfig.DATABASE
 
-        self.mongo_db = self.connection[self.db_name]
+        self.mongo_db = self.connection[BlockchainETLConfig.DATABASE]
 
         self.block_collection = self.mongo_db[BlockchainETLCollections.blocks]
         self.transaction_collection = self.mongo_db[BlockchainETLCollections.transactions]
@@ -32,7 +28,11 @@ class BlockchainETL:
         self.collector_collection = self.mongo_db[BlockchainETLCollections.collectors]
         self.lending_events_collection = self.mongo_db['lending_events']
         self.events_collection = self.mongo_db['events']
-        self.dex_events_collection = self.mongo_db['dex_event']
+        if db_prefix:
+            dex_event_col = db_prefix + "_" + BlockchainETLConfig.DEX_EVENT
+        else:
+            dex_event_col = BlockchainETLConfig.DEX_EVENT
+        self.dex_events_collection = self.mongo_db[dex_event_col]
         self.projects_collection = self.mongo_db['projects']
         self.logs_collection = self.mongo_db['logs']
 

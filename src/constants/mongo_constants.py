@@ -11,7 +11,7 @@ class MongoDBCollections:
     multichain_wallets_credit_scores = 'multichain_wallets_credit_scores_v3'
 
     is_part_ofs = 'is_part_ofs'
-    dex_nfts = 'dex_nft'
+    dex_nfts = 'dex_nfts'
 
 
 class MongoDBKeys:

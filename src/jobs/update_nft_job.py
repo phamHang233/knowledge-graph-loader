@@ -36,9 +36,10 @@ class UpdateNftInfoJob(BaseJob):
 
     def _start(self):
         self.updated_nfts: Dict[str, NFT] = {}
-        self.updated_factory_nft = self.exporter.get_config(f"{self.chain_id}_factory_nft_contract")["addresses"]
-        if not self.updated_factory_nft:
-            self.updated_factory_nft = {}
+        self.updated_factory_nft = {}
+        cursor = self.exporter.get_config(f"{self.chain_id}_factory_nft_contract")
+        if cursor:
+            self.updated_factory_nft = cursor['addresses']
         self.pools = {}
 
     def _end(self):
@@ -112,16 +113,16 @@ class UpdateNftInfoJob(BaseJob):
             nft_info.first_called_at = query_info.get('first_called_at')
             nft_info.pool_address = query_info.get('pool_address')
             nft_info.nft_manager_address = event['contract_address']
+            nft_info.wallet = query_info.get('wallet')
         else:
             return
-
+        nft_info.last_interact_at = block_number
         if block_number > nft_info.last_interact_at:
             if event['event_type'] == "INCREASELIQUIDITY":
                 nft_info.liquidity += liquidity
             if event['event_type'] == "DECREASELIQUIDITY":
                 nft_info.liquidity -= liquidity
 
-        nft_info.last_interact_at = block_number
         nft_info.liquidity_change_logs[str(block_number)] = nft_info.liquidity
 
     def aggregate_collect_event(self, event, data):
@@ -139,10 +140,10 @@ class UpdateNftInfoJob(BaseJob):
             nft_info.first_called_at = query_info.get('first_called_at')
             nft_info.pool_address = pool_address
             nft_info.nft_manager_address = event['contract_address']
-            nft_info.last_interact_at = query_info.get('first_called_at')
         else:
             return
 
+        nft_info.last_interact_at = block_number
         pool_info = self.pools.get(pool_address)
         if pool_info and pool_info.get("tokens"):
             tokens = pool_info['tokens']
@@ -154,7 +155,6 @@ class UpdateNftInfoJob(BaseJob):
                     nft_info.collected_fee[address] = 0
                 nft_info.collected_fee[address] += amount / 10 ** decimals
                 nft_info.fee_change_logs[str(block_number)] = nft_info.collected_fee
-        nft_info.last_interact_at = block_number
 
     def _export(self):
         data = [p.to_dict() for pool_address, p in self.updated_nfts.items()]

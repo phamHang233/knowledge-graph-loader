@@ -21,7 +21,7 @@ class NFT:
         return {
             "tokenId": self.token_id.lower(),
             "chainId": self.chain,
-            "lastUpdatedAt": self.last_interact_at,
+            "lastInteractAt": self.last_interact_at,
             'liquidity': self.liquidity,
             'poolAddress': self.pool_address,
             'tickLower': self.tick_lower,
@@ -44,7 +44,7 @@ class NFT:
         self.tick_lower = json_dict.get('tickLower', 0)
         self.collected_fee = json_dict.get('collectedFee', {})
         self.uncollected_fee = json_dict.get('uncollectedFee', {})
-        self.last_interact_at = json_dict.get('lastUpdatedAt', 0)
+        self.last_interact_at = json_dict.get('lastInteractAt', 0)
         self.liquidity_change_logs = json_dict.get('liquidityChangeLogs', {})
         self.fee_change_logs = json_dict.get('feeChangeLogs', {})
         self.first_called_at = json_dict.get('firstCalledAt', 0)

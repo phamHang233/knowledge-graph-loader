@@ -23,8 +23,6 @@ L
 src/cli/nft_info_enricher.py,8/6/8624c0bf415f8416dd63eb24fdd8a4baa4ce3172
 4
 .env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
-<
-requirements,e/d/ed2eb3742618bb10d3b2ba0231ab69fecc8d716b
 @
 requirements.txt,1/9/19359a61ae2446b51b549167b014da2fcf265768
 :
