@@ -114,9 +114,10 @@ class UpdateNftInfoJob(BaseJob):
             nft_info.pool_address = query_info.get('pool_address')
             nft_info.nft_manager_address = event['contract_address']
             nft_info.wallet = query_info.get('wallet')
-        else:
+            nft_info.last_interact_at = query_info.get('first_called_at')
+
+        if not nft_info:
             return
-        nft_info.last_interact_at = block_number
         if block_number > nft_info.last_interact_at:
             if event['event_type'] == "INCREASELIQUIDITY":
                 nft_info.liquidity += liquidity
@@ -124,6 +125,7 @@ class UpdateNftInfoJob(BaseJob):
                 nft_info.liquidity -= liquidity
 
         nft_info.liquidity_change_logs[str(block_number)] = nft_info.liquidity
+        nft_info.last_interact_at = block_number
 
     def aggregate_collect_event(self, event, data):
         token_id = event['tokenId']
@@ -140,11 +142,11 @@ class UpdateNftInfoJob(BaseJob):
             nft_info.first_called_at = query_info.get('first_called_at')
             nft_info.pool_address = pool_address
             nft_info.nft_manager_address = event['contract_address']
-        else:
+        if not nft_info:
             return
 
         nft_info.last_interact_at = block_number
-        pool_info = self.pools.get(pool_address)
+        pool_info = self.pools.get(nft_info.pool_address)
         if pool_info and pool_info.get("tokens"):
             tokens = pool_info['tokens']
             for idx, token in enumerate(tokens):

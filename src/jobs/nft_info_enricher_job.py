@@ -19,20 +19,13 @@ logger = get_logger('NFT Info Enricher Job')
 
 class NFTInfoEnricherJob(CLIJob):
     def __init__(
-            self, _db, _exporter, start_timestamp, end_timestamp, interval, max_workers, batch_size,
-            chain_id, last_synced_file, provider_uri,
-            n_cpu, cpu, stream_id, monitor, end_block, before_30_days_block):
+            self, _db, _exporter, start_timestamp, end_timestamp, interval, batch_size,
+            chain_id, last_synced_file, provider_uri, end_block, before_30_days_block):
         self._klg_db = _db
         self._exporter = _exporter
-        self.monitor = monitor
         self.end_block = end_block
         self.before_30_days_block = before_30_days_block
-        self.stream_id = stream_id
-        self.cpu = cpu
-        self.n_cpu = n_cpu
-        self.provider_uri = provider_uri
         self.start_timestamp = start_timestamp
-        self.max_workers = max_workers
         self.batch_size = batch_size
         self.chain_id = chain_id
         self.last_synced_file = last_synced_file
@@ -41,7 +34,7 @@ class NFTInfoEnricherJob(CLIJob):
         super().__init__(interval, end_timestamp, retry=False)
 
     def _start(self):
-        cursor = self._klg_db.get_all_nfts()
+        cursor = self._klg_db.get_all_nfts({"liquidity": {"$gt": 0}})
         self.nfts: Dict[str, NFT] = {}
         self.deleted_tokens = []
         self.pools = {}
@@ -51,8 +44,6 @@ class NFTInfoEnricherJob(CLIJob):
         for idx in range(0, len(cursor), self.batch_size):
             batch = cursor[idx:idx + self.batch_size]
             self._execute_batch(batch)
-
-    # def _execute(self, *args, **kwargs):
 
     def _execute_batch(self, batch_cursor):
         pools_in_batch = set()
@@ -97,7 +88,7 @@ class NFTInfoEnricherJob(CLIJob):
                     list_call_id=list_call_id, list_rpc_call=list_rpc_call
                 )
             tick = pool_info['tick']
-            if tick_lower < tick < tick_upper and liquidity > 0:
+            if tick_lower < tick < tick_upper:
                 if pool_address not in self.pools_info_with_provider:
                     add_rpc_call(
                         abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
@@ -188,7 +179,7 @@ class NFTInfoEnricherJob(CLIJob):
                 nft.wallet = data_response.get(
                     f'ownerOf_{nft_manager_contract}_{token_id}_{block_number}'.lower())
 
-            if tick_lower < tick < tick_upper and liquidity > 0:
+            if tick_lower < tick < tick_upper:
                 if pool_address not in self.pools_info_with_provider:
                     fee_growth_global_0 = data_response.get(
                         f'feeGrowthGlobal0X128_{pool_address}_{block_number}'.lower())

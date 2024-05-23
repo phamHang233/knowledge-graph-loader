@@ -1324,7 +1324,7 @@ class MongoDB:
     #       NFT        #
     #######################
 
-    def get_all_nfts(self):
-        return self._nft_col.find({}).batch_size(10000)
+    def get_all_nfts(self, filter):
+        return self._nft_col.find(filter).batch_size(10000)
     def get_nft_info(self, nfts):
         return self._nft_col.find({"_id": {"$in": nfts}}).batch_size(1000)
