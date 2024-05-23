@@ -23,6 +23,14 @@ class MongoDBConfig:
     CONNECTION_URL = os.getenv("MONGODB_CONNECTION_URL") or f"mongodb@{USERNAME}:{PASSWORD}@http://{HOST}:{PORT}"
     DATABASE = os.getenv('MONGODB_DATABASE', 'klg_database')
 
+class DexNFTManagerDBConfig:
+    HOST = os.environ.get("MONGODB_HOST", '0.0.0.0')
+    PORT = os.environ.get("MONGODB_PORT", '8529')
+    USERNAME = os.environ.get("MONGODB_USERNAME", "root")
+    PASSWORD = os.environ.get("MONGODB_PASSWORD", "dev123")
+    CONNECTION_URL = os.getenv("DEX_NFT_MANAGER_MONGODB_CONNECTION_URL") or f"mongodb@{USERNAME}:{PASSWORD}@http://{HOST}:{PORT}"
+    DATABASE = os.getenv('DEX_NFT_MANAGER_MONGODB_DATABASE', 'dex_nft_manager')
+
 
 class ArangoDBOldConfig:
     CONNECTION_URL = os.getenv("ARANGODB_OLD_CONNECTION_URL")

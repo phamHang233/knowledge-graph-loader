@@ -2,9 +2,8 @@ import click
 
 from src.constants.blockchain_etl_constants import DBPrefix
 from src.constants.network_constants import Chains
-from src.databases.blockchain_etl import BlockchainETL
-from src.databases.mongodb_klg import MongoDB
-from src.exporters import MongoDBExporter
+from src.databases.dex_nft_manager_db import NFTMongoDB
+from src.exporters.nft_mongodb_exporter import NFTMongoDBExporter
 from src.streaming.update_nft_adapter import UpdateNftInfoAdapter
 from src.streaming.streamer import Streamer
 from src.utils.logger_utils import get_logger
@@ -39,12 +38,10 @@ def update_nft_info_stream(
     db_prefix = DBPrefix.mapping.get(chain, '')
     logger.info(f'Streaming with chain {chain} - prefix: {db_prefix}')
 
-    _db = MongoDB()
-    _exporter = MongoDBExporter(_db)
+    _db = NFTMongoDB(db_prefix=db_prefix)
+    _exporter = NFTMongoDBExporter(_db)
     logger.info(f'Connect to graph: {_db.connection_url}')
 
-    _db = BlockchainETL(db_prefix=db_prefix)
-    logger.info(f'Connect to importer: {_db.connection_url}')
     dp_collector_id = f"{db_prefix}-{collector_id}"
     streamer_adapter = UpdateNftInfoAdapter(
         exporter=_exporter,

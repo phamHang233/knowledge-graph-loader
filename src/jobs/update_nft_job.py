@@ -4,7 +4,7 @@ from multithread_processing.base_job import BaseJob
 
 from src.constants.network_constants import Networks, Chains
 from src.databases.mongodb_dex import MongoDBDex
-from src.exporters import MongoDBExporter
+from src.exporters.nft_mongodb_exporter import NFTMongoDBExporter
 from src.models.nfts import NFT
 from src.services.blockchain.state_query_service import StateQueryService
 from src.utils.logger_utils import get_logger
@@ -16,7 +16,7 @@ class UpdateNftInfoJob(BaseJob):
     def __init__(
             self, start_block, end_block,
             batch_size=4, max_workers=8,
-            importer=None, exporter: MongoDBExporter = None,
+            importer=None, exporter: NFTMongoDBExporter = None,
             chain_id=None, query_batch_size=100
     ):
         self.chain_id = chain_id

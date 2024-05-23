@@ -2,8 +2,8 @@ import time
 
 from src.constants.network_constants import Chains
 from src.constants.time_constants import TimeConstants
-from src.databases.blockchain_etl import BlockchainETL
-from src.exporters import MongoDBExporter
+from src.databases.dex_nft_manager_db import NFTMongoDB
+from src.exporters.nft_mongodb_exporter import NFTMongoDBExporter
 from src.jobs.update_nft_job import UpdateNftInfoJob
 from src.utils.file_utils import write_last_time_running_logs
 from src.utils.logger_utils import get_logger
@@ -12,7 +12,7 @@ logger = get_logger('UPdate NFT Info Adapter')
 
 
 class UpdateNftInfoAdapter:
-    def __init__(self, importer: BlockchainETL, exporter: MongoDBExporter, collector_id="streaming_collector",
+    def __init__(self, importer: NFTMongoDB, exporter: NFTMongoDBExporter, collector_id="streaming_collector",
                  chain_id=Chains.bsc, batch_size=4, max_workers=8):
         self.collector_id = collector_id
 

@@ -14,6 +14,15 @@ class MongoDBCollections:
     dex_nfts = 'dex_nfts'
 
 
+class DexNFTManagerCollections:
+        wallets = 'wallets'
+        configs = 'configs'
+        collectors = 'collectors'
+        dex_nfts = 'dex_nfts'
+        dex_events_etl = 'dex_events'
+        pairs = "pairs"
+
+
 class MongoDBKeys:
     project_overview = 'project_overview'
 
