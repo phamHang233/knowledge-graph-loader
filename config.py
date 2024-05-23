@@ -58,7 +58,7 @@ class BlockchainETLConfig:
     PASSWORD = os.getenv("BLOCKCHAIN_ETL_PASSWORD")
 
     CONNECTION_URL = os.getenv("BLOCKCHAIN_ETL_CONNECTION_URL") or f"mongodb://{USERNAME}:{PASSWORD}@{HOST}:{PORT}"
-    DATABASE = 'dex_nft_manager'
+    DATABASE = os.getenv("BLOCKCHAIN_ETL_DATABASE") or 'blockchain_etl'
     DB_PREFIX = os.getenv("DB_PREFIX")
     DEX_EVENT = 'dex_events'
 

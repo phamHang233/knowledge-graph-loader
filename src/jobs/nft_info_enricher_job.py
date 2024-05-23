@@ -1,92 +1,87 @@
+import os
 import time
 from typing import Dict
 
+from cli_scheduler.scheduler_job import SchedulerJob
 from defi_services.utils.get_fees import get_fees
 from query_state_lib.client.client_querier import ClientQuerier
 
 from artifacts.abis.dexes.uniswap_v3_nft_manage_abi import UNISWAP_V3_NFT_MANAGER_ABI
 from artifacts.abis.dexes.uniswap_v3_pool_abi import UNISWAP_V3_POOL_ABI
-from src.constants.time_constants import TimeConstants
+from src.databases.blockchain_etl import BlockchainETL
 from src.databases.mongodb_dex import MongoDBDex
-from src.jobs.base.cli_job import CLIJob
 from src.models.nfts import NFT
 from src.services.blockchain.batch_queries_service import add_rpc_call, decode_data_response_ignore_error
-from src.utils.file_utils import write_last_synced_file
-from src.utils.logger_utils import get_logger
 
+from src.utils.logger_utils import get_logger
 logger = get_logger('NFT Info Enricher Job')
 
 
-class NFTInfoEnricherJob(CLIJob):
+class NFTInfoEnricherJob(SchedulerJob):
     def __init__(
-            self, _db, _exporter, start_timestamp, end_timestamp, interval, batch_size,
-            chain_id, last_synced_file, provider_uri, end_block, before_30_days_block):
+            self, _db, _exporter, scheduler, batch_size,
+            chain_id, provider_uri, db_prefix):
         self._klg_db = _db
         self._exporter = _exporter
-        self.end_block = end_block
-        self.before_30_days_block = before_30_days_block
-        self.start_timestamp = start_timestamp
+        self.db_prefix = db_prefix
+        # self.end_block = end_block
+        # self.start_timestamp = start_timestamp
         self.batch_size = batch_size
         self.chain_id = chain_id
-        self.last_synced_file = last_synced_file
-        self.dex_db = MongoDBDex()
+        # self.last_synced_file = last_synced_file
         self.client_querier = ClientQuerier(provider_url=provider_uri)
-        super().__init__(interval, end_timestamp, retry=False)
+        super().__init__(scheduler=scheduler)
+
+    def _pre_start(self):
+        self.dex_db = MongoDBDex()
+        # progress_logger = logging.getLogger('ProgressLogger')
+        self._etl_db = BlockchainETL(db_prefix=self.db_prefix, connection_url=os.getenv("BLOCKCHAIN_ETL_CONNECTION_URL"))
 
     def _start(self):
-        cursor = self._klg_db.get_all_nfts({"liquidity": {"$gt": 0}})
         self.nfts: Dict[str, NFT] = {}
         self.deleted_tokens = []
         self.pools = {}
         self.pools_info_with_provider = {}
         self.invalid_pool = []
+        # self.end_block = _etl_db.get_last_block_number()
+        current_day_timestamp = int(int(time.time()) / 24 / 3600) * 24 * 3600
+        self.before_30_days_block = self._etl_db.get_block_by_timestamp(current_day_timestamp - 24 * 30 * 3600)[0]['number']
+
+    def _execute(self, *args, **kwargs):
+        cursor = self._klg_db.get_all_nfts({"liquidity": {"$gt": 0}})
         cursor = list(cursor)
         for idx in range(0, len(cursor), self.batch_size):
             batch = cursor[idx:idx + self.batch_size]
             self._execute_batch(batch)
 
     def _execute_batch(self, batch_cursor):
+        data_response, pools_in_batch = self.prepare_enrich(batch_cursor)
+        cursor = self.dex_db.get_pairs_with_addresses(chain_id=self.chain_id, addresses=list(pools_in_batch))
+        self.pools.update({doc['address']: doc for doc in cursor})
+        self.enrich_data(batch_cursor, data_response)
+        self._export(batch_cursor)
+
+    def prepare_enrich(self, cursor_batch):
+        list_rpc_call = []
+        list_call_id = []
         pools_in_batch = set()
-        nfts_batch = {}
-        for doc in batch_cursor:
+        for doc in cursor_batch:
             token_id = doc['tokenId']
-            nft = NFT(id=token_id, chain=self.chain_id)
-            nft.from_dict(doc)
-            nfts_batch[doc["_id"]] = nft
+            nft = NFT(id=token_id, chain=self.chain_id).from_dict(doc)
             pool_address = doc.get('poolAddress')
             if pool_address not in self.pools and pool_address not in self.invalid_pool:
                 pools_in_batch.add(pool_address)
 
-        cursor = self.dex_db.get_pairs_with_addresses(chain_id=self.chain_id, addresses=list(pools_in_batch))
-        self.pools.update({doc['address']: doc for doc in cursor})
-
-        data_response = self.prepare_enrich(nfts_batch, pools_in_batch)
-        self.enrich_data(nfts_batch, data_response)
-        self._export(nfts_batch)
-
-    def prepare_enrich(self, nfts_batch: Dict[str, NFT], pool_contracts):
-        list_rpc_call = []
-        list_call_id = []
-
-        for idx, nft in nfts_batch.items():
-            token_id = int(nft.token_id)
             tick_lower = nft.tick_lower
             tick_upper = nft.tick_upper
             nft_manager_address = nft.nft_manager_address
-            liquidity = nft.liquidity
-
             pool_address = nft.pool_address
             pool_info = self.pools.get(pool_address)
+
             if not pool_info or not pool_info.get('tick'):
                 self.invalid_pool.append(pool_address)
                 continue
 
-            if not nft.wallet:
-                add_rpc_call(
-                    abi=UNISWAP_V3_NFT_MANAGER_ABI, contract_address=nft_manager_address,
-                    fn_name="ownerOf", fn_paras=token_id, block_number='latest',
-                    list_call_id=list_call_id, list_rpc_call=list_rpc_call
-                )
             tick = pool_info['tick']
             if tick_lower < tick < tick_upper:
                 if pool_address not in self.pools_info_with_provider:
@@ -158,11 +153,14 @@ class NFTInfoEnricherJob(CLIJob):
         except Exception as e:
             raise e
 
-        return decoded_data
+        return decoded_data, pools_in_batch
 
-    def enrich_data(self, nfts: Dict[str, NFT], data_response):
-        for idx, nft in nfts.items():
-            token_id = nft.token_id
+    def enrich_data(self, batch_cursor, data_response):
+        nfts_batch: Dict[str, NFT] = {}
+        for doc in batch_cursor:
+            token_id = doc['tokenId']
+            idx = doc['_id']
+            nft = NFT(id=token_id, chain=self.chain_id).from_dict(doc)
             pool_address = nft.pool_address
             nft_manager_contract = nft.nft_manager_address
             tick_lower = nft.tick_lower
@@ -175,9 +173,6 @@ class NFTInfoEnricherJob(CLIJob):
                 continue
 
             tick = pool_info['tick']
-            if not nft.wallet:
-                nft.wallet = data_response.get(
-                    f'ownerOf_{nft_manager_contract}_{token_id}_{block_number}'.lower())
 
             if tick_lower < tick < tick_upper:
                 if pool_address not in self.pools_info_with_provider:
@@ -202,7 +197,7 @@ class NFTInfoEnricherJob(CLIJob):
                 unchanged_nft = True
                 liquidity_change_logs = nft.liquidity_change_logs
                 for block in liquidity_change_logs:
-                    if block > self.before_30_days_block:
+                    if int(block) > self.before_30_days_block:
                         unchanged_nft = False
                         break
 
@@ -267,36 +262,3 @@ class NFTInfoEnricherJob(CLIJob):
         if self.deleted_tokens:
             self._exporter.removed_docs(collection_name='dex_nfts', keys=self.deleted_tokens)
             logger.info(f'Remove {len(self.deleted_tokens)} nfts')
-
-    def run(self, *args, **kwargs):
-        while True:
-            try:
-                self._start()
-                self._execute(*args, **kwargs)
-                write_last_synced_file(self.last_synced_file, self.start_timestamp)
-            except Exception as ex:
-                logger.exception(ex)
-                logger.warning('Something went wrong!!!')
-                if self.retry:
-                    self._retry()
-                    continue
-                raise ex
-
-            self._end()
-
-            # Check if not repeat
-            if not self.interval:
-                break
-
-            # Check if finish
-            next_synced_timestamp = self._get_next_synced_timestamp()
-            if self._check_finish(next_synced_timestamp):
-                break
-
-            # Sleep to next synced time
-            time_sleep = next_synced_timestamp - time.time() + TimeConstants.MINUTES_5
-            if time_sleep > 0:
-                logger.info(f'Sleep {round(time_sleep, 3)} seconds')
-                time.sleep(time_sleep)
-
-        self._follow_end()

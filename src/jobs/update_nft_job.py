@@ -142,6 +142,7 @@ class UpdateNftInfoJob(BaseJob):
             nft_info.first_called_at = query_info.get('first_called_at')
             nft_info.pool_address = pool_address
             nft_info.nft_manager_address = event['contract_address']
+            nft_info.wallet = query_info.get('wallet')
         if not nft_info:
             return
 

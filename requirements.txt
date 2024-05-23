@@ -6,3 +6,4 @@ prometheus_client
 base58~=2.1.1
 multithread-parallel-processing==1.0.0
 pymongo==4.6.2
+python-cli-scheduler==1.1.1
