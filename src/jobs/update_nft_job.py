@@ -57,8 +57,8 @@ class UpdateNftInfoJob(BaseJob):
         events = list(events_cursor)
         new_pools = set()
         if events:
-            token_ids = [f"{self.chain_id}_{event['contract_address']}_{event['tokenId']}" for event in events]
-            cursor = self.exporter.get_nfts(token_ids)
+            token_keys = [f"{self.chain_id}_{event['contract_address']}_{event['tokenId']}" for event in events]
+            cursor = self.exporter.get_nfts(token_keys)
             for nft in cursor:
                 token_id = nft['tokenId']
                 new_pools.add(nft.get('poolAddress'))
@@ -103,22 +103,22 @@ class UpdateNftInfoJob(BaseJob):
         liquidity = float(event['liquidity'])
         nft_info = self.updated_nfts.get(token_id)
         block_number = event['block_number']
-        if data and data.get(token_id) and not nft_info:
+        if nft_info is None and data and data.get(token_id):
             query_info = data[token_id]
             self.updated_nfts[token_id] = NFT(token_id, self.chain_id)
             nft_info = self.updated_nfts.get(token_id)
             nft_info.liquidity = query_info.get('liquidity')
             nft_info.tick_upper = query_info.get('tick_upper')
             nft_info.tick_lower = query_info.get('tick_lower')
-            nft_info.first_called_at = query_info.get('first_called_at')
+            nft_info.last_called_at = query_info.get('last_called_at')
             nft_info.pool_address = query_info.get('pool_address')
             nft_info.nft_manager_address = event['contract_address']
             nft_info.wallet = query_info.get('wallet')
-            nft_info.last_interact_at = query_info.get('first_called_at')
+            nft_info.last_interact_at = query_info.get('last_called_at')
 
         if not nft_info:
             return
-        if block_number > nft_info.last_interact_at:
+        if block_number > nft_info.last_called_at:
             if event['event_type'] == "INCREASELIQUIDITY":
                 nft_info.liquidity += liquidity
             if event['event_type'] == "DECREASELIQUIDITY":
@@ -139,7 +139,7 @@ class UpdateNftInfoJob(BaseJob):
             nft_info.liquidity = query_info.get('liquidity')
             nft_info.tick_upper = query_info.get('tick_upper')
             nft_info.tick_lower = query_info.get('tick_lower')
-            nft_info.first_called_at = query_info.get('first_called_at')
+            nft_info.last_called_at = query_info.get('last_called_at')
             nft_info.pool_address = pool_address
             nft_info.nft_manager_address = event['contract_address']
             nft_info.wallet = query_info.get('wallet')

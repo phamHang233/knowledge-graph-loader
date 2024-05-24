@@ -9,7 +9,7 @@ class NFT:
         self.collected_fee = {}
         self.uncollected_fee = {}
         self.last_interact_at = 0
-        self.first_called_at = 0
+        self.last_called_at = 0
         self.liquidity_change_logs = {}
         self.fee_change_logs = {}
         self.nft_manager_address = None
@@ -27,7 +27,7 @@ class NFT:
             'tickLower': self.tick_lower,
             'tickUpper': self.tick_upper,
             'collectedFee': self.collected_fee,
-            'firstCalledAt': self.first_called_at,
+            'lastCalledAt': self.last_called_at,
             'liquidityChangeLogs': self.liquidity_change_logs,
             'feeChangeLogs': self.fee_change_logs,
             'nftManagerAddress': self.nft_manager_address,
@@ -47,7 +47,7 @@ class NFT:
         self.last_interact_at = json_dict.get('lastInteractAt', 0)
         self.liquidity_change_logs = json_dict.get('liquidityChangeLogs', {})
         self.fee_change_logs = json_dict.get('feeChangeLogs', {})
-        self.first_called_at = json_dict.get('firstCalledAt', 0)
+        self.last_called_at = json_dict.get('lastCalledAt', 0)
         self.nft_manager_address = json_dict.get('nftManagerAddress', "")
         self.pool_address = json_dict.get('poolAddress', "")
         self.wallet = json_dict.get("wallet")

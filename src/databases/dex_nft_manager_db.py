@@ -703,8 +703,9 @@ class NFTMongoDB:
     #       NFT        #
     #######################
 
-    def get_all_nfts(self, filter):
-        return self._nft_col.find(filter).batch_size(10000)
+    @sync_log_time_exe(tag=TimeExeTag.database)
+    def get_all_nfts(self, _filter):
+        return self._nft_col.find(_filter).limit(10000)
 
     def get_nft_info(self, nfts):
         return self._nft_col.find({"_id": {"$in": nfts}}).batch_size(1000)

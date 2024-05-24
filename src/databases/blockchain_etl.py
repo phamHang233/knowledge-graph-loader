@@ -1,3 +1,4 @@
+import pymongo
 from pymongo import MongoClient, UpdateOne, DeleteMany
 from pymongo.errors import BulkWriteError
 
@@ -14,7 +15,7 @@ class BlockchainETL:
     def __init__(self, connection_url=None, db_prefix=""):
         self._conn = None
         if not connection_url:
-            connection_url = TestBlockchainETLConfig.CONNECTION_URL
+            connection_url = BlockchainETLConfig.CONNECTION_URL
 
         # self.connection_url = connection_url.split('@')[-1]
         self.connection_url = connection_url
@@ -54,7 +55,6 @@ class BlockchainETL:
         if BlockchainETLIndexes.ttl_transactions not in self.transaction_collection:
             self.transaction_collection.create_index([('item_timestamp', 1)], expireAfterSeconds=TimeConstants.DAYS_30,
                                                      name=BlockchainETLIndexes.ttl_transactions)
-
 
     @staticmethod
     def get_projection_statement(projection: list = None):
@@ -125,9 +125,6 @@ class BlockchainETL:
         cursor = self.block_collection.find(filter_).batch_size(10000)
         return cursor
 
-    def get_blocks(self, block_numbers):
-        return self.block_collection.find({'number': {'$in': block_numbers}})
-
     def get_sort_txs_in_range(self, start_timestamp, end_timestamp):
         filter_ = {
             'block_timestamp': {
@@ -191,7 +188,8 @@ class BlockchainETL:
         except BulkWriteError:
             data = []
             for tx in transactions:
-                data.append(UpdateOne({'_id': tx['_id'], 'block_number': tx['block_number']}, {'$set': tx}, upsert=True))
+                data.append(
+                    UpdateOne({'_id': tx['_id'], 'block_number': tx['block_number']}, {'$set': tx}, upsert=True))
 
             try:
                 self.transaction_collection.bulk_write(data)
@@ -334,7 +332,8 @@ class BlockchainETL:
             logger.exception(ex)
         return []
 
-    def get_events_by_timestamp(self, contract_addresses, from_timestamp, to_timestamp, projection=None, event_types=None):
+    def get_events_by_timestamp(self, contract_addresses, from_timestamp, to_timestamp, projection=None,
+                                event_types=None):
         filter_ = {
             'contract_address': {'$in': contract_addresses},
             'block_timestamp': {'$gte': from_timestamp, '$lt': to_timestamp}
@@ -368,13 +367,6 @@ class BlockchainETL:
         for i in cursor:
             return i
 
-    def export_project(self, data):
-        try:
-            collection = self.mongo_db['projects']
-            collection.update_one({'_id': data['_id']}, {"$set": data}, upsert=True)
-        except Exception as e:
-            logger.exception(e)
-
     @sync_log_time_exe(tag=TimeExeTag.database)
     def prune_blocks(self, out_date_blocks, ordered=True):
         bulk_operators = [DeleteMany({'number': {'$lte': out_date_blocks[0]}})]
@@ -406,21 +398,6 @@ class BlockchainETL:
             logger.exception(e)
 
     @sync_log_time_exe(tag=TimeExeTag.database)
-    def prune_internal_transactions(self, out_date_blocks, ordered=True):
-        bulk_operators = [DeleteMany({'block_number': {'$lte': out_date_blocks[0]}})]
-        for index in range(len(out_date_blocks) - 1):
-            block1 = out_date_blocks[index]
-            block2 = out_date_blocks[index + 1]
-            _filter = {"$and": [{'block_number': {'$gte': block1}}, {'block_number': {'$lte': block2}}]}
-            bulk_operators.append(DeleteMany(_filter))
-
-        try:
-            tx_res = self.internal_transaction_collection.bulk_write(bulk_operators, ordered=ordered)
-            logger.info(f'Transactions collection deleted {tx_res.deleted_count} records')
-        except Exception as e:
-            logger.exception(e)
-
-    @sync_log_time_exe(tag=TimeExeTag.database)
     def prune_logs(self, out_date_blocks, ordered=True):
         bulk_operators = [DeleteMany({'block_number': {'$lte': out_date_blocks[0]}})]
         for index in range(len(out_date_blocks) - 1):
@@ -434,3 +411,8 @@ class BlockchainETL:
             logger.info(f'Logs collection deleted {logs_res.deleted_count} records')
         except Exception as e:
             logger.exception(e)
+
+    @sync_log_time_exe(tag=TimeExeTag.database)
+    def get_block_by_timestamp(self, timestamp):
+        return self.block_collection.find({"timestamp": {"$gte": timestamp}}).sort("number", pymongo.ASCENDING).limit(1)
+

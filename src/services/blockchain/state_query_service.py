@@ -429,7 +429,7 @@ class StateQueryService:
                 'liquidity': float(liquidity),
                 'fee_growth_inside0': fee_growth_inside0,
                 'fee_growth_inside1': fee_growth_inside1,
-                'first_called_at': block_number,
+                'last_called_at': block_number,
                 'wallet': wallet
             }
             add_rpc_call(
