@@ -1,3 +1,3 @@
 # HELP last_time_run Last time run
 # TYPE last_time_run gauge
-last_time_run{process="UpdateNftInfoAdapter_0x1",threshold="900"} 1.716439258e+09
+last_time_run{process="UpdateNftInfoAdapter_0x1",threshold="900"} 1.716807625e+09

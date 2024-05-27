@@ -1,3 +1,8 @@
+import math
+
+from defi_services.utils.sqrt_price_math import get_token_amount_of_user
+
+
 class NFT:
     def __init__(self, id="", chain=None) -> None:
         self.token_id: str = id
@@ -13,7 +18,7 @@ class NFT:
         self.liquidity_change_logs = {}
         self.fee_change_logs = {}
         self.nft_manager_address = None
-        self.fee_30_days_before = {}
+        self.apr_in_month = {}
         self.wallet = None
         self.last_updated_fee_at = 0
 
@@ -33,7 +38,7 @@ class NFT:
             'nftManagerAddress': self.nft_manager_address,
             "uncollectedFee": self.uncollected_fee,
             "wallet": self.wallet,
-            "fee30DaysBefore": self.fee_30_days_before,
+            "aprInMonth": self.apr_in_month,
             "lastUpdatedFeeAt": self.last_updated_fee_at
 
         }
@@ -51,5 +56,37 @@ class NFT:
         self.nft_manager_address = json_dict.get('nftManagerAddress', "")
         self.pool_address = json_dict.get('poolAddress', "")
         self.wallet = json_dict.get("wallet")
-        self.fee_30_days_before = json_dict.get('fee30DaysBefore', {})
+        self.apr_in_month = json_dict.get('aprInMonth', {})
         self.last_updated_fee_at = json_dict.get('lastUpdatedFeeAt', 0)
+
+    def cal_apr_in_month(self, start_block, fee0_before, fee1_before, pool_info, tick_before, tick):
+
+        token0_info = pool_info['tokens'][0]
+        token1_info = pool_info['tokens'][1]
+        token0_address = token0_info['address']
+        token1_address = token1_info['address']
+        token0_price = token0_info.get('liquidityValueInUSD', 0) / token0_info['liquidityAmount']
+        token1_price = token1_info.get('liquidityValueInUSD', 0) / token1_info['liquidityAmount']
+        collected_amount0 = 0
+        collected_amount1 = 0
+        for block_number, amount in self.fee_change_logs.items():
+            if int(block_number) >= start_block:
+                collected_amount0 += amount[token0_address]
+                collected_amount1 += amount[token1_address]
+
+        token0_change = self.uncollected_fee[token0_address] - fee0_before + collected_amount0
+        token1_change = self.uncollected_fee[token1_address] - fee1_before + collected_amount1
+        fee_change_in_usd = token0_change * token0_price + token1_change * token1_price
+
+        invest0_before, invest1_before = get_token_amount_of_user(
+            liquidity=self.liquidity, sqrt_price_x96=math.sqrt(1.0001 ** tick_before) * 2 ** 96, tick=tick_before,
+            tick_upper=self.tick_upper, tick_lower=self.tick_lower)
+        invest0, invest1 = get_token_amount_of_user(
+            liquidity=self.liquidity, sqrt_price_x96=math.sqrt(1.0001 ** tick) * 2 ** 96, tick=tick,
+            tick_upper=self.tick_upper, tick_lower=self.tick_lower)
+        investment_change_in_usd = ((invest1 - invest1_before) / 10 ** token1_info['decimals'] * token1_price
+                                    + (invest0 - invest0_before) / 10 ** token0_info['decimals'] * token0_price)
+        total_invest_in_usd = ((invest1 * token1_price / 10 ** token1_info['decimals'])
+                               + (invest0 * token0_price / 10 ** token0_info['decimals']))
+
+        return (fee_change_in_usd + investment_change_in_usd) / total_invest_in_usd
