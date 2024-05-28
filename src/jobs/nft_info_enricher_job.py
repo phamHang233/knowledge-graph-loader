@@ -171,111 +171,114 @@ class NFTInfoEnricherJob(SchedulerJob):
     def enrich_data(self, batch_cursor, data_response) -> Dict[str, NFT]:
         updated_nfts: Dict[str, NFT] = {}
         for doc in batch_cursor:
-            token_id = doc['tokenId']
-            idx = doc['_id']
-            nft = NFT(id=token_id, chain=self.chain_id)
-            nft.from_dict(doc)
-            pool_address = nft.pool_address
-            nft_manager_contract = nft.nft_manager_address
-            tick_lower = nft.tick_lower
-            tick_upper = nft.tick_upper
-            pool_info = self.pools.get(pool_address)
-            if not pool_info or not pool_info.get('tick'):
-                self.invalid_pool.append(pool_address)
-                continue
+            try:
+                token_id = doc['tokenId']
+                idx = doc['_id']
+                nft = NFT(id=token_id, chain=self.chain_id)
+                nft.from_dict(doc)
+                pool_address = nft.pool_address
+                nft_manager_contract = nft.nft_manager_address
+                tick_lower = nft.tick_lower
+                tick_upper = nft.tick_upper
+                pool_info = self.pools.get(pool_address)
+                if not pool_info or not pool_info.get('tick'):
+                    self.invalid_pool.append(pool_address)
+                    continue
 
-            tick = pool_info['tick']
+                tick = pool_info['tick']
+                if not self.pools_info_with_provider.get(pool_address, {}).get("feeGrowthGlobal0X128"):
+                    fee_growth_global_0 = data_response.get(f'feeGrowthGlobal0X128_{pool_address}_latest'.lower())
+                    fee_growth_global_1 = data_response.get(f'feeGrowthGlobal1X128_{pool_address}_latest'.lower())
+                    self.pools_info_with_provider[pool_address] = {
+                        "feeGrowthGlobal0X128": fee_growth_global_0,
+                        "feeGrowthGlobal1X128": fee_growth_global_1,
+                    }
+                else:
+                    fee_growth_global_0 = self.pools_info_with_provider[pool_address]['feeGrowthGlobal0X128']
+                    fee_growth_global_1 = self.pools_info_with_provider[pool_address]['feeGrowthGlobal1X128']
 
-            # if tick_lower < tick < tick_upper:
-            if not self.pools_info_with_provider.get(pool_address, {}).get("feeGrowthGlobal0X128"):
-                fee_growth_global_0 = data_response.get(f'feeGrowthGlobal0X128_{pool_address}_latest'.lower())
-                fee_growth_global_1 = data_response.get(f'feeGrowthGlobal1X128_{pool_address}_latest'.lower())
-                self.pools_info_with_provider[pool_address] = {
-                    "feeGrowthGlobal0X128": fee_growth_global_0,
-                    "feeGrowthGlobal1X128": fee_growth_global_1,
-                }
-            else:
-                fee_growth_global_0 = self.pools_info_with_provider[pool_address]['feeGrowthGlobal0X128']
-                fee_growth_global_1 = self.pools_info_with_provider[pool_address]['feeGrowthGlobal1X128']
+                fee_growth_low_x128 = data_response.get(f'ticks_{pool_address}_{tick_lower}_latest'.lower())
+                fee_growth_hi_x128 = data_response.get(f'ticks_{pool_address}_{tick_upper}_latest'.lower())
+                positions = data_response.get(f'positions_{nft_manager_contract}_{token_id}_latest'.lower())
 
-            fee_growth_low_x128 = data_response.get(f'ticks_{pool_address}_{tick_lower}_latest'.lower())
-            fee_growth_hi_x128 = data_response.get(f'ticks_{pool_address}_{tick_upper}_latest'.lower())
-            positions = data_response.get(f'positions_{nft_manager_contract}_{token_id}_latest'.lower())
-
-            ###
-            if positions:
-                nft.liquidity = positions[7]
-                if nft.liquidity == 0:
-                    print(nft.token_id)
-                tokens = pool_info['tokens']
-                token0_decimals = tokens[0]['decimals']
-                token1_decimals = tokens[1]['decimals']
-                token0_reward, token1_reward = get_fees(
-                    fee_growth_global_0=fee_growth_global_0,
-                    fee_growth_global_1=fee_growth_global_1,
-                    fee_growth_0_low=fee_growth_low_x128[2],
-                    fee_growth_1_low=fee_growth_low_x128[3],
-                    fee_growth_0_hi=fee_growth_hi_x128[2],
-                    fee_growth_1_hi=fee_growth_hi_x128[3],
-                    fee_growth_inside_0=positions[8],
-                    fee_growth_inside_1=positions[9],
-                    liquidity=nft.liquidity, tick_lower=tick_lower,
-                    tick_upper=tick_upper, tick_current=tick,
-                    decimals0=token0_decimals, decimals1=token1_decimals
-                )
-                nft.uncollected_fee[tokens[0]['address']] = token0_reward
-                nft.uncollected_fee[tokens[1]['address']] = token1_reward
-                nft.last_updated_fee_at = self.end_block
-
-                unchanged_nft = True
-                liquidity_change_logs = nft.liquidity_change_logs
-                for block in liquidity_change_logs:
-                    if int(block) > self.before_30_days_block:
-                        unchanged_nft = False
-                        break
-                if unchanged_nft:
-                    if not self.pools_info_with_provider.get(pool_address, {}).get("feeGrowthGlobal0X128Before"):
-                        fee_growth_global_0_before = data_response.get(
-                            f'feeGrowthGlobal0X128_{pool_address}_{self.before_30_days_block}'.lower())
-                        fee_growth_global_1_before = data_response.get(
-                            f'feeGrowthGlobal1X128_{pool_address}_{self.before_30_days_block}'.lower())
-                        slot0 = data_response.get(f'slot0_{pool_address}_{self.before_30_days_block}'.lower())
-                        self.pools_info_with_provider[pool_address] = {
-                            "feeGrowthGlobal0X128Before": fee_growth_global_0_before,
-                            "feeGrowthGlobal1X128Before": fee_growth_global_1_before,
-                            'tick': slot0[1]
-                        }
-                    fee_growth_global_0_before = self.pools_info_with_provider[pool_address]['feeGrowthGlobal0X128Before']
-                    fee_growth_global_1_before = self.pools_info_with_provider[pool_address]['feeGrowthGlobal1X128Before']
-                    tick_before = self.pools_info_with_provider[pool_address]['tick']
-
-                    fee_growth_low_x128_before = data_response.get(
-                        f'ticks_{pool_address}_{tick_lower}_{self.before_30_days_block}'.lower())
-                    fee_growth_hi_x128_before = data_response.get(
-                        f'ticks_{pool_address}_{tick_upper}_{self.before_30_days_block}'.lower())
-                    positions_before = data_response.get(
-                        f'positions_{nft_manager_contract}_{token_id}_{self.before_30_days_block}'.lower())
-                    if positions[7] != positions_before[7]:
-                        print(f"token id {token_id} has smt wrong!!")
-                    token0_reward_before, token1_reward_before = get_fees(
-                        fee_growth_global_0=fee_growth_global_0_before,
-                        fee_growth_global_1=fee_growth_global_1_before,
-                        fee_growth_0_low=fee_growth_low_x128_before[2],
-                        fee_growth_1_low=fee_growth_low_x128_before[3],
-                        fee_growth_0_hi=fee_growth_hi_x128_before[2],
-                        fee_growth_1_hi=fee_growth_hi_x128_before[3],
-                        fee_growth_inside_0=positions_before[8],
-                        fee_growth_inside_1=positions_before[9],
-                        liquidity=positions_before[7], tick_lower=tick_lower,
-                        tick_upper=tick_upper, tick_current=tick_before,
+                ###
+                if positions:
+                    if positions[7] == 0:
+                        continue
+                    nft.liquidity = float(positions[7])
+                    tokens = pool_info['tokens']
+                    token0_decimals = tokens[0]['decimals']
+                    token1_decimals = tokens[1]['decimals']
+                    token0_reward, token1_reward = get_fees(
+                        fee_growth_global_0=fee_growth_global_0,
+                        fee_growth_global_1=fee_growth_global_1,
+                        fee_growth_0_low=fee_growth_low_x128[2],
+                        fee_growth_1_low=fee_growth_low_x128[3],
+                        fee_growth_0_hi=fee_growth_hi_x128[2],
+                        fee_growth_1_hi=fee_growth_hi_x128[3],
+                        fee_growth_inside_0=positions[8],
+                        fee_growth_inside_1=positions[9],
+                        liquidity=nft.liquidity, tick_lower=tick_lower,
+                        tick_upper=tick_upper, tick_current=tick,
                         decimals0=token0_decimals, decimals1=token1_decimals
                     )
-                    nft.apr_in_month = nft.cal_apr_in_month(self.before_30_days_block, token0_reward_before,
-                                                            token1_reward_before, pool_info, tick_before, tick)
+                    nft.uncollected_fee[tokens[0]['address']] = token0_reward
+                    nft.uncollected_fee[tokens[1]['address']] = token1_reward
+                    nft.last_updated_fee_at = self.end_block
 
-            else:
-                self.deleted_tokens.append(idx)
-            updated_nfts[idx] = nft
+                    unchanged_nft = True
+                    liquidity_change_logs = nft.liquidity_change_logs
+                    for block in liquidity_change_logs:
+                        if int(block) > self.before_30_days_block:
+                            unchanged_nft = False
+                            break
+                    if unchanged_nft:
+                        if not self.pools_info_with_provider.get(pool_address, {}).get("feeGrowthGlobal0X128Before"):
+                            fee_growth_global_0_before = data_response.get(
+                                f'feeGrowthGlobal0X128_{pool_address}_{self.before_30_days_block}'.lower())
+                            fee_growth_global_1_before = data_response.get(
+                                f'feeGrowthGlobal1X128_{pool_address}_{self.before_30_days_block}'.lower())
+                            slot0 = data_response.get(f'slot0_{pool_address}_{self.before_30_days_block}'.lower())
+                            self.pools_info_with_provider[pool_address] = {
+                                "feeGrowthGlobal0X128Before": fee_growth_global_0_before,
+                                "feeGrowthGlobal1X128Before": fee_growth_global_1_before,
+                                'tick': slot0[1] if slot0 else None
+                            }
+                        fee_growth_global_0_before = self.pools_info_with_provider[pool_address]['feeGrowthGlobal0X128Before']
+                        fee_growth_global_1_before = self.pools_info_with_provider[pool_address]['feeGrowthGlobal1X128Before']
+                        tick_before = self.pools_info_with_provider[pool_address]['tick']
+                        if tick_before:
+                            fee_growth_low_x128_before = data_response.get(
+                                f'ticks_{pool_address}_{tick_lower}_{self.before_30_days_block}'.lower())
+                            fee_growth_hi_x128_before = data_response.get(
+                                f'ticks_{pool_address}_{tick_upper}_{self.before_30_days_block}'.lower())
+                            positions_before = data_response.get(
+                                f'positions_{nft_manager_contract}_{token_id}_{self.before_30_days_block}'.lower())
+                            if positions[7] != positions_before[7]:
+                                print(f"token id {token_id} has smt wrong!!")
+                            token0_reward_before, token1_reward_before = get_fees(
+                                fee_growth_global_0=fee_growth_global_0_before,
+                                fee_growth_global_1=fee_growth_global_1_before,
+                                fee_growth_0_low=fee_growth_low_x128_before[2],
+                                fee_growth_1_low=fee_growth_low_x128_before[3],
+                                fee_growth_0_hi=fee_growth_hi_x128_before[2],
+                                fee_growth_1_hi=fee_growth_hi_x128_before[3],
+                                fee_growth_inside_0=positions_before[8],
+                                fee_growth_inside_1=positions_before[9],
+                                liquidity=positions_before[7], tick_lower=tick_lower,
+                                tick_upper=tick_upper, tick_current=tick_before,
+                                decimals0=token0_decimals, decimals1=token1_decimals
+                            )
+                            nft.apr_in_month = nft.cal_apr_in_month(self.before_30_days_block, token0_reward_before,
+                                                                    token1_reward_before, pool_info, tick_before, tick)
+
+                else:
+                    self.deleted_tokens.append(idx)
+                updated_nfts[idx] = nft
+            except Exception as e:
+                raise e
+                # logger.error(e)
+                # continue
         return updated_nfts
 
     def _export(self, updated_nfts: Dict[str, NFT]):

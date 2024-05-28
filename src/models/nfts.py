@@ -18,7 +18,7 @@ class NFT:
         self.liquidity_change_logs = {}
         self.fee_change_logs = {}
         self.nft_manager_address = None
-        self.apr_in_month = {}
+        self.apr_in_month = 0
         self.wallet = None
         self.last_updated_fee_at = 0
 
@@ -56,7 +56,7 @@ class NFT:
         self.nft_manager_address = json_dict.get('nftManagerAddress', "")
         self.pool_address = json_dict.get('poolAddress', "")
         self.wallet = json_dict.get("wallet")
-        self.apr_in_month = json_dict.get('aprInMonth', {})
+        self.apr_in_month = json_dict.get('aprInMonth', 0)
         self.last_updated_fee_at = json_dict.get('lastUpdatedFeeAt', 0)
 
     def cal_apr_in_month(self, start_block, fee0_before, fee1_before, pool_info, tick_before, tick):
@@ -79,14 +79,14 @@ class NFT:
         fee_change_in_usd = token0_change * token0_price + token1_change * token1_price
 
         invest0_before, invest1_before = get_token_amount_of_user(
-            liquidity=self.liquidity, sqrt_price_x96=math.sqrt(1.0001 ** tick_before) * 2 ** 96, tick=tick_before,
+            liquidity=int(self.liquidity), sqrt_price_x96=math.sqrt(1.0001 ** tick_before) * 2 ** 96, tick=tick_before,
             tick_upper=self.tick_upper, tick_lower=self.tick_lower)
         invest0, invest1 = get_token_amount_of_user(
-            liquidity=self.liquidity, sqrt_price_x96=math.sqrt(1.0001 ** tick) * 2 ** 96, tick=tick,
+            liquidity=int(self.liquidity), sqrt_price_x96=math.sqrt(1.0001 ** tick) * 2 ** 96, tick=tick,
             tick_upper=self.tick_upper, tick_lower=self.tick_lower)
         investment_change_in_usd = ((invest1 - invest1_before) / 10 ** token1_info['decimals'] * token1_price
                                     + (invest0 - invest0_before) / 10 ** token0_info['decimals'] * token0_price)
         total_invest_in_usd = ((invest1 * token1_price / 10 ** token1_info['decimals'])
                                + (invest0 * token0_price / 10 ** token0_info['decimals']))
 
-        return (fee_change_in_usd + investment_change_in_usd) / total_invest_in_usd
+        return (fee_change_in_usd + investment_change_in_usd) / total_invest_in_usd if total_invest_in_usd else 0
