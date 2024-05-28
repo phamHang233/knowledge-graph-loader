@@ -1,7 +1,7 @@
 import time
 from typing import List
 
-from src.constants.mongo_constants import MongoDBCollections
+from src.constants.mongo_constants import DexNFTManagerCollections
 from src.databases.dex_nft_manager_db import NFTMongoDB
 from src.models.loader import Loader
 from src.utils.format_utils import filter_string
@@ -50,7 +50,7 @@ class NFTMongoDBExporter:
     def export_dex_nfts(self, data: List[dict]):
         for nft in data:
             nft['_id'] = f"{nft['chainId']}_{nft['nftManagerAddress']}_{nft['tokenId']}"
-        self._db.update_docs(collection_name=MongoDBCollections.dex_nfts, data=data)
+        self._db.update_docs(collection_name=DexNFTManagerCollections.dex_nfts, data=data)
 
     def export_tokens_holders(self, data: List[dict]):
         """Update top holders for top tokens
