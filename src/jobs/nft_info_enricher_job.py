@@ -276,9 +276,9 @@ class NFTInfoEnricherJob(SchedulerJob):
                     self.deleted_tokens.append(idx)
                 updated_nfts[idx] = nft
             except Exception as e:
-                raise e
-                # logger.error(e)
-                # continue
+                # raise e
+                logger.error(e)
+                continue
         return updated_nfts
 
     def _export(self, updated_nfts: Dict[str, NFT]):
