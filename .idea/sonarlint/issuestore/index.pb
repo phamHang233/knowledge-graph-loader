@@ -90,3 +90,9 @@ W
 tests/test.py,2/6/260c16d0c0db389dc861969f8c921f71efc023ae
 y
 I.venv/lib/python3.10/site-packages/defi_services/utils/sqrt_price_math.py,d/b/db5bf072f222e7da40fa29f128c176e30d036cc6
+b
+2.venv/lib/python3.10/site-packages/pymongo/bulk.py,e/4/e41488494ae2d97881b046a717bb21b88b10ca59
+e
+5.venv/lib/python3.10/site-packages/pymongo/message.py,3/c/3cad659bb1b6f3047a0a0cda72d74154571f62c7
+r
+B.venv/lib/python3.10/site-packages/defi_services/utils/get_fees.py,9/1/911c6bb5a967d82016621a3b94e1ca5abd333596

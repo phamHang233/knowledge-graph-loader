@@ -11,14 +11,13 @@ class MongoDBCollections:
     multichain_wallets_credit_scores = 'multichain_wallets_credit_scores_v3'
 
     is_part_ofs = 'is_part_ofs'
-    dex_nfts = 'dex_nfts'
 
 
 class DexNFTManagerCollections:
         wallets = 'wallets'
         configs = 'configs'
         collectors = 'collectors'
-        dex_nfts = 'dex_nfts'
+        dex_nfts = 'dex_nft'
         dex_events_etl = 'dex_events'
         pairs = "pairs"
 

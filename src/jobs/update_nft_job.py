@@ -150,6 +150,7 @@ class UpdateNftInfoJob(BaseJob):
         pool_info = self.pools.get(nft_info.pool_address)
         if pool_info and pool_info.get("tokens"):
             tokens = pool_info['tokens']
+            nft_info.fee_change_logs[str(block_number)] = {}
             for idx, token in enumerate(tokens):
                 address = token.get('address')
                 amount = float(event[f'amount{idx}'])
@@ -157,7 +158,7 @@ class UpdateNftInfoJob(BaseJob):
                 if address not in nft_info.collected_fee:
                     nft_info.collected_fee[address] = 0
                 nft_info.collected_fee[address] += amount / 10 ** decimals
-                nft_info.fee_change_logs[str(block_number)] = nft_info.collected_fee
+                nft_info.fee_change_logs[str(block_number)][address] = amount / 10 ** decimals
 
     def _export(self):
         data = [p.to_dict() for pool_address, p in self.updated_nfts.items()]

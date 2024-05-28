@@ -7,6 +7,7 @@ from query_state_lib.client.client_querier import ClientQuerier
 
 from artifacts.abis.dexes.uniswap_v3_nft_manage_abi import UNISWAP_V3_NFT_MANAGER_ABI
 from artifacts.abis.dexes.uniswap_v3_pool_abi import UNISWAP_V3_POOL_ABI
+from src.constants.mongo_constants import DexNFTManagerCollections
 from src.databases.blockchain_etl import BlockchainETL
 from src.databases.mongodb_dex import MongoDBDex
 from src.models.nfts import NFT
@@ -23,11 +24,8 @@ class NFTInfoEnricherJob(SchedulerJob):
         self._klg_db = _db
         self._exporter = _exporter
         self.db_prefix = db_prefix
-        # self.end_block = end_block
-        # self.start_timestamp = start_timestamp
         self.batch_size = batch_size
         self.chain_id = chain_id
-        # self.last_synced_file = last_synced_file
         self.client_querier = ClientQuerier(provider_url=provider_uri)
         super().__init__(scheduler=scheduler)
 
@@ -289,5 +287,5 @@ class NFTInfoEnricherJob(SchedulerJob):
             logger.info(f'Update {len(data)} nfts')
 
         if self.deleted_tokens:
-            self._exporter.removed_docs(collection_name='dex_nfts', keys=self.deleted_tokens)
+            self._exporter.removed_docs(collection_name=DexNFTManagerCollections.dex_nfts, keys=self.deleted_tokens)
             logger.info(f'Remove {len(self.deleted_tokens)} nfts')
