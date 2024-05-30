@@ -16,10 +16,13 @@ from src.utils.logger_utils import get_logger
 logger = get_logger('Elite wallet marker')
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
-@click.option('-c', '--chain', default='bsc', show_default=True, type=str, help='Network name example bsc or polygon')
-@click.option('-b', '--batch-size', default=100, show_default=True, type=int, help='Batch size')
-@click.option('--scheduler', default='^false@hourly', show_default=True, type=str, help=f'Scheduler with format "{scheduler_format}"')
-def dex_nft_info_enricher(chain, batch_size, scheduler):
+@click.option("-nc", "--n-cpu", default=1, show_default=True, type=int, help="Number of CPU")
+@click.option('-c', '--chain', default='ethereum', show_default=True, type=str, help='Network name example bsc or polygon')
+@click.option("-cpu", default=1, show_default=True, type=int, help="CPU order")
+@click.option('-b', '--batch-size', default=1, show_default=True, type=int, help='NFT Batch size')
+# @click.option('--scheduler', default='^false@hourly', show_default=True, type=str, help=f'Scheduler with format "{scheduler_format}"')
+@click.option("-w", "--max-workers", default=3, show_default=True, type=int, help="The number of workers")
+def dex_nft_info_enricher(chain, batch_size, n_cpu, cpu, max_workers):
     chain = str(chain).lower()
     if chain not in Chains.mapping:
         raise click.BadOptionUsage("--chain", f"Chain {chain} is not support. Try {list(Chains.mapping.keys())}")
@@ -31,11 +34,14 @@ def dex_nft_info_enricher(chain, batch_size, scheduler):
 
     logger.info(f'Connect to entity data: {_db.connection_url}')
 
-    provider_uri = Networks.providers.get(Chains.names.get(chain_id))
+    provider_uri = Networks.archive_node.get(Chains.names[chain_id])
+
+    flagged_state = _db.get_nft_flagged_state(chain_id=chain_id)
+    nfts_batch = flagged_state["batch_idx"]
 
     job = NFTInfoEnricherJob(
-        _db=_db, _exporter=_exporter,
-        scheduler=scheduler, batch_size=batch_size,
+        _db=_db, _exporter=_exporter, nfts_batch=nfts_batch,
+        batch_size=batch_size, n_cpu=n_cpu, cpu=cpu, max_workers=max_workers,
         chain_id=chain_id, provider_uri=provider_uri, db_prefix=db_prefix)
 
     job.run()

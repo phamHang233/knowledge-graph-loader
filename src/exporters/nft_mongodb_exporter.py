@@ -1,7 +1,7 @@
 import time
 from typing import List
 
-from src.constants.mongo_constants import DexNFTManagerCollections
+from src.constants.mongo_constants import DexNFTManagerCollections, MongoDBCollections
 from src.databases.dex_nft_manager_db import NFTMongoDB
 from src.models.loader import Loader
 from src.utils.format_utils import filter_string

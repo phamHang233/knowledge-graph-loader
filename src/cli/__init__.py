@@ -1,4 +1,6 @@
 import click
+
+from src.cli.flagged_nft import nft_flagged
 from src.cli.update_nft_stream import update_nft_info_stream
 from src.cli.nft_info_enricher import dex_nft_info_enricher
 
@@ -13,3 +15,4 @@ def cli(ctx):
 
 cli.add_command(dex_nft_info_enricher, 'dex_nft_info_enricher')
 cli.add_command(update_nft_info_stream, "update_nft_info_stream")
+cli.add_command(nft_flagged, "nft_flagged")

@@ -5,7 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7e54e82-91bf-4949-b697-b0122a4a78a0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4d209132a2ee64a2e0170cdaae024db342695d75" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4d209132a2ee64a2e0170cdaae024db342695d75" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cli/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/databases/dex_nft_manager_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/databases/dex_nft_manager_db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,14 +36,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.run.executor": "Debug",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/home/hang/Documents/Study/DATN/knowledge-graph-loader-project/src/models"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.run.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/hang/Documents/centic/api_comment.png&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/models" />
@@ -58,7 +68,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
-      <option name="PARAMETERS" value="dex_nft_info_enricher -c ethereum --scheduler ^true" />
+      <option name="PARAMETERS" value="dex_nft_info_enricher -c ethereum" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -122,18 +132,43 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
-          <line>171</line>
+          <line>172</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
-          <line>165</line>
+          <line>166</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
           <line>121</line>
           <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/cli/flagged_nft.py</url>
+          <line>86</line>
+          <option name="timeStamp" value="47" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/databases/dex_nft_manager_db.py</url>
+          <line>767</line>
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
+          <line>233</line>
+          <option name="timeStamp" value="49" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
+          <line>71</line>
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
+          <line>114</line>
+          <option name="timeStamp" value="70" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

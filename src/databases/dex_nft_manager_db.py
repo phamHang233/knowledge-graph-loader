@@ -1,4 +1,5 @@
 import sys
+from typing import List
 
 import pymongo
 from pymongo import MongoClient, UpdateOne
@@ -476,6 +477,20 @@ class NFTMongoDB:
             return None
         return config
 
+    def get_nft_flagged_state(self, chain_id=None):
+        key = f'nfts_flagged_state_{chain_id}'
+        filter_statement = {
+            "_id": key
+        }
+        config = self._configs_col.find_one(filter_statement)
+        if not config:
+            return None
+        return config
+
+    def get_nfts_by_flag(self, _filter, projection=None):
+        cursor = self._nft_col.find(_filter, projection=projection)
+        return cursor
+
     def get_new_wallet_by_flags_config(self, chain_id):
         filter_statement = {
             "_id": f'wallet_flags_{chain_id}'
@@ -705,7 +720,7 @@ class NFTMongoDB:
 
     @sync_log_time_exe(tag=TimeExeTag.database)
     def get_all_nfts(self, _filter):
-        return self._nft_col.find(_filter).limit(10000)
+        return self._nft_col.find(_filter).batch_size(10000)
 
     def get_nft_info(self, nfts):
         return self._nft_col.find({"_id": {"$in": nfts}}).batch_size(1000)
@@ -733,3 +748,25 @@ class NFTMongoDB:
         except Exception as ex:
             logger.exception(ex)
         return []
+
+    def get_nft_with_flagged(self, batch_size=50000, chain_id=None, reset=False):
+        if not reset:
+            filter_statement = {'flagged': {'$exists': False}}
+        else:
+            filter_statement = {}
+        cursor = self._nft_col.find(filter_statement, batch_size=batch_size)
+
+        return cursor
+
+    @sync_log_time_exe(tag=TimeExeTag.database)
+    @retry_handler
+    def update_nfts(self, nfts: List[dict]):
+        for nft in nfts:
+            nft["_id"] = f'{nft.get("chainId")}_{nft.get("nftManagerAddress")}_{nft.get("tokenId")}'
+
+        bulk_operations = [UpdateOne(
+            {"_id": item["_id"]},
+            {"$set": flatten_dict(item)},
+            upsert=True
+        ) for item in nfts]
+        self._nft_col.bulk_write(bulk_operations)

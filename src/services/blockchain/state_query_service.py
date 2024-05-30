@@ -7,6 +7,7 @@ from web3 import Web3, HTTPProvider
 from web3.middleware import geth_poa_middleware
 
 from artifacts.abis.dexes.uniswap_v3_nft_manage_abi import UNISWAP_V3_NFT_MANAGER_ABI
+from artifacts.abis.dexes.uniswap_v3_pool_abi import UNISWAP_V3_POOL_ABI
 from artifacts.abis.erc20_abi import ERC20_ABI
 from artifacts.abis.dexes.uniswap_v3_factory_abi import UNISWAP_V3_FACTORY_ABI
 from src.constants.network_constants import NATIVE_TOKEN
@@ -465,4 +466,46 @@ class StateQueryService:
 
         except Exception as ex:
             return {}
+
+    def get_batch_nft_fee_with_block_number(self, nfts, pools, list_rpc_call, list_call_id, block_number='latest'):
+        for idx, nft in enumerate(nfts):
+            pool_address = nft['poolAddress']
+            if pool_address not in pools:
+                add_rpc_call(
+                    abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
+                    fn_name="feeGrowthGlobal0X128", block_number=block_number,
+                    list_call_id=list_call_id, list_rpc_call=list_rpc_call
+                )
+
+                add_rpc_call(
+                    abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
+                    fn_name="feeGrowthGlobal1X128", block_number=block_number,
+                    list_call_id=list_call_id, list_rpc_call=list_rpc_call
+                )
+                if block_number != 'latest':
+                    add_rpc_call(
+                        abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
+                        fn_name="slot0", block_number=block_number,
+                        list_call_id=list_call_id, list_rpc_call=list_rpc_call
+                    )
+            add_rpc_call(
+                abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
+                fn_name="ticks", block_number=block_number, fn_paras=nft['tickLower'],
+                list_call_id=list_call_id, list_rpc_call=list_rpc_call
+            )
+            add_rpc_call(
+                abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
+                fn_name="ticks", block_number=block_number, fn_paras=nft['tickUpper'],
+                list_call_id=list_call_id, list_rpc_call=list_rpc_call
+            )
+            add_rpc_call(
+                abi=UNISWAP_V3_NFT_MANAGER_ABI, contract_address=nft['nftManagerAddress'],
+                fn_name="positions", block_number=block_number, fn_paras=int(nft['tokenId']),
+                list_call_id=list_call_id, list_rpc_call=list_rpc_call
+            )
+
+        return list_rpc_call, list_call_id
+
+
+
 
