@@ -1,10 +1,11 @@
 from query_state_lib.base.mappers.eth_call_mapper import EthCall
 from query_state_lib.base.utils.encoder import encode_eth_call_data
-from web3 import Web3
+from web3 import Web3, contract
 
 from src.utils.logger_utils import get_logger
 
 logger = get_logger('Batch queries')
+w3 = Web3()
 
 
 def add_rpc_call(abi, fn_name, contract_address, block_number=None, fn_paras=None, list_rpc_call=None,
@@ -22,7 +23,11 @@ def add_rpc_call(abi, fn_name, contract_address, block_number=None, fn_paras=Non
     else:
         call_id = f"{fn_name}_{contract_address}_{block_number}".lower()
 
-    data_call = encode_eth_call_data(abi=abi, fn_name=fn_name, args=args)
+    # data_call = encode_eth_call_data(abi=abi, fn_name=fn_name, args=args)
+    c = contract.Contract
+    c.w3 = w3
+    c.abi = abi
+    data_call = c.encodeABI(fn_name=fn_name, args=args)
     if block_number:
         eth_call = EthCall(to=Web3.to_checksum_address(contract_address), block_number=block_number, data=data_call,
                            abi=abi, fn_name=fn_name, id=call_id)

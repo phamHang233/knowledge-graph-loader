@@ -68,7 +68,7 @@ class NFTInfoEnricherJob(BaseJob):
             updated_nfts = self.enrich_data(batch_cursor, data_response)
             self._export(updated_nfts)
 
-            logger.info(f'Time to execute of batch {batch_idx} is {time.time() - start_time} seconds')
+            logger.info(f'Time to execute of batch [{batch_idx}] is {time.time() - start_time} seconds')
 
     def prepare_enrich(self, cursor_batch):
         list_rpc_call = []
