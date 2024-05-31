@@ -59,8 +59,8 @@ class NFTInfoEnricherJob(BaseJob):
     def _execute_batch(self, nfts_batch_indicates):
         for batch_idx in nfts_batch_indicates:
             start_time = time.time()
-            # batch_cursor = self._klg_db.get_nfts_by_flag(_filter={"liquidity": {"$gt": 0}, "flagged": batch_idx})
-            batch_cursor = self._klg_db.get_nfts_by_flag(_filter={"tokenId": "690066"})
+            batch_cursor = self._klg_db.get_nfts_by_flag(_filter={"liquidity": {"$gt": 0}, "flagged": batch_idx})
+            # batch_cursor = self._klg_db.get_nfts_by_flag(_filter={"tokenId": "690066"})
             batch_cursor = list(batch_cursor)
             data_response, pools_in_batch = self.prepare_enrich(batch_cursor)
 
