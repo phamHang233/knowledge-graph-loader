@@ -84,9 +84,12 @@ class NFT:
         invest0, invest1 = get_token_amount_of_user(
             liquidity=int(self.liquidity), sqrt_price_x96=math.sqrt(1.0001 ** tick) * 2 ** 96, tick=tick,
             tick_upper=self.tick_upper, tick_lower=self.tick_lower)
-        investment_change_in_usd = ((invest1 - invest1_before) / 10 ** token1_info['decimals'] * token1_price
-                                    + (invest0 - invest0_before) / 10 ** token0_info['decimals'] * token0_price)
-        total_invest_in_usd = ((invest1 * token1_price / 10 ** token1_info['decimals'])
-                               + (invest0 * token0_price / 10 ** token0_info['decimals']))
 
-        return (fee_change_in_usd + investment_change_in_usd) / total_invest_in_usd if total_invest_in_usd else 0
+        current_invest_in_usd = ((invest1 * token1_price / 10 ** token1_info['decimals'])
+                                 + (invest0 * token0_price / 10 ** token0_info['decimals']))
+
+        ref_invest_in_usd = ((invest1_before * token1_price / 10 ** token1_info['decimals'])
+                             + (invest0_before * token0_price / 10 ** token0_info['decimals']))
+        investment_change_in_usd = current_invest_in_usd - ref_invest_in_usd
+        apr = (fee_change_in_usd + investment_change_in_usd) / ref_invest_in_usd / 30 * 365 if ref_invest_in_usd > 1 / 10e5 else 0
+        return apr

@@ -6,16 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="c7e54e82-91bf-4949-b697-b0122a4a78a0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4d209132a2ee64a2e0170cdaae024db342695d75" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4d209132a2ee64a2e0170cdaae024db342695d75" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cli/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/databases/dex_nft_manager_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/databases/dex_nft_manager_db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/nfts.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/nfts.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,10 +33,11 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.nft_info_enricher_job.executor&quot;: &quot;Debug&quot;,
     &quot;Python.run.executor&quot;: &quot;Debug&quot;,
     &quot;Python.test.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/hang/Documents/centic/api_comment.png&quot;
+    &quot;last_opened_file_path&quot;: &quot;/home/hang/Documents/Study/DATN/revert-backtester&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -54,7 +50,29 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.run">
-    <configuration name="run" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="nft_info_enricher_job" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="knowledge-graph-loader-project" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/jobs" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="run" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="knowledge-graph-loader-project" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -68,7 +86,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
-      <option name="PARAMETERS" value="dex_nft_info_enricher -c ethereum" />
+      <option name="PARAMETERS" value="dex_nft_info_enricher" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -100,11 +118,12 @@
     </configuration>
     <list>
       <item itemvalue="Python.run" />
+      <item itemvalue="Python.nft_info_enricher_job" />
       <item itemvalue="Python.test" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.run" />
+        <item itemvalue="Python.nft_info_enricher_job" />
         <item itemvalue="Python.test" />
       </list>
     </recent_temporary>
@@ -152,23 +171,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/databases/dex_nft_manager_db.py</url>
-          <line>767</line>
+          <line>766</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
-          <line>233</line>
+          <line>224</line>
           <option name="timeStamp" value="49" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
-          <line>71</line>
-          <option name="timeStamp" value="52" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
-          <line>114</line>
-          <option name="timeStamp" value="70" />
+          <url>file://$PROJECT_DIR$/src/models/nfts.py</url>
+          <line>94</line>
+          <option name="timeStamp" value="83" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

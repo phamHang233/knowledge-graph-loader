@@ -108,3 +108,5 @@ u
 E.venv/lib/python3.10/site-packages/multithread_processing/base_job.py,4/6/4697a3c908995d6854b7823d0cef6bd73326efef
 {
 K.venv/lib/python3.10/site-packages/query_state_lib/client/client_querier.py,2/7/27321f6e0283e01e038186fc1110d11a1b93dd38
+x
+H.venv/lib/python3.10/site-packages/query_state_lib/base/utils/encoder.py,5/5/5546f1e1f9c5518e05b24c2669797cecea7255a5
