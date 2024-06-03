@@ -10,7 +10,7 @@ from src.databases.dex_nft_manager_db import NFTMongoDB
 from src.databases.mongodb_klg import MongoDB
 from src.exporters import create_entity_db_and_exporter, ExporterType
 from src.exporters.nft_mongodb_exporter import NFTMongoDBExporter
-from src.jobs.nft_info_enricher_job import NFTInfoEnricherJob
+from src.jobs.nft_info_enricher_job_base_job import NFTInfoEnricherJob
 from src.utils.logger_utils import get_logger
 
 logger = get_logger('Elite wallet marker')
@@ -21,7 +21,7 @@ logger = get_logger('Elite wallet marker')
 @click.option("-cpu", default=1, show_default=True, type=int, help="CPU order")
 @click.option('-b', '--batch-size', default=1, show_default=True, type=int, help='NFT Batch size')
 # @click.option('--scheduler', default='^false@hourly', show_default=True, type=str, help=f'Scheduler with format "{scheduler_format}"')
-@click.option("-w", "--max-workers", default=3, show_default=True, type=int, help="The number of workers")
+@click.option("-w", "--max-workers", default=1, show_default=True, type=int, help="The number of workers")
 def dex_nft_info_enricher(chain, batch_size, n_cpu, cpu, max_workers):
     chain = str(chain).lower()
     if chain not in Chains.mapping:

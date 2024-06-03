@@ -19,6 +19,7 @@ class NFT:
         self.fee_change_logs = {}
         self.nft_manager_address = None
         self.apr_in_month = 0
+        self.apr = 0
         self.wallet = None
         self.last_updated_fee_at = 0
 
@@ -39,6 +40,7 @@ class NFT:
             "uncollectedFee": self.uncollected_fee,
             "wallet": self.wallet,
             "aprInMonth": self.apr_in_month,
+            'apr': self.apr,
             "lastUpdatedFeeAt": self.last_updated_fee_at
 
         }
@@ -57,6 +59,7 @@ class NFT:
         self.pool_address = json_dict.get('poolAddress', "")
         self.wallet = json_dict.get("wallet")
         self.apr_in_month = json_dict.get('aprInMonth', 0)
+        self.apr = json_dict.get('apr', 0)
         self.last_updated_fee_at = json_dict.get('lastUpdatedFeeAt', 0)
 
     def cal_apr_in_month(self, start_block, fee0_before, fee1_before, pool_info, tick_before, tick):
@@ -69,6 +72,8 @@ class NFT:
         token1_price = token1_info.get('liquidityValueInUSD', 0) / token1_info['liquidityAmount']
         collected_amount0 = 0
         collected_amount1 = 0
+        if token1_price == 0 or token0_price == 0:
+            return 0
         for block_number, amount in self.fee_change_logs.items():
             if int(block_number) >= start_block:
                 collected_amount0 += amount[token0_address]
@@ -91,5 +96,7 @@ class NFT:
         ref_invest_in_usd = ((invest1_before * token1_price / 10 ** token1_info['decimals'])
                              + (invest0_before * token0_price / 10 ** token0_info['decimals']))
         investment_change_in_usd = current_invest_in_usd - ref_invest_in_usd
-        apr = (fee_change_in_usd + investment_change_in_usd) / ref_invest_in_usd / 30 * 365 if ref_invest_in_usd > 1 / 10e5 else 0
+        apr = (fee_change_in_usd + investment_change_in_usd) / ref_invest_in_usd / 30 * 365 if ref_invest_in_usd > 1e-03 else 0
+        if apr > 10e3:
+            print(self.token_id)
         return apr

@@ -110,3 +110,15 @@ E.venv/lib/python3.10/site-packages/multithread_processing/base_job.py,4/6/4697
 K.venv/lib/python3.10/site-packages/query_state_lib/client/client_querier.py,2/7/27321f6e0283e01e038186fc1110d11a1b93dd38
 x
 H.venv/lib/python3.10/site-packages/query_state_lib/base/utils/encoder.py,5/5/5546f1e1f9c5518e05b24c2669797cecea7255a5
+k
+;.venv/lib/python3.10/site-packages/web3/_utils/contracts.py,7/a/7afa2083379a6de38e3afed04ddae15b929239e5
+q
+A.venv/lib/python3.10/site-packages/web3/contract/base_contract.py,d/f/df0a062acc9dc751d5b685851b9d83cea7f6c779
+j
+:.venv/lib/python3.10/site-packages/eth_utils/decorators.py,8/3/83412060454d7d38f8bc370286562cdedb201c15
+Z
+*src/jobs/nft_info_enricher_job_base_job.py,b/b/bb18c68df69110870dda1b7da250d4286e63de91
+L
+src/cli/fix_collect_event.py,9/c/9cbc57bc812efb8e9a36ea51ce8fdc88d57bec38
+Z
+*src/cli/fix_update_nft_in_collect_event.py,3/3/33aab920119d51d0400daecf2efd124e390d15e0

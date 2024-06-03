@@ -467,8 +467,11 @@ class StateQueryService:
         except Exception as ex:
             return {}
 
-    def get_batch_nft_fee_with_block_number(self, nfts, pools, list_rpc_call, list_call_id, block_number='latest'):
+    def get_batch_nft_fee_with_block_number(self, nfts, pools, list_rpc_call, list_call_id, start_block=None, latest = False):
         for idx, nft in enumerate(nfts):
+            block_number = start_block if start_block else nft['blockNumber']
+            if not block_number:
+                continue
             pool_address = nft['poolAddress']
             if pool_address not in pools:
                 add_rpc_call(
@@ -482,7 +485,7 @@ class StateQueryService:
                     fn_name="feeGrowthGlobal1X128", block_number=block_number,
                     list_call_id=list_call_id, list_rpc_call=list_rpc_call
                 )
-                if block_number != 'latest':
+                if not latest:
                     add_rpc_call(
                         abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
                         fn_name="slot0", block_number=block_number,
