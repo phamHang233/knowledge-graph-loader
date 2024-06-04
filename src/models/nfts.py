@@ -22,6 +22,10 @@ class NFT:
         self.apr = 0
         self.wallet = None
         self.last_updated_fee_at = 0
+        self.pnl = 0
+        self.tokens = {}
+        self.current_invest_in_usd = 0
+        self.invested_asset_in_usd = 0
 
     def to_dict(self):
         return {
@@ -41,7 +45,11 @@ class NFT:
             "wallet": self.wallet,
             "aprInMonth": self.apr_in_month,
             'apr': self.apr,
-            "lastUpdatedFeeAt": self.last_updated_fee_at
+            "lastUpdatedFeeAt": self.last_updated_fee_at,
+            'PnL': self.pnl,
+            'tokens': self.tokens,
+            'assetsInUSD': self.current_invest_in_usd,
+            'investedAssetInUSD': self.invested_asset_in_usd
 
         }
 
@@ -58,8 +66,6 @@ class NFT:
         self.nft_manager_address = json_dict.get('nftManagerAddress', "")
         self.pool_address = json_dict.get('poolAddress', "")
         self.wallet = json_dict.get("wallet")
-        self.apr_in_month = json_dict.get('aprInMonth', 0)
-        self.apr = json_dict.get('apr', 0)
         self.last_updated_fee_at = json_dict.get('lastUpdatedFeeAt', 0)
 
     def cal_apr_in_month(self, start_block, fee0_before, fee1_before, pool_info, tick_before, tick):
@@ -89,9 +95,11 @@ class NFT:
         invest0, invest1 = get_token_amount_of_user(
             liquidity=int(self.liquidity), sqrt_price_x96=math.sqrt(1.0001 ** tick) * 2 ** 96, tick=tick,
             tick_upper=self.tick_upper, tick_lower=self.tick_lower)
-
+        self.tokens[token0_address] = invest0
+        self.tokens[token1_address] = invest1
         current_invest_in_usd = ((invest1 * token1_price / 10 ** token1_info['decimals'])
                                  + (invest0 * token0_price / 10 ** token0_info['decimals']))
+        self.current_invest_in_usd = current_invest_in_usd
 
         ref_invest_in_usd = ((invest1_before * token1_price / 10 ** token1_info['decimals'])
                              + (invest0_before * token0_price / 10 ** token0_info['decimals']))
@@ -99,4 +107,4 @@ class NFT:
         apr = (fee_change_in_usd + investment_change_in_usd) / ref_invest_in_usd / 30 * 365 if ref_invest_in_usd > 1e-03 else 0
         if apr > 10e3:
             print(self.token_id)
-        return apr
+        return apr, investment_change_in_usd, ref_invest_in_usd

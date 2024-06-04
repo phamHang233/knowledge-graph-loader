@@ -6,6 +6,7 @@ from src.constants.network_constants import Networks, Chains
 from src.databases.mongodb_dex import MongoDBDex
 from src.exporters.nft_mongodb_exporter import NFTMongoDBExporter
 from src.models.nfts import NFT
+from src.models.wallet import Wallet
 from src.services.blockchain.state_query_service import StateQueryService
 from src.utils.logger_utils import get_logger
 
@@ -30,6 +31,7 @@ class UpdateNftInfoJob(BaseJob):
         self.end_block = end_block
         self.start_block = start_block
         self.dex_db = MongoDBDex()
+        self.updated_wallet: Dict[str, Wallet] = {}
 
         work_iterable = range(start_block, end_block + 1)
         super().__init__(work_iterable, batch_size, max_workers)
@@ -168,14 +170,35 @@ class UpdateNftInfoJob(BaseJob):
                 nft_info.collected_fee[address] += fee_amount / 10 ** decimals
                 nft_info.fee_change_logs[str(block_number)][address] = fee_amount / 10 ** decimals
 
+    def update_wallet_info(self):
+        addresses = [nft_info.wallet for _, nft_info in self.updated_nfts.items()]
+        cursor = self.exporter.get_wallets(addresses=addresses, chain_id=self.chain_id)
+        for doc in cursor:
+            address = doc['address']
+            self.updated_wallet[address] = Wallet(address, chain_id=self.chain_id)
+            self.updated_wallet[address].from_dict(doc)
+        for token_id, nft_info in self.updated_nfts.items():
+            address = nft_info.wallet
+            if address not in self.updated_wallet:
+                self.updated_wallet[address] = Wallet(address, chain_id=self.chain_id)
+            wallet = self.updated_wallet[address]
+            wallet.nfts.append(f"{self.chain_id}_{nft_info.nft_manager_address}_{token_id}")
+
     def _export(self):
-        data = [p.to_dict() for pool_address, p in self.updated_nfts.items()]
+        self.update_wallet_info()
         config = {
             "id": f"{self.chain_id}_factory_nft_contract",
             "addresses": self.updated_factory_nft,
             "chainId": self.chain_id
         }
         self.exporter.export_config(config)
+        wallet_data = [w.to_dict() for _, w in self.updated_wallet.items()]
+        if wallet_data:
+            self.exporter.export_wallets(wallet_data)
+            logger.info(f'Exported {len(wallet_data)} wallets')
+
+
+        data = [p.to_dict() for pool_address, p in self.updated_nfts.items()]
         if data:
             self.exporter.export_dex_nfts(data)
             logger.info(f'Exported {len(data)} nfts')

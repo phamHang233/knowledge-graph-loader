@@ -491,6 +491,9 @@ class NFTMongoDB:
         cursor = self._nft_col.find(_filter, projection=projection)
         return cursor
 
+    def get_nfts_by_keys(self, keys):
+        cursor = self._nft_col.find({"_id": {"$in": keys}})
+        return cursor
     def get_new_wallet_by_flags_config(self, chain_id):
         filter_statement = {
             "_id": f'wallet_flags_{chain_id}'

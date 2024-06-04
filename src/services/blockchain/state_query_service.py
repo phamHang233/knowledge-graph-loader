@@ -401,7 +401,7 @@ class StateQueryService:
             if filtered_call_id:
                 decoded_data.update(decode_data_response_ignore_error(data_responses=responses, list_call_id=filtered_call_id))
         except Exception as ex:
-            pass
+            logger.exception(f"Exception {ex} when query provider")
         list_rpc_call = []
         list_call_id = []
         for nft in missing_nfts:

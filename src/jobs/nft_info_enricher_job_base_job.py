@@ -160,9 +160,9 @@ class NFTInfoEnricherJob(BaseJob):
                         unchanged_nft = False
 
                 if unchanged_nft:
-                    nft.apr_in_month = self.calculate_apr(doc, data_response, start_block=self.before_30_days_block)
+                    nft.apr_in_month, _, _ = self.calculate_apr(doc, data_response, start_block=self.before_30_days_block)
                 if blocks:
-                    nft.apr = self.calculate_apr(doc, data_response, start_block=min(blocks))
+                    nft.apr, nft.pnl, nft.invested_asset_in_usd = self.calculate_apr(doc, data_response, start_block=min(blocks))
                 updated_nfts[idx] = nft
             except Exception as e:
                 # raise e
@@ -217,7 +217,7 @@ class NFTInfoEnricherJob(BaseJob):
         ###
         if positions:
             if positions[7] == 0:
-                return 0
+                return 0, 0, 0
             nft.liquidity = float(positions[7])
             tick = pool_info['tick']
             tokens = pool_info['tokens']
@@ -258,7 +258,7 @@ class NFTInfoEnricherJob(BaseJob):
 
         else:
             self.deleted_tokens.append(idx)
-            return 0
+            return 0, 0, 0
         # updated_nfts[idx] = nft
 
     def _export(self, updated_nfts: Dict[str, NFT]):

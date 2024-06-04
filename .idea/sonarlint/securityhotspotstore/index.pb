@@ -118,7 +118,11 @@ j
 :.venv/lib/python3.10/site-packages/eth_utils/decorators.py,8/3/83412060454d7d38f8bc370286562cdedb201c15
 Z
 *src/jobs/nft_info_enricher_job_base_job.py,b/b/bb18c68df69110870dda1b7da250d4286e63de91
-L
-src/cli/fix_collect_event.py,9/c/9cbc57bc812efb8e9a36ea51ce8fdc88d57bec38
 Z
 *src/cli/fix_update_nft_in_collect_event.py,3/3/33aab920119d51d0400daecf2efd124e390d15e0
+D
+src/models/wallet.py,c/3/c350b24518dbb14f31eab00e8d36500c4db59f20
+M
+src/cli/update_wallet_info.py,2/4/2447a05f73ceca8d035f1e1487e24248e927ca7a
+R
+"src/jobs/update_wallet_info_job.py,c/5/c55bf870f654bf93bcc7b1b24139752f0a5737b1

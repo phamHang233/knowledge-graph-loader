@@ -5,16 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7e54e82-91bf-4949-b697-b0122a4a78a0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4d209132a2ee64a2e0170cdaae024db342695d75" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4d209132a2ee64a2e0170cdaae024db342695d75" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.datalast_UpdateNftInfoAdapter_0x1.prom" beforeDir="false" afterPath="$PROJECT_DIR$/.datalast_UpdateNftInfoAdapter_0x1.prom" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/8/e812eebb0056da2b5601953f4a3e32ebdb37d249" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/8/e812eebb0056da2b5601953f4a3e32ebdb37d249" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/databases/dex_nft_manager_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/databases/dex_nft_manager_db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jobs/update_nft_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/update_nft_job.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/nfts.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/nfts.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +96,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
-      <option name="PARAMETERS" value="dex_nft_info_enricher" />
+      <option name="PARAMETERS" value="update_nft_info_stream  -c ethereum --collector-id liquidity-pool-events-collector --stream-id updatet-dex-nft -b 40   -e 20015233" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -153,23 +156,24 @@
     </task>
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
-          <line>172</line>
+          <line>203</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
-          <line>166</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
-          <line>121</line>
-          <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/cli/flagged_nft.py</url>
@@ -178,13 +182,43 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/databases/dex_nft_manager_db.py</url>
-          <line>766</line>
+          <line>769</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py</url>
+          <line>74</line>
+          <option name="timeStamp" value="99" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/models/nfts.py</url>
-          <line>98</line>
-          <option name="timeStamp" value="95" />
+          <line>108</line>
+          <option name="timeStamp" value="110" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
+          <line>195</line>
+          <option name="timeStamp" value="116" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
+          <line>74</line>
+          <option name="timeStamp" value="118" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
+          <line>88</line>
+          <option name="timeStamp" value="119" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/services/blockchain/state_query_service.py</url>
+          <line>390</line>
+          <option name="timeStamp" value="121" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/services/blockchain/state_query_service.py</url>
+          <line>402</line>
+          <option name="timeStamp" value="122" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

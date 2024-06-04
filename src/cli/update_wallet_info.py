@@ -11,9 +11,10 @@ from src.databases.mongodb_klg import MongoDB
 from src.exporters import create_entity_db_and_exporter, ExporterType
 from src.exporters.nft_mongodb_exporter import NFTMongoDBExporter
 from src.jobs.nft_info_enricher_job_base_job import NFTInfoEnricherJob
+from src.jobs.update_wallet_info_job import UpdateWalletInfoJob
 from src.utils.logger_utils import get_logger
 
-logger = get_logger('NFT Info Enricher')
+logger = get_logger('Elite wallet marker')
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.option("-nc", "--n-cpu", default=1, show_default=True, type=int, help="Number of CPU")
@@ -39,7 +40,7 @@ def dex_nft_info_enricher(chain, batch_size, n_cpu, cpu, max_workers):
     flagged_state = _db.get_nft_flagged_state(chain_id=chain_id)
     nfts_batch = flagged_state["batch_idx"]
 
-    job = NFTInfoEnricherJob(
+    job = UpdateWalletInfoJob(
         _db=_db, _exporter=_exporter, nfts_batch=nfts_batch,
         batch_size=batch_size, n_cpu=n_cpu, cpu=cpu, max_workers=max_workers,
         chain_id=chain_id, provider_uri=provider_uri, db_prefix=db_prefix)
