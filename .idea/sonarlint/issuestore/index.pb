@@ -126,3 +126,27 @@ M
 src/cli/update_wallet_info.py,2/4/2447a05f73ceca8d035f1e1487e24248e927ca7a
 R
 "src/jobs/update_wallet_info_job.py,c/5/c55bf870f654bf93bcc7b1b24139752f0a5737b1
+E
+last_synced_block.txt,a/7/a7eb4eee23de77cafa8219c68a5bf8632daab38f
+Š
+Z.venv/lib/python3.10/site-packages/multithread_processing/executors/batch_work_executor.py,5/a/5adeff83ca0a14f3da607573cda705016da26dfd
+T
+$src/services/blockchain/multicall.py,1/4/14ae277664b5e18f37d7996bf877867d2634df43
+O
+artifacts/abis/multicall_abi.py,a/b/abe1bf1a4480f9e564f333a8c9f78efe2b5060a3
+E
+tests/pool_address.py,c/5/c5b420eef69ae4cf569b62161f566e8b5103735f
+T
+$src/cli/calculate_optimized_range.py,6/a/6a99b267dca765560be8f8c31913fbb8b16a1b29
+Y
+)src/jobs/calculate_optimized_range_job.py,6/6/66a2af11b1c5d13d9bf1d8925ca4fe8a1da6cbbe
+L
+src/utils/sqrt_price_math.py,6/e/6e4b256b11727a028fd385e4538ff1c8849b43a2
+W
+'job/services/calculate_from_strategy.py,6/f/6f65ac56ca2d8c6d52224c66b700c2018daeeb13
+U
+%job/algorthisms/genetic_algorithms.py,d/b/db117816a98298208a95b3686c6c772ccce79825
+Q
+!job/services/fee_from_strategy.py,c/9/c9b912deab7e52ce77ce0db01704b6d1b28e4d1b
+M
+job/crawlers/uni_pool_data.py,3/4/3473629da7c5ffb9e8e68b3b698aba8cdf1a742b

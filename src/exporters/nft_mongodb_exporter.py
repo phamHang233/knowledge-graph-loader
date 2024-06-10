@@ -52,6 +52,8 @@ class NFTMongoDBExporter:
             nft['_id'] = f"{nft['chainId']}_{nft['nftManagerAddress']}_{nft['tokenId']}"
         self._db.update_docs(collection_name=DexNFTManagerCollections.dex_nfts, data=data)
 
+    def export_pairs(self, data: List[dict]):
+        self._db.update_docs(collection_name=DexNFTManagerCollections.pairs, data=data)
 
     def export_tokens_holders(self, data: List[dict]):
         """Update top holders for top tokens

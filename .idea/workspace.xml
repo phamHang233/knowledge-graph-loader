@@ -5,19 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7e54e82-91bf-4949-b697-b0122a4a78a0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.datalast_UpdateNftInfoAdapter_0x1.prom" beforeDir="false" afterPath="$PROJECT_DIR$/.datalast_UpdateNftInfoAdapter_0x1.prom" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.datalast_UpdateNftInfoAdapter_0x1.prom" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/a/3af6b08f1b25cce2823477151536f0a2f3ab0f92" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/a/3af6b08f1b25cce2823477151536f0a2f3ab0f92" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4d209132a2ee64a2e0170cdaae024db342695d75" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4d209132a2ee64a2e0170cdaae024db342695d75" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/8/4/84ff00b9a2640c1f4f7e1920d020412ff6036855" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/8/4/84ff00b9a2640c1f4f7e1920d020412ff6036855" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/8/e812eebb0056da2b5601953f4a3e32ebdb37d249" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/8/e812eebb0056da2b5601953f4a3e32ebdb37d249" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cli/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/databases/dex_nft_manager_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/databases/dex_nft_manager_db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cli/update_nft_stream.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/update_nft_stream.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cli/update_wallet_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/update_wallet_info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/databases/mongodb_dex.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/databases/mongodb_dex.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jobs/update_nft_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/update_nft_job.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/nfts.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/nfts.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,22 +46,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.nft_info_enricher_job.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.run.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.test.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/hang/Documents/Study/DATN/knowledge-graph-loader-project/src/jobs/base&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.nft_info_enricher_job.executor": "Debug",
+    "Python.run.executor": "Debug",
+    "Python.test.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/home/hang/Documents/Study/DATN/knowledge-graph-loader-project"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/jobs/base" />
-      <recent name="$PROJECT_DIR$/src/models" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/artifacts/abis/dexes" />
+      <recent name="$PROJECT_DIR$/src/utils" />
+      <recent name="$PROJECT_DIR$/src/services" />
       <recent name="$PROJECT_DIR$/artifacts/abis" />
+      <recent name="$PROJECT_DIR$/src/services/blockchain" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/jobs" />
@@ -96,7 +104,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
-      <option name="PARAMETERS" value="update_nft_info_stream  -c ethereum --collector-id liquidity-pool-events-collector --stream-id updatet-dex-nft -b 40   -e 20015233" />
+      <option name="PARAMETERS" value="calculate_optimized_price_range" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -171,11 +179,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
-          <line>203</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/cli/flagged_nft.py</url>
           <line>86</line>
           <option name="timeStamp" value="47" />
@@ -192,33 +195,70 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/models/nfts.py</url>
-          <line>108</line>
+          <line>109</line>
           <option name="timeStamp" value="110" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
-          <line>195</line>
-          <option name="timeStamp" value="116" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
-          <line>74</line>
-          <option name="timeStamp" value="118" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/jobs/update_nft_job.py</url>
-          <line>88</line>
-          <option name="timeStamp" value="119" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/services/blockchain/state_query_service.py</url>
-          <line>390</line>
-          <option name="timeStamp" value="121" />
+          <line>404</line>
+          <option name="timeStamp" value="123" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/services/blockchain/state_query_service.py</url>
-          <line>402</line>
-          <option name="timeStamp" value="122" />
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py</url>
+          <line>71</line>
+          <option name="timeStamp" value="127" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <condition expression="tick_current is None" language="Python" />
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.10/site-packages/defi_services/utils/get_fees.py</url>
+          <line>3</line>
+          <option name="timeStamp" value="137" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py</url>
+          <line>268</line>
+          <option name="timeStamp" value="140" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py</url>
+          <line>167</line>
+          <option name="timeStamp" value="141" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py</url>
+          <line>257</line>
+          <option name="timeStamp" value="142" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.10/site-packages/eth_abi/decoding.py</url>
+          <line>413</line>
+          <option name="timeStamp" value="145" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
+          <line>294</line>
+          <option name="timeStamp" value="148" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.10/site-packages/web3/_utils/error_formatters_utils.py</url>
+          <line>161</line>
+          <option name="timeStamp" value="154" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <condition expression="token_id=='681429'" language="Python" />
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
+          <line>171</line>
+          <option name="timeStamp" value="166" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
+          <line>289</line>
+          <option name="timeStamp" value="168" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/job/algorthisms/genetic_algorithms.py</url>
+          <line>178</line>
+          <option name="timeStamp" value="175" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

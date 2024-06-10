@@ -16,9 +16,9 @@ logger = get_logger('Synced Wallet Stream')
 @click.option('--lag', default=0, show_default=True, type=int, help='The number of blocks to lag behind the network.')
 @click.option('-s', '--start-block', default=None, show_default=True, type=int, help='Start block')
 @click.option('-e', '--end-block', type=int, default=None, show_default=True, help='End block')
-@click.option('-B', '--block-batch-size', default=320, show_default=True, type=int,
+@click.option('-B', '--block-batch-size', default=180, show_default=True, type=int,
               help='How many blocks to batch in single sync round')
-@click.option('-b', '--batch-size', default=40, show_default=True, type=int,
+@click.option('-b', '--batch-size', default=30, show_default=True, type=int,
               help='How many blocks to batch in a worker')
 @click.option('--pid-file', default=None, show_default=True, type=str, help='pid file')
 @click.option('-c', '--chain', default='bsc', show_default=True, type=str,

@@ -121,16 +121,16 @@ class NFTInfoEnricherJob(BaseJob):
         self.state_querier.get_batch_nft_fee_with_block_number(
             nfts=unchanged_nfts, pools=self.pools_fee, list_rpc_call=list_rpc_call, list_call_id=list_call_id,
             start_block=self.before_30_days_block, latest=False)
-        self.state_querier.get_batch_nft_fee_with_block_number(
-            nfts=unchanged_nfts, pools=self.pools_fee, list_rpc_call=list_rpc_call, list_call_id=list_call_id,
-            latest=False)
+        # self.state_querier.get_batch_nft_fee_with_block_number(
+        #     nfts=unchanged_nfts, pools=self.pools_fee, list_rpc_call=list_rpc_call, list_call_id=list_call_id,
+        #     latest=False)
 
-        self.state_querier.get_batch_nft_fee_with_block_number(
-            nfts=changed_nfts, pools=self.pools_fee, start_block=self.end_block, list_rpc_call=list_rpc_call,
-            list_call_id=list_call_id, latest=True)
-        self.state_querier.get_batch_nft_fee_with_block_number(
-            nfts=changed_nfts, pools=self.pools_fee, list_rpc_call=list_rpc_call, list_call_id=list_call_id,
-            latest=False)
+        # self.state_querier.get_batch_nft_fee_with_block_number(
+        #     nfts=changed_nfts, pools=self.pools_fee, start_block=self.end_block, list_rpc_call=list_rpc_call,
+        #     list_call_id=list_call_id, latest=True)
+        # self.state_querier.get_batch_nft_fee_with_block_number(
+        #     nfts=changed_nfts, pools=self.pools_fee, list_rpc_call=list_rpc_call, list_call_id=list_call_id,
+        #     latest=False)
 
         data_response = self.state_querier.client_querier.sent_batch_to_provider(list_rpc_call, batch_size=1000)
         decoded_data = decode_data_response_ignore_error(data_response, list_call_id)
@@ -160,13 +160,15 @@ class NFTInfoEnricherJob(BaseJob):
                         unchanged_nft = False
 
                 if unchanged_nft:
-                    nft.apr_in_month, _, _ = self.calculate_apr(doc, data_response, start_block=self.before_30_days_block)
-                if blocks:
-                    nft.apr, nft.pnl, nft.invested_asset_in_usd = self.calculate_apr(doc, data_response, start_block=min(blocks))
+                    data = self.calculate_apr(doc, data_response, start_block=self.before_30_days_block)
+                    nft.apr_in_month = data.get('apr', 0)
+
+                # if blocks:
+                #     nft.apr, nft.pnl, nft.invested_asset_in_usd = self.calculate_apr(doc, data_response, start_block=min(blocks))
                 updated_nfts[idx] = nft
             except Exception as e:
                 # raise e
-                logger.error(e)
+                logger.exception(e)
                 continue
         return updated_nfts
 
@@ -217,7 +219,7 @@ class NFTInfoEnricherJob(BaseJob):
         ###
         if positions:
             if positions[7] == 0:
-                return 0, 0, 0
+                return {}
             nft.liquidity = float(positions[7])
             tick = pool_info['tick']
             tokens = pool_info['tokens']
@@ -258,7 +260,7 @@ class NFTInfoEnricherJob(BaseJob):
 
         else:
             self.deleted_tokens.append(idx)
-            return 0, 0, 0
+            return {}
         # updated_nfts[idx] = nft
 
     def _export(self, updated_nfts: Dict[str, NFT]):

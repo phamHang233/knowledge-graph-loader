@@ -40,7 +40,7 @@ class UpdateWalletInfoJob(BaseJob):
         for batch_idx in wallets_batch_indicates:
             update_wallets: Dict[str, Wallet] = {}
             try:
-                start_timestamp  = time.time()
+                start_timestamp = time.time()
                 cursor = self._klg_db.get_wallets(chain_id='0x1', batch_idx=batch_idx)
                 nft_ids = [doc['nfts'].keys() for doc in cursor]
                 nft_cursor = self._klg_db.get_nfts_by_keys(nft_ids)

@@ -62,6 +62,14 @@ class MongoDBDex:
             logger.exception(ex)
         return []
 
+    def get_project(self, project, chain_id):
+        try:
+            cursor = self._dexes_col.find_one({"_id": f"{chain_id}_{project}"})
+            return cursor
+        except Exception as e:
+            logger.exception(e)
+        return []
+
     #######################
     #        Pairs        #
     #######################
@@ -91,6 +99,16 @@ class MongoDBDex:
             keys = [f'{chain_id}_{address}' for address in addresses]
             filter_statement = {'_id': {'$in': keys}}
             cursor = self._pairs_col.find(filter=filter_statement, batch_size=batch_size)
+            return cursor
+        except Exception as ex:
+            logger.exception(ex)
+        return []
+
+    @sync_log_time_exe(tag=TimeExeTag.database)
+    def get_top_pairs(self, chain_id, project):
+        try:
+            filter_statement = {'project': project, "chainId": chain_id}
+            cursor = self._pairs_col.find(filter=filter_statement).sort('liquidityValueInUSD', pymongo.DESCENDING).limit(100)
             return cursor
         except Exception as ex:
             logger.exception(ex)
