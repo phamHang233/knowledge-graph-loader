@@ -207,4 +207,4 @@ class GeneticAlgorithms:
 #
 # def convert_price_to_tick(price, decimals0, decimals1):
 #     return int(math.log(1 / price * 10 ** (decimals1 - decimals0), 1.0001))
-print(convert_price_to_tick(3590.31, 6,18))
+# print(convert_price_to_tick(3590.31, 6,18))

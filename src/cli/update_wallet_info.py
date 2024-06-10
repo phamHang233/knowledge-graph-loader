@@ -23,7 +23,7 @@ logger = get_logger('Elite wallet marker')
 @click.option('-b', '--batch-size', default=1, show_default=True, type=int, help='NFT Batch size')
 # @click.option('--scheduler', default='^false@hourly', show_default=True, type=str, help=f'Scheduler with format "{scheduler_format}"')
 @click.option("-w", "--max-workers", default=1, show_default=True, type=int, help="The number of workers")
-def dex_nft_info_enricher(chain, batch_size, n_cpu, cpu, max_workers):
+def dex_wallet_info_enricher(chain, batch_size, n_cpu, cpu, max_workers):
     chain = str(chain).lower()
     if chain not in Chains.mapping:
         raise click.BadOptionUsage("--chain", f"Chain {chain} is not support. Try {list(Chains.mapping.keys())}")
@@ -35,14 +35,13 @@ def dex_nft_info_enricher(chain, batch_size, n_cpu, cpu, max_workers):
 
     logger.info(f'Connect to entity data: {_db.connection_url}')
 
-    provider_uri = Networks.archive_node.get(Chains.names[chain_id])
+    # provider_uri = Networks.archive_node.get(Chains.names[chain_id])
 
-    flagged_state = _db.get_nft_flagged_state(chain_id=chain_id)
-    nfts_batch = flagged_state["batch_idx"]
+    num_flagged_state = _db.get_nft_flagged_state(chain_id=chain_id)["batch_idx"]
 
     job = UpdateWalletInfoJob(
-        _db=_db, _exporter=_exporter, nfts_batch=nfts_batch,
+        _db=_db, _exporter=_exporter, num_nft_flagged=num_flagged_state,
         batch_size=batch_size, n_cpu=n_cpu, cpu=cpu, max_workers=max_workers,
-        chain_id=chain_id, provider_uri=provider_uri, db_prefix=db_prefix)
+        chain_id=chain_id, db_prefix=db_prefix)
 
     job.run()

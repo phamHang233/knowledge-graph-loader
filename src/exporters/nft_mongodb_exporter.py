@@ -32,10 +32,10 @@ class NFTMongoDBExporter:
             project['_id'] = filter_string(project['id'])
         self._db.update_docs(MongoDBCollections.projects, data=data)
 
-    def export_wallets(self, data: List[dict], metadata: dict = None):
+    def export_wallets(self, data: List[dict], chain_id = "0x1", metadata: dict = None):
         """Update newly-appeared wallets"""
         for wallet in data:
-            wallet['_id'] = f"{wallet['chainId']}_{wallet['address']}"
+            wallet['_id'] = f"{chain_id}_{wallet['address']}"
             if metadata is not None:
                 wallet.update(metadata)
 

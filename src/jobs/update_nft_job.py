@@ -112,22 +112,22 @@ class UpdateNftInfoJob(BaseJob):
             nft_info.liquidity = query_info.get('liquidity')
             nft_info.tick_upper = query_info.get('tick_upper')
             nft_info.tick_lower = query_info.get('tick_lower')
-            nft_info.last_called_at = query_info.get('last_called_at')
+            # nft_info.last_called_at = query_info.get('last_called_at')
             nft_info.pool_address = query_info.get('pool_address')
             nft_info.nft_manager_address = event['contract_address']
             nft_info.wallet = query_info.get('wallet')
-            nft_info.last_interact_at = query_info.get('last_called_at')
+            # nft_info.last_interact_at = query_info.get('last_called_at')
 
         if not nft_info:
             return
-        if block_number > nft_info.last_called_at:
-            if event['event_type'] == "INCREASELIQUIDITY":
-                nft_info.liquidity += liquidity
-            if event['event_type'] == "DECREASELIQUIDITY":
-                nft_info.liquidity -= liquidity
+        # if block_number > nft_info.last_called_at:
+        #     if event['event_type'] == "INCREASELIQUIDITY":
+        #         nft_info.liquidity += liquidity
+        #     if event['event_type'] == "DECREASELIQUIDITY":
+        #         nft_info.liquidity -= liquidity
 
-        nft_info.liquidity_change_logs[str(block_number)] = nft_info.liquidity
-        nft_info.last_interact_at = block_number
+        # nft_info.liquidity_change_logs[str(block_number)] = nft_info.liquidity
+        # nft_info.last_interact_at = block_number
 
     def aggregate_collect_event(self, event, events, data):
         token_id = event['tokenId']
@@ -142,7 +142,7 @@ class UpdateNftInfoJob(BaseJob):
             nft_info.liquidity = query_info.get('liquidity')
             nft_info.tick_upper = query_info.get('tick_upper')
             nft_info.tick_lower = query_info.get('tick_lower')
-            nft_info.last_called_at = query_info.get('last_called_at')
+            # nft_info.last_called_at = query_info.get('last_called_at')
             nft_info.pool_address = pool_address
             nft_info.nft_manager_address = event['contract_address']
             nft_info.wallet = query_info.get('wallet')
@@ -155,7 +155,7 @@ class UpdateNftInfoJob(BaseJob):
                 decrease_event = e
                 break
 
-        nft_info.last_interact_at = block_number
+        # nft_info.last_interact_at = block_number
         pool_info = self.pools.get(nft_info.pool_address)
         if pool_info and pool_info.get("tokens"):
             tokens = pool_info['tokens']
@@ -192,10 +192,10 @@ class UpdateNftInfoJob(BaseJob):
             "chainId": self.chain_id
         }
         self.exporter.export_config(config)
-        wallet_data = [w.to_dict() for _, w in self.updated_wallet.items()]
-        if wallet_data:
-            self.exporter.export_wallets(wallet_data)
-            logger.info(f'Exported {len(wallet_data)} wallets')
+        # wallet_data = [w.to_dict() for _, w in self.updated_wallet.items()]
+        # if wallet_data:
+        #     self.exporter.export_wallets(wallet_data)
+        #     logger.info(f'Exported {len(wallet_data)} wallets')
 
 
         data = [p.to_dict() for pool_address, p in self.updated_nfts.items()]

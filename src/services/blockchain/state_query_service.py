@@ -368,16 +368,16 @@ class StateQueryService:
         list_call_id = []
         for nft in missing_nfts:
             token_id = nft['token_id']
-            block_number = nft['block_number']
+            # block_number = nft['block_number']
             address = nft['contract_address']
             add_rpc_call(
                 abi=UNISWAP_V3_NFT_MANAGER_ABI, contract_address=Web3.to_checksum_address(address),
-                fn_name="positions", block_number=block_number, fn_paras=int(token_id),
+                fn_name="positions", block_number='latest', fn_paras=int(token_id),
                 list_call_id=list_call_id, list_rpc_call=list_rpc_call
             )
             add_rpc_call(
                 abi=UNISWAP_V3_NFT_MANAGER_ABI, contract_address=Web3.to_checksum_address(address),
-                fn_name="ownerOf", block_number=block_number, fn_paras=int(token_id),
+                fn_name="ownerOf", block_number='latest', fn_paras=int(token_id),
                 list_call_id=list_call_id, list_rpc_call=list_rpc_call
             )
             factory = factory_nft_contracts.get(address)
@@ -407,10 +407,10 @@ class StateQueryService:
         list_call_id = []
         for nft in missing_nfts:
             token_id = nft['token_id']
-            block_number = nft['block_number']
+            # block_number = nft['block_number']
             address = nft['contract_address']
-            position = decoded_data.get(f"positions_{address}_{token_id}_{block_number}".lower())
-            wallet = decoded_data.get(f"ownerOf_{address}_{token_id}_{block_number}".lower())
+            position = decoded_data.get(f"positions_{address}_{token_id}_latest".lower())
+            wallet = decoded_data.get(f"ownerOf_{address}_{token_id}_latest".lower())
             if not position:
                 continue
             if factory_nft_contracts.get(address) is None:
@@ -423,15 +423,15 @@ class StateQueryService:
             tick_lower = position[5]
             tick_upper = position[6]
             liquidity = position[7]
-            fee_growth_inside0 = position[8]
-            fee_growth_inside1 = position[9]
+            # fee_growth_inside0 = position[8]
+            # fee_growth_inside1 = position[9]
             result[token_id] = {
                 'tick_lower': tick_lower,
                 'tick_upper': tick_upper,
                 'liquidity': float(liquidity),
-                'fee_growth_inside0': fee_growth_inside0,
-                'fee_growth_inside1': fee_growth_inside1,
-                'last_called_at': block_number,
+                # 'fee_growth_inside0': fee_growth_inside0,
+                # 'fee_growth_inside1': fee_growth_inside1,
+                # 'last_called_at': block_number,
                 'wallet': wallet
             }
             add_rpc_call(
@@ -450,9 +450,9 @@ class StateQueryService:
 
             for nft in missing_nfts:
                 token_id = nft['token_id']
-                block_number = nft['block_number']
+                # block_number = nft['block_number']
                 address = nft['contract_address']
-                position = decoded_data.get(f"positions_{address}_{token_id}_{block_number}".lower())
+                position = decoded_data.get(f"positions_{address}_{token_id}_latest".lower())
                 if not position:
                     continue
 

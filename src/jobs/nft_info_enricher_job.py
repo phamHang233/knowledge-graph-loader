@@ -64,7 +64,7 @@ class NFTInfoEnricherJob(BaseJob):
         for batch_idx in nfts_batch_indicates:
             try:
                 start_time = time.time()
-                batch_cursor = self._klg_db.get_nfts_by_flag(_filter={"flagged": batch_idx,
+                batch_cursor = self._klg_db.get_nfts_by_filter(_filter={"flagged": batch_idx,
                                                                       "nftManagerAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88"})
                 batch_cursor = list(batch_cursor)
                 new_batch_cursor = self.check_available_nft(batch_cursor)

@@ -31,6 +31,7 @@ class NFTMongoDB:
         self._nft_col = self.mongo_db[DexNFTManagerCollections.dex_nfts]
         self.collector_collection = self.mongo_db[DexNFTManagerCollections.collectors]
         self._configs_col = self.mongo_db[DexNFTManagerCollections.configs]
+        self._pair_col = self.mongo_db[DexNFTManagerCollections.pairs]
         if db_prefix:
             dex_event_col = db_prefix + "_" + DexNFTManagerCollections.dex_events_etl
         else:
@@ -487,9 +488,17 @@ class NFTMongoDB:
             return None
         return config
 
-    def get_nfts_by_flag(self, _filter, projection=None):
+    def get_nfts_by_filter(self, _filter, projection=None):
         cursor = self._nft_col.find(_filter, projection=projection)
         return cursor
+
+    def get_top_nfts_of_pair(self, pair_address, projection=None):
+        try:
+            cursor = (self._nft_col.find({'poolAddress': pair_address, 'aprInMonth':{"$gt": 0}}, projection=projection)
+                      .sort("aprInMonth", pymongo.DESCENDING).limit(1))
+            return cursor[0]
+        except:
+            return None
 
     def get_nfts_by_keys(self, keys):
         cursor = self._nft_col.find({"_id": {"$in": keys}})
@@ -773,3 +782,11 @@ class NFTMongoDB:
             upsert=True
         ) for item in nfts]
         self._nft_col.bulk_write(bulk_operations)
+
+    ######################
+    #        PAIR        #
+    ######################
+
+    def get_pairs(self):
+        cursor = self._pair_col.find({'bestAPR': {"$exists": True}})
+        return cursor

@@ -6,6 +6,7 @@ class Wallet:
         self.address = address
         self.chain_id = chain_id
         self.nfts = []
+        self.total_liquidity = 0
         self.tokens = {}
         self.apr = 0
         self.pnl = 0

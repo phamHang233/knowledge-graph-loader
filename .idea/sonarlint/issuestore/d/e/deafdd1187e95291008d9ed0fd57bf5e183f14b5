@@ -1,7 +1,11 @@
 
-ypython:S3776Ü"TRefactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed.(ôÚÔ„øÿÿÿÿ8Š‚Çş1
-tpython:S3776‚"TRefactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed.(·¡Î†8¿Š‚Çş1
-spython:S3776ì"TRefactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed.(‚÷ÕP8ËŠ‚Çş1
->python:S125½"Remove this commented out code.(¿·Îä8ËŠ‚Çş1
-Cpython:S125ç"Remove this commented out code.(Œ‚âÄøÿÿÿÿ8˜…‰Çş1
-Cpython:S125‰"Remove this commented out code.(Œ‚âÄøÿÿÿÿ8˜…‰Çş1
+ypython:S3776Ü"TRefactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed.(ôÚÔ„øÿÿÿÿ8Ğœó€2
+tpython:S3776‚"TRefactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed.(·¡Î†8ßœó€2
+spython:S3776ì"TRefactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed.(‚÷ÕP8‘Ôó€2
+>python:S125ó"Remove this commented out code.(øÛØ¾8ãœó€2
+>python:S125š"Remove this commented out code.(øÛØ¾8ãœó€2
+Cpython:S125ª"Remove this commented out code.(¾É¹¬ûÿÿÿÿ8ãœó€2
+>python:S125½"Remove this commented out code.(¿·Îä8äœó€2
+>python:S125Å"Remove this commented out code.(øÛØ¾8ûó€2
+Cpython:S125ç"Remove this commented out code.(Œ‚âÄøÿÿÿÿ8äœó€2
+Cpython:S125‰"Remove this commented out code.(Œ‚âÄøÿÿÿÿ8åœó€2
