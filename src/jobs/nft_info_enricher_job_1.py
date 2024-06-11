@@ -57,10 +57,10 @@ class NFTInfoEnricherJob(BaseJob):
         # self.invalid_pool = []
         # self.token_price = {}
         self.end_block = self._etl_db.get_last_block_number()
-        # current_day_timestamp = int(int(time.time()) / 24 / 3600) * 24 * 3600
-        # cursor = self._etl_db.get_block_by_timestamp(current_day_timestamp - 24 * 1 * 3600 + 3600 -1)
-        # self.before_timestamp = cursor['number']
-        self.before_timestamp = 220460428
+        current_day_timestamp = int(time.time())
+        cursor = self._etl_db.get_block_by_timestamp(current_day_timestamp - 24 * 1 * 3600 + 3600 -1)
+        self.before_timestamp = cursor['number']
+        # self.before_timestamp = 220460428
 
     def _execute_batch(self, nfts_batch_indicates):
         for batch_idx in nfts_batch_indicates:
@@ -155,9 +155,9 @@ class NFTInfoEnricherJob(BaseJob):
         current_decoded_data = w3_multicall.decode(response)
 
         before_decoded_data = {}
-        for idx in range(0, len(cursor_batch), 40):
+        for idx in range(0, len(cursor_batch), 20):
             w3_multicall.calls = []
-            nft_batchs = cursor_batch[idx: idx+40]
+            nft_batchs = cursor_batch[idx: idx+20]
             self.state_querier.get_batch_nft_fee_with_block_number(
                 nfts=nft_batchs, pools=self.pools_fee, latest=False,w3_multicall=w3_multicall)
             contract_ = self._w3.eth.contract(Web3.to_checksum_address(w3_multicall.address), abi=MULTICALL_ABI)
