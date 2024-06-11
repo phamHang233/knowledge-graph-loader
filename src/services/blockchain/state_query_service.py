@@ -518,21 +518,6 @@ class StateQueryService:
                 W3Multicall.Call(address=Web3.to_checksum_address(nft['nftManagerAddress']),
                                  abi=UNISWAP_V3_NFT_MANAGER_ABI, fn_name='positions', fn_paras=int(nft['tokenId'])
                                  ))
-            # add_rpc_call(
-            #     abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
-            #     fn_name="ticks", block_number=block_number, fn_paras=nft['tickLower'],
-            #     list_call_id=list_call_id, list_rpc_call=list_rpc_call
-            # )
-            # add_rpc_call(
-            #     abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
-            #     fn_name="ticks", block_number=block_number, fn_paras=nft['tickUpper'],
-            #     list_call_id=list_call_id, list_rpc_call=list_rpc_call
-            # )
-            # add_rpc_call(
-            #     abi=UNISWAP_V3_NFT_MANAGER_ABI, contract_address=nft['nftManagerAddress'],
-            #     fn_name="positions", block_number=block_number, fn_paras=int(nft['tokenId']),
-            #     list_call_id=list_call_id, list_rpc_call=list_rpc_call
-            # )
 
         return w3_multicall
     # def get_batch_nft_fee_with_block_number(self, nfts, pools, list_rpc_call, list_call_id, start_block=None, latest = False):

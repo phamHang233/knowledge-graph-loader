@@ -105,7 +105,7 @@ class NFT:
         ref_invest_in_usd = ((invest1_before * token1_price / 10 ** decimals1)
                              + (invest0_before * token0_price / 10 ** decimals0))
         investment_change_in_usd = current_invest_in_usd - ref_invest_in_usd
-        apr = (fee_change_in_usd + investment_change_in_usd) / ref_invest_in_usd / 30 * 365 if ref_invest_in_usd > 1e-03 else 0
+        apr = (fee_change_in_usd + investment_change_in_usd) / ref_invest_in_usd / 1 * 365 if ref_invest_in_usd > 1e-03 else 0
         if apr > 10e3:
             print(self.token_id)
         self.tokens = {

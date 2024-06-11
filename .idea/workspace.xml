@@ -5,20 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7e54e82-91bf-4949-b697-b0122a4a78a0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/8/e812eebb0056da2b5601953f4a3e32ebdb37d249" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/8/e812eebb0056da2b5601953f4a3e32ebdb37d249" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4d209132a2ee64a2e0170cdaae024db342695d75" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4d209132a2ee64a2e0170cdaae024db342695d75" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/c/dc340daa0bf31143bb4199b355ad2b61f9ff96b0" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/c/dc340daa0bf31143bb4199b355ad2b61f9ff96b0" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job/algorthisms/genetic_algorithms.py" beforeDir="false" afterPath="$PROJECT_DIR$/job/algorthisms/genetic_algorithms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cli/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cli/update_wallet_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/update_wallet_info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job/services/fee_from_strategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/job/services/fee_from_strategy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/databases/blockchain_etl.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/databases/blockchain_etl.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/databases/dex_nft_manager_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/databases/dex_nft_manager_db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jobs/update_nft_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/update_nft_job.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jobs/update_wallet_info_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/update_wallet_info_job.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/wallet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/wallet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/nfts.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/nfts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,27 +42,50 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.fee_from_strategy.executor": "Run",
     "Python.histogram.executor": "Run",
     "Python.nft_info_enricher_job.executor": "Debug",
-    "Python.run.executor": "Run",
+    "Python.run.executor": "Debug",
     "Python.test.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/home/hang/Documents/Study/DATN/knowledge-graph-loader-project"
+    "last_opened_file_path": "/home/hang/Documents/Study/DATN/knowledge-graph-loader-project/src/jobs"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/jobs" />
+      <recent name="$PROJECT_DIR$/src/cli" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/utils" />
       <recent name="$PROJECT_DIR$/src/services" />
-      <recent name="$PROJECT_DIR$/artifacts/abis" />
-      <recent name="$PROJECT_DIR$/src/services/blockchain" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/jobs" />
     </key>
   </component>
   <component name="RunManager" selected="Python.run">
+    <configuration name="fee_from_strategy" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="knowledge-graph-loader-project" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/job/services" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/job/services/fee_from_strategy.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="histogram" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="knowledge-graph-loader-project" />
       <option name="ENV_FILES" value="" />
@@ -120,7 +144,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
-      <option name="PARAMETERS" value="dex_wallet_info_enricher" />
+      <option name="PARAMETERS" value="dex_nft_info_enricher -c arbitrum" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -152,12 +176,14 @@
     </configuration>
     <list>
       <item itemvalue="Python.run" />
+      <item itemvalue="Python.fee_from_strategy" />
       <item itemvalue="Python.histogram" />
       <item itemvalue="Python.nft_info_enricher_job" />
       <item itemvalue="Python.test" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.fee_from_strategy" />
         <item itemvalue="Python.histogram" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.nft_info_enricher_job" />
@@ -167,7 +193,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-48aec45f0201-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.17011.127" />
+        <option value="bundled-python-sdk-5b207ade9991-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.17890.14" />
       </set>
     </attachedChunks>
   </component>
@@ -197,16 +223,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/cli/flagged_nft.py</url>
-          <line>86</line>
-          <option name="timeStamp" value="47" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/databases/dex_nft_manager_db.py</url>
-          <line>778</line>
-          <option name="timeStamp" value="48" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py</url>
           <line>74</line>
           <option name="timeStamp" value="99" />
@@ -215,11 +231,6 @@
           <url>file://$PROJECT_DIR$/src/models/nfts.py</url>
           <line>109</line>
           <option name="timeStamp" value="110" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/services/blockchain/state_query_service.py</url>
-          <line>404</line>
-          <option name="timeStamp" value="123" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py</url>
@@ -246,11 +257,6 @@
           <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job_base_job.py</url>
           <line>257</line>
           <option name="timeStamp" value="142" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/.venv/lib/python3.10/site-packages/eth_abi/decoding.py</url>
-          <line>413</line>
-          <option name="timeStamp" value="145" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
@@ -328,6 +334,26 @@
           <line>34</line>
           <option name="timeStamp" value="212" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/utils/file_utils.py</url>
+          <line>73</line>
+          <option name="timeStamp" value="227" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/cli/flagged_nft.py</url>
+          <line>60</line>
+          <option name="timeStamp" value="229" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job_1.py</url>
+          <line>81</line>
+          <option name="timeStamp" value="244" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job_1.py</url>
+          <line>164</line>
+          <option name="timeStamp" value="246" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -337,5 +363,10 @@
         </breakpoint>
       </default-breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="contract_" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

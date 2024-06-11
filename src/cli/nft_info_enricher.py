@@ -10,10 +10,11 @@ from src.databases.dex_nft_manager_db import NFTMongoDB
 from src.databases.mongodb_klg import MongoDB
 from src.exporters import create_entity_db_and_exporter, ExporterType
 from src.exporters.nft_mongodb_exporter import NFTMongoDBExporter
-from src.jobs.nft_info_enricher_job import NFTInfoEnricherJob
+from src.jobs.nft_info_enricher_job_1 import NFTInfoEnricherJob
 from src.utils.logger_utils import get_logger
 
 logger = get_logger('NFT Info Enricher')
+
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.option("-nc", "--n-cpu", default=1, show_default=True, type=int, help="Number of CPU")

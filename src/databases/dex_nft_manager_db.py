@@ -766,6 +766,9 @@ class NFTMongoDB:
             filter_statement = {'flagged': {'$exists': False}}
         else:
             filter_statement = {}
+        if chain_id:
+            filter_statement['chainId'] = chain_id
+
         cursor = self._nft_col.find(filter_statement, batch_size=batch_size)
 
         return cursor

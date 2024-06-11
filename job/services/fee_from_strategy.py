@@ -10,6 +10,7 @@ def uniswap_strategy_backtest(pool, investment_amount, min_range, max_range, pro
                               end_timestamp):
     if min_range >= max_range:
         return None
+    start_time = time.time()
     pool_data = pool_by_id(pool, protocol)
     hourly_price_data = get_pool_hour_data(pool, start_timestamp, end_timestamp, protocol)
     if pool_data and hourly_price_data and len(hourly_price_data) > 0:
@@ -26,6 +27,10 @@ def uniswap_strategy_backtest(pool, investment_amount, min_range, max_range, pro
         # amount0, amount1 = get_token_amount_of_user(liquidity=investment_amount,
         #                                             sqrt_price_x96=math.sqrt(1.0001 ** tick) * 2 ** 96, tick=tick,
         #                                             tick_upper=tick_upper, tick_lower=tick_lower)
+        start = time.time()
+        # print(f'execute toke {time.time() - start_time}')
+
+
         amount0, amount1 = tokens_for_strategy(min_range=min_range, max_range=max_range,
                                                investment_amount=investment_amount, price=entry_price,
                                                decimals=decimals1 - decimals0)
@@ -35,7 +40,9 @@ def uniswap_strategy_backtest(pool, investment_amount, min_range, max_range, pro
         #                                            amount1, decimals0, decimals1)
         hourly_backtest = calc_fees(backtest_data, pool_data, liquidity,
                                     min_range, max_range)
-        return pivot_fee_data(amount0, amount1, hourly_backtest)
+        x = pivot_fee_data(amount0, amount1, hourly_backtest)
+        print(f'execute toke {time.time() - start}')
+        return x
 
 
 def uniswap_strategy_algorithm(backtest_data, pool_data, investment_amount, min_tick, max_tick):
@@ -58,12 +65,10 @@ def uniswap_strategy_algorithm(backtest_data, pool_data, investment_amount, min_
 #
 # end_timestamp = int(time.time())
 # start_timestamp = int(end_timestamp / 24 /3600) * 24 * 3600 - 3 * 24 * 3600 -1
-# start_time = time.time()
-# #
-# print(uniswap_strategy_backtest(pool="0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", investment_amount=1000,
+# uniswap_strategy_backtest(pool="0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", investment_amount=1000,
 #                                        min_range=3729.3582,
 #                                        max_range=3850.6215,
-#                                        protocol='ethereum', start_timestamp=start_timestamp,end_timestamp=end_timestamp))
+#                                        protocol='ethereum', start_timestamp=start_timestamp,end_timestamp=end_timestamp)
 # # print(res, time)
 # print(time.time()-start_time)
 

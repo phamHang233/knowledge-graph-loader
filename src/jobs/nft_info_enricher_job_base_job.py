@@ -52,8 +52,8 @@ class NFTInfoEnricherJob(BaseJob):
         current_day_timestamp = int(int(time.time()) / 24 / 3600) * 24 * 3600
         cursor = self._etl_db.get_block_by_timestamp(current_day_timestamp - 24 * 30 * 3600 + 3600 -1)
         for doc in cursor:
-            self.before_30_days_block = doc['number']
-        # self.before_30_days_block = 19331243
+            self.before_timestamp = doc['number']
+        # self.before_timestamp = 19331243
 
     def _execute_batch(self, nfts_batch_indicates):
         for batch_idx in nfts_batch_indicates:
@@ -91,7 +91,7 @@ class NFTInfoEnricherJob(BaseJob):
             blocks = []
             for block_number in liquidity_change_logs:
                 blocks.append(int(block_number))
-                if int(block_number) > self.before_30_days_block:
+                if int(block_number) > self.before_timestamp:
                     unchanged_nft = False
 
             if unchanged_nft:
@@ -120,7 +120,7 @@ class NFTInfoEnricherJob(BaseJob):
             list_call_id=list_call_id, latest=True)
         self.state_querier.get_batch_nft_fee_with_block_number(
             nfts=unchanged_nfts, pools=self.pools_fee, list_rpc_call=list_rpc_call, list_call_id=list_call_id,
-            start_block=self.before_30_days_block, latest=False)
+            start_block=self.before_timestamp, latest=False)
         # self.state_querier.get_batch_nft_fee_with_block_number(
         #     nfts=unchanged_nfts, pools=self.pools_fee, list_rpc_call=list_rpc_call, list_call_id=list_call_id,
         #     latest=False)
@@ -156,11 +156,11 @@ class NFTInfoEnricherJob(BaseJob):
                 blocks = []
                 for block_number in liquidity_change_logs:
                     blocks.append(int(block_number))
-                    if int(block_number) > self.before_30_days_block:
+                    if int(block_number) > self.before_timestamp:
                         unchanged_nft = False
 
                 if unchanged_nft:
-                    data = self.calculate_apr(doc, data_response, start_block=self.before_30_days_block)
+                    data = self.calculate_apr(doc, data_response, start_block=self.before_timestamp)
                     nft.apr_in_month = data.get('apr', 0)
 
                 # if blocks:

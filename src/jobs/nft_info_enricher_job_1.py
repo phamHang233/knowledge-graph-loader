@@ -8,6 +8,8 @@ from web3 import Web3
 from artifacts.abis.dexes.uniswap_v3_nft_manage_abi import UNISWAP_V3_NFT_MANAGER_ABI
 from artifacts.abis.multicall_abi import MULTICALL_ABI
 from src.constants.mongo_constants import DexNFTManagerCollections
+from src.constants.multicall_contract import MulticallContract
+from src.constants.network_constants import Networks
 from src.databases.blockchain_etl import BlockchainETL
 from src.databases.mongodb_dex import MongoDBDex
 from src.models.nfts import NFT
@@ -35,6 +37,7 @@ class NFTInfoEnricherJob(BaseJob):
 
         self.chain_id = chain_id
         self.state_querier = StateQueryService(provider_uri)
+        self._w3 = Web3(Web3.HTTPProvider(provider_uri))
 
         work_iterable = self._get_work_iterable()
         super().__init__(work_iterable, batch_size, max_workers)
@@ -54,20 +57,19 @@ class NFTInfoEnricherJob(BaseJob):
         # self.invalid_pool = []
         # self.token_price = {}
         self.end_block = self._etl_db.get_last_block_number()
-        current_day_timestamp = int(int(time.time()) / 24 / 3600) * 24 * 3600
-        cursor = self._etl_db.get_block_by_timestamp(current_day_timestamp - 24 * 30 * 3600 + 3600 -1)
-        for doc in cursor:
-            self.before_timestamp = doc['number']
-        # self.before_timestamp = 19331243
+        # current_day_timestamp = int(int(time.time()) / 24 / 3600) * 24 * 3600
+        # cursor = self._etl_db.get_block_by_timestamp(current_day_timestamp - 24 * 1 * 3600 + 3600 -1)
+        # self.before_timestamp = cursor['number']
+        self.before_timestamp = 220460428
 
     def _execute_batch(self, nfts_batch_indicates):
         for batch_idx in nfts_batch_indicates:
             try:
                 start_time = time.time()
-                batch_cursor = self._klg_db.get_nfts_by_filter(_filter={"flagged": batch_idx,
+                batch_cursor = self._klg_db.get_nfts_by_filter(_filter={"flagged": batch_idx, 'liquidity': {"$gt": 0}, 'chainId': self.chain_id,
                                                                       "nftManagerAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88"})
-                batch_cursor = list(batch_cursor)
-                new_batch_cursor = self.check_available_nft(batch_cursor)
+                new_batch_cursor = list(batch_cursor)
+                # new_batch_cursor = self.check_available_nft(batch_cursor)
                 current_data_response, before_data_response, pools_in_batch = self.prepare_enrich(new_batch_cursor)
 
                 cursor = self.dex_db.get_pairs_with_addresses(chain_id=self.chain_id, addresses=list(pools_in_batch))
@@ -108,31 +110,31 @@ class NFTInfoEnricherJob(BaseJob):
     def prepare_enrich(self, cursor_batch):
         pools_in_batch = []
         start_time = time.time()
-        unchanged_nfts = []
+        # unchanged_nfts = []
         # changed_nfts = []
 
         for _, doc in enumerate(cursor_batch):
             pool_address = doc['poolAddress']
             pools_in_batch.append(pool_address)
 
-            liquidity_change_logs = doc.get('liquidityChangeLogs', {})
-            unchanged_nft = True
-            blocks = []
-            for block_number in liquidity_change_logs:
-                blocks.append(int(block_number))
-                if int(block_number) > self.before_timestamp:
-                    unchanged_nft = False
-
-            if unchanged_nft:
-                unchanged_nfts.append({
-                    'tokenId': doc['tokenId'],
-                    'poolAddress': pool_address,
-                    'tickLower': doc['tickLower'],
-                    "tickUpper": doc['tickUpper'],
-                    'nftManagerAddress': doc['nftManagerAddress'],
-                    'blockNumber': min(blocks) if blocks else 0
-
-                })
+            # liquidity_change_logs = doc.get('liquidityChangeLogs', {})
+            # unchanged_nft = True
+            # blocks = []
+            # for block_number in liquidity_change_logs:
+            #     blocks.append(int(block_number))
+            #     if int(block_number) > self.before_timestamp:
+            #         unchanged_nft = False
+            #
+            # if unchanged_nft:
+            #     unchanged_nfts.append({
+            #         'tokenId': doc['tokenId'],
+            #         'poolAddress': pool_address,
+            #         'tickLower': doc['tickLower'],
+            #         "tickUpper": doc['tickUpper'],
+            #         'nftManagerAddress': doc['nftManagerAddress'],
+            #         'blockNumber': min(blocks) if blocks else 0
+            #
+            #     })
             # else:
                 # if blocks:
                 #     changed_nfts.append({
@@ -143,23 +145,26 @@ class NFTInfoEnricherJob(BaseJob):
                 #         'nftManagerAddress': doc['nftManagerAddress'],
                 #         'blockNumber': min(blocks)
                 #     })
-        _w3 = Web3(Web3.HTTPProvider('https://rpc.ankr.com/eth'))
-        w3_multicall = W3Multicall(_w3, address='0xcA11bde05977b3631167028862bE2a173976CA11')
+        w3_multicall = W3Multicall(self._w3, address=MulticallContract.multicall_contract.get(self.chain_id))
 
         self.state_querier.get_batch_nft_fee_with_block_number(
-            nfts=unchanged_nfts, pools=self.pools_fee, w3_multicall=w3_multicall, latest=True)
-        contract_ = _w3.eth.contract(Web3.to_checksum_address(w3_multicall.address), abi=MULTICALL_ABI)
+            nfts=cursor_batch, pools=self.pools_fee, w3_multicall=w3_multicall, latest=True)
+        contract_ = self._w3.eth.contract(Web3.to_checksum_address(w3_multicall.address), abi=MULTICALL_ABI)
         inputs = w3_multicall.get_params()
         response = contract_.functions.aggregate(*inputs).call(block_identifier='latest')
         current_decoded_data = w3_multicall.decode(response)
 
-        w3_multicall = W3Multicall(_w3, address='0xcA11bde05977b3631167028862bE2a173976CA11')
-        self.state_querier.get_batch_nft_fee_with_block_number(
-            nfts=unchanged_nfts, pools=self.pools_fee, latest=False,w3_multicall=w3_multicall)
-        contract_ = _w3.eth.contract(Web3.to_checksum_address(w3_multicall.address), abi=MULTICALL_ABI)
-        inputs = w3_multicall.get_params()
-        response = contract_.functions.aggregate(*inputs).call(block_identifier=self.before_timestamp)
-        before_decoded_data = w3_multicall.decode(response)
+        before_decoded_data = {}
+        for idx in range(0, len(cursor_batch), 40):
+            w3_multicall.calls = []
+            nft_batchs = cursor_batch[idx: idx+40]
+            self.state_querier.get_batch_nft_fee_with_block_number(
+                nfts=nft_batchs, pools=self.pools_fee, latest=False,w3_multicall=w3_multicall)
+            contract_ = self._w3.eth.contract(Web3.to_checksum_address(w3_multicall.address), abi=MULTICALL_ABI)
+            inputs = w3_multicall.get_params()
+            response = contract_.functions.aggregate(*inputs).call(block_identifier=self.before_timestamp)
+            before_decoded_data.update(w3_multicall.decode(response))
+
         logger.info(f"Query process toke {time.time() - start_time}")
 
         return current_decoded_data, before_decoded_data, pools_in_batch
@@ -178,16 +183,16 @@ class NFTInfoEnricherJob(BaseJob):
                     #     self.invalid_pool.append(pool_address)
                     continue
 
-                unchanged_nft = True
-                liquidity_change_logs = nft.liquidity_change_logs
-                blocks = []
-                for block_number in liquidity_change_logs:
-                    blocks.append(int(block_number))
-                    if int(block_number) > self.before_timestamp:
-                        unchanged_nft = False
-
-                if unchanged_nft:
-                    self.calculate_apr(nft, current_data_response, before_data_response)
+                # unchanged_nft = True
+                # liquidity_change_logs = nft.liquidity_change_logs
+                # blocks = []
+                # for block_number in liquidity_change_logs:
+                #     blocks.append(int(block_number))
+                #     if int(block_number) > self.before_timestamp:
+                #         unchanged_nft = False
+                #
+                # if unchanged_nft:
+                self.calculate_apr(nft, current_data_response, before_data_response)
 
                 # if blocks:
                 #     nft.apr, nft.pnl, nft.invested_asset_in_usd = self.calculate_apr(doc, data_response, start_block=min(blocks))
@@ -238,10 +243,13 @@ class NFTInfoEnricherJob(BaseJob):
         fee_growth_low_x128 = current_data_response.get(f'ticks_{pool_address}_{tick_lower}'.lower())
         fee_growth_hi_x128 = current_data_response.get(f'ticks_{pool_address}_{tick_upper}'.lower())
         positions = current_data_response.get(f'positions_{nft_manager_contract}_{token_id}'.lower())
-
+        if not positions:
+            self.deleted_tokens.append(f"{self.chain_id}_{nft.nft_manager_address}_{nft.token_id}")
         ###
 
         nft.liquidity = float(positions[7])
+        if abs(positions_before[7] - float(positions[7])) > 0.01:
+            return
         tick = pool_info['tick']
         tokens = pool_info['tokens']
         token0_decimals = tokens[0]['decimals']
