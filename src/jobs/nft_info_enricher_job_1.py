@@ -69,8 +69,8 @@ class NFTInfoEnricherJob(BaseJob):
                 start_time = time.time()
                 batch_cursor = self._klg_db.get_nfts_by_filter(_filter={"flagged": batch_idx, 'liquidity': {"$gt": 0}, 'chainId': self.chain_id,
                                                                       "nftManagerAddress": "0xc36442b4a4522e871399cd717abdd847ab11fe88"})
-                new_batch_cursor = list(batch_cursor)
-                # new_batch_cursor = self.check_available_nft(batch_cursor)
+                batch_cursor = list(batch_cursor)
+                new_batch_cursor = self.check_available_nft(batch_cursor)
                 current_data_response, before_data_response, pools_in_batch = self.prepare_enrich(new_batch_cursor)
 
                 cursor = self.dex_db.get_pairs_with_addresses(chain_id=self.chain_id, addresses=list(pools_in_batch))
@@ -83,6 +83,7 @@ class NFTInfoEnricherJob(BaseJob):
             except Exception as e:
                 # logger.error(e)
                 logger.exception(e)
+                continue
 
     def check_available_nft(self, cursor_batch):
 
