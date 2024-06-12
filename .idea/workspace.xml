@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c7e54e82-91bf-4949-b697-b0122a4a78a0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job_1.py" afterDir="false" />
-    </list>
+    <list default="true" id="c7e54e82-91bf-4949-b697-b0122a4a78a0" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,7 +29,7 @@
     "Python.fee_from_strategy.executor": "Run",
     "Python.histogram.executor": "Run",
     "Python.nft_info_enricher_job.executor": "Debug",
-    "Python.run.executor": "Run",
+    "Python.run.executor": "Debug",
     "Python.test.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "last_opened_file_path": "/home/hang/Documents/Study/DATN/knowledge-graph-loader-project/src/jobs"
