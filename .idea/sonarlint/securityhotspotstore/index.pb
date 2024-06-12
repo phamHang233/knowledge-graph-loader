@@ -164,3 +164,5 @@ S
 #src/constants/multicall_contract.py,b/2/b25531b735cb13bc702ca525f0572979bd90859e
 R
 "job/constants/network_constants.py,8/8/88dc4657d0aba899821a59eb0431d8ff9346d19f
+R
+"artifacts/abis/multicall_v3_abi.py,7/c/7c37f6ed66ade4caf35d3062ca83ddf41733aa5e

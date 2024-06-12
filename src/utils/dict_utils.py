@@ -89,3 +89,6 @@ def short_address(address: str, n_start=3, n_end=4):
     if not address:
         return ''
     return address[:n_start + 2] + '...' + address[-n_end:]
+
+def all_equal(array):
+    return (not array) or (array.count(array[0]) == len(array))

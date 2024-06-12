@@ -5,9 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7e54e82-91bf-4949-b697-b0122a4a78a0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/8/e812eebb0056da2b5601953f4a3e32ebdb37d249" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/8/e812eebb0056da2b5601953f4a3e32ebdb37d249" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/b/9b44123f2e5c621a545a3fccf328b46dacec8d50" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/b/9b44123f2e5c621a545a3fccf328b46dacec8d50" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/multicall_contract.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/multicall_contract.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/network_constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/network_constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/databases/blockchain_etl.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/databases/blockchain_etl.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/blockchain/batch_queries_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/blockchain/batch_queries_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/blockchain/multicall.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/blockchain/multicall.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/dict_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/dict_utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -334,13 +344,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job_1.py</url>
-          <line>82</line>
+          <line>83</line>
           <option name="timeStamp" value="244" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/databases/blockchain_etl.py</url>
-          <line>418</line>
+          <line>419</line>
           <option name="timeStamp" value="248" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job_1.py</url>
+          <line>168</line>
+          <option name="timeStamp" value="251" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -351,10 +366,5 @@
         </breakpoint>
       </default-breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="PythonConfigurationType">
-        <watch expression="contract_" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>

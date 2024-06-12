@@ -293,4 +293,30 @@ NATIVE_TOKENS = {
     Chains.avalanche: '0x0000000000000000000000000000000000000000',
     Chains.tron: '0x0000000000000000000000000000000000000000'
 }
+
+class MulticallContract:
+    """
+    References: https://www.multicall3.com/deployments
+    """
+
+    on_chains_v3 = {
+        Chains.ethereum: '0xca11bde05977b3631167028862be2a173976ca11',
+        Chains.bsc: '0xca11bde05977b3631167028862be2a173976ca11',
+        Chains.polygon: '0xca11bde05977b3631167028862be2a173976ca11',
+        Chains.avalanche: '0xca11bde05977b3631167028862be2a173976ca11',
+        Chains.fantom: '0xca11bde05977b3631167028862be2a173976ca11',
+        Chains.arbitrum: '0xca11bde05977b3631167028862be2a173976ca11',
+        Chains.optimism: '0xca11bde05977b3631167028862be2a173976ca11',
+        Chains.tron: '0x32a4f47a74a6810bd0bf861cabab99656a75de9e',
+        # Chains.oasis_sapphire: '0xca11bde05977b3631167028862be2a173976ca11',
+        # Chains.oasis_sapphire_testnet: '0xca11bde05977b3631167028862be2a173976ca11'
+    }
+
+    default_address = '0xca11bde05977b3631167028862be2a173976ca11'
+
+    @classmethod
+    def get_multicall_contract(cls, chain_id):
+        return cls.on_chains_v3.get(chain_id, cls.default_address)
+
+
 EMPTY_TOKEN_IMG = 'https://firebasestorage.googleapis.com/v0/b/token-c515a.appspot.com/o/tokens_v2%2Fempty-token.png?alt=media&token=2f9dfcc1-88a0-472c-a51f-4babc0c583f0'

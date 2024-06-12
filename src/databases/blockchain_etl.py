@@ -414,6 +414,7 @@ class BlockchainETL:
 
     @sync_log_time_exe(tag=TimeExeTag.database)
     def get_block_by_timestamp(self, timestamp):
-        cursor = self.block_collection.find({"timestamp": {"$gte": timestamp}}).sort("number", pymongo.ASCENDING).limit(1)
+        cursor = self.transaction_collection.find({"block_timestamp": {"$gte": timestamp}})\
+            .sort("block_timestamp", pymongo.ASCENDING).limit(1)
         cursor = list(cursor)
         return cursor[0]

@@ -13,7 +13,7 @@ from artifacts.abis.dexes.uniswap_v3_factory_abi import UNISWAP_V3_FACTORY_ABI
 from src.constants.network_constants import NATIVE_TOKEN
 from src.services.blockchain.batch_queries_service import add_rpc_call, decode_data_response_ignore_error, \
     decode_data_response
-from src.services.blockchain.multicall import W3Multicall
+from src.services.blockchain.multicall import W3Multicall, add_rpc_multicall, decode_multical_response
 from src.utils.logger_utils import get_logger
 
 logger = get_logger('State Query Service')
@@ -347,7 +347,8 @@ class StateQueryService:
                     symbol = symbol.upper()
                     decimals = decoded_data.get(f'decimals_{token["address"]}_{block_number}'.lower())
 
-                    liquidity_amount = decoded_data.get(f'balanceOf_{token["address"]}_{address}_{block_number}'.lower())
+                    liquidity_amount = decoded_data.get(
+                        f'balanceOf_{token["address"]}_{address}_{block_number}'.lower())
                     token['liquidityAmount'] = liquidity_amount / 10 ** decimals
                     token['symbol'] = symbol
                     token['decimals'] = decimals
@@ -400,7 +401,8 @@ class StateQueryService:
                 #         contract = call_id.split("_")[1]
                 #         invalid_tokens.append(f"{contract}_{token_id}")
             if filtered_call_id:
-                decoded_data.update(decode_data_response_ignore_error(data_responses=responses, list_call_id=filtered_call_id))
+                decoded_data.update(
+                    decode_data_response_ignore_error(data_responses=responses, list_call_id=filtered_call_id))
         except Exception as ex:
             logger.exception(f"Exception {ex} when query provider")
         list_rpc_call = []
@@ -468,7 +470,8 @@ class StateQueryService:
         except Exception as ex:
             return {}
 
-    def get_batch_nft_fee_with_block_number(self, nfts, pools,w3_multicall, latest = False):
+    def get_batch_nft_fee_with_block_number(self, nfts, pools, w3_multicall, block_number = 'latest', latest=False,
+                                            batch_size=2000):
 
         for idx, nft in enumerate(nfts):
             # block_number = start_block if start_block else nft['blockNumber']
@@ -477,13 +480,13 @@ class StateQueryService:
             pool_address = nft['poolAddress']
             if pool_address not in pools:
                 w3_multicall.add(
-                    W3Multicall.Call(address=Web3.to_checksum_address(pool_address),
-                    abi=UNISWAP_V3_POOL_ABI,fn_name='feeGrowthGlobal0X128'
-                ))
+                    W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
+                                     abi=UNISWAP_V3_POOL_ABI, fn_name='feeGrowthGlobal0X128'
+                                     ))
                 w3_multicall.add(
-                    W3Multicall.Call(address=Web3.to_checksum_address(pool_address),
-                    abi=UNISWAP_V3_POOL_ABI,fn_name='feeGrowthGlobal1X128'
-                ))
+                    W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
+                                     abi=UNISWAP_V3_POOL_ABI, fn_name='feeGrowthGlobal1X128'
+                                     ))
                 # add_rpc_call(
                 #     abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
                 #     fn_name="feeGrowthGlobal0X128", block_number=block_number,
@@ -497,7 +500,7 @@ class StateQueryService:
                 # )
                 if not latest:
                     w3_multicall.add(
-                        W3Multicall.Call(address=Web3.to_checksum_address(pool_address),
+                        W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
                                          abi=UNISWAP_V3_POOL_ABI, fn_name='slot0'
                                          ))
                     # add_rpc_call(
@@ -507,19 +510,26 @@ class StateQueryService:
                     # )
 
             w3_multicall.add(
-                W3Multicall.Call(address=Web3.to_checksum_address(pool_address),
+                W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
                                  abi=UNISWAP_V3_POOL_ABI, fn_name='ticks', fn_paras=nft['tickLower']
                                  ))
             w3_multicall.add(
-                W3Multicall.Call(address=Web3.to_checksum_address(pool_address),
+                W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
                                  abi=UNISWAP_V3_POOL_ABI, fn_name='ticks', fn_paras=nft['tickUpper']
                                  ))
             w3_multicall.add(
-                W3Multicall.Call(address=Web3.to_checksum_address(nft['nftManagerAddress']),
+                W3Multicall.Call(address=Web3.to_checksum_address(nft['nftManagerAddress']), block_number=block_number,
                                  abi=UNISWAP_V3_NFT_MANAGER_ABI, fn_name='positions', fn_paras=int(nft['tokenId'])
                                  ))
+        list_call_id, list_rpc_call = [], []
+        add_rpc_multicall(w3_multicall, list_rpc_call=list_rpc_call, list_call_id=list_call_id, batch_size=batch_size)
 
-        return w3_multicall
+        responses = self.client_querier.sent_batch_to_provider(list_rpc_call, batch_size=1)
+        decoded_data = decode_multical_response(
+            w3_multicall=w3_multicall, data_responses=responses,
+            list_call_id=list_call_id, ignore_error=True, batch_size=batch_size
+        )
+        return decoded_data
     # def get_batch_nft_fee_with_block_number(self, nfts, pools, list_rpc_call, list_call_id, start_block=None, latest = False):
     #     for idx, nft in enumerate(nfts):
     #         block_number = start_block if start_block else nft['blockNumber']
@@ -588,7 +598,3 @@ class StateQueryService:
     #         # )
     #
     #     return list_rpc_call, list_call_id
-
-
-
-
