@@ -60,7 +60,7 @@ class NFTInfoEnricherJob(BaseJob):
         current_day_timestamp = int(time.time())
         cursor = self._etl_db.get_block_by_timestamp(current_day_timestamp - 24 * 1 * 3600 + 3600 -1)
         if cursor:
-            self.before_timestamp = cursor['number']
+            self.before_timestamp = cursor['block_number']
         # self.before_timestamp = 220460428
 
     def _execute_batch(self, nfts_batch_indicates):
