@@ -112,7 +112,7 @@ class UpdateNftInfoJob(BaseJob):
             nft_info.liquidity = query_info.get('liquidity')
             nft_info.tick_upper = query_info.get('tick_upper')
             nft_info.tick_lower = query_info.get('tick_lower')
-            # nft_info.last_called_at = query_info.get('last_called_at')
+            nft_info.last_called_at = query_info.get('last_called_at')
             nft_info.pool_address = query_info.get('pool_address')
             nft_info.nft_manager_address = event['contract_address']
             nft_info.wallet = query_info.get('wallet')
@@ -142,7 +142,7 @@ class UpdateNftInfoJob(BaseJob):
             nft_info.liquidity = query_info.get('liquidity')
             nft_info.tick_upper = query_info.get('tick_upper')
             nft_info.tick_lower = query_info.get('tick_lower')
-            # nft_info.last_called_at = query_info.get('last_called_at')
+            nft_info.last_called_at = query_info.get('last_called_at')
             nft_info.pool_address = pool_address
             nft_info.nft_manager_address = event['contract_address']
             nft_info.wallet = query_info.get('wallet')

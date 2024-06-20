@@ -410,7 +410,7 @@ class StateQueryService:
         list_call_id = []
         for nft in missing_nfts:
             token_id = nft['token_id']
-            # block_number = nft['block_number']
+            block_number = nft['block_number']
             address = nft['contract_address']
             position = decoded_data.get(f"positions_{address}_{token_id}_latest".lower())
             wallet = decoded_data.get(f"ownerOf_{address}_{token_id}_latest".lower())
@@ -434,7 +434,7 @@ class StateQueryService:
                 'liquidity': float(liquidity),
                 # 'fee_growth_inside0': fee_growth_inside0,
                 # 'fee_growth_inside1': fee_growth_inside1,
-                # 'last_called_at': block_number,
+                'last_called_at': block_number,
                 'wallet': wallet
             }
             add_rpc_call(
