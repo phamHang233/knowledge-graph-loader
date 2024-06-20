@@ -62,12 +62,12 @@ class NFTInfoEnricherJob(SchedulerJob):
             try:
                 start_time = time.time()
 
-                batch_cursor = self.dex_nft_db.get_nfts_by_filter(
-                    _filter={"flagged": batch_idx, 'chainId': self.chain_id, 'poolAddress': {"$in": self.supported_pool}})
+                # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
+                #     _filter={"flagged": batch_idx, 'chainId': self.chain_id, 'poolAddress': {"$in": self.supported_pool}})
                 # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
                 #     _filter={"flagged": 68, 'liquidity': {"$gt": 0}, 'chainId': self.chain_id, 'poolAddress': "0xaebdca1bc8d89177ebe2308d62af5e74885dccc3"})
-                # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
-                #     {'chainId': self.chain_id, 'tokenId': {"$in": ["3030234"]}})
+                batch_cursor = self.dex_nft_db.get_nfts_by_filter(
+                    {'chainId': self.chain_id, 'tokenId': {"$in": ["2837283"]}})
                 new_batch_cursor = list(batch_cursor)
                 self.get_information_of_batch_cursor(new_batch_cursor)
                 logger.info(f'Time to execute of batch [{batch_idx}] is {time.time() - start_time} seconds')
@@ -83,12 +83,11 @@ class NFTInfoEnricherJob(SchedulerJob):
         self._export(updated_nfts, deleted_tokens)
 
     def prepare_enrich(self, cursor_batch):
-        pools_in_batch = []
         start_time = time.time()
 
         w3_multicall = W3Multicall(self._w3, address=MulticallContract.get_multicall_contract(self.chain_id))
 
-        current_decoded_data, important_nfts = self.state_querier.get_batch_nft_fee_with_current_block(
+        current_decoded_data, important_nfts, pools_in_batch = self.state_querier.get_batch_nft_fee_with_current_block(
             nfts=cursor_batch, pools=self.pools_fee, w3_multicall=w3_multicall)
 
         before_decoded_data = {}

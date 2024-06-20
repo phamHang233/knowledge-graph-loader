@@ -473,7 +473,8 @@ class StateQueryService:
 
     def get_batch_nft_fee_with_current_block(self, nfts, pools, w3_multicall, block_number='latest', batch_size=2000):
         important_nfts = []
-        for idx, nft in enumerate(nfts):
+        pools_in_batch = []
+        for nft in nfts:
             w3_multicall.add(
                 W3Multicall.Call(address=Web3.to_checksum_address(nft['nftManagerAddress']), block_number=block_number,
                                  abi=UNISWAP_V3_NFT_MANAGER_ABI, fn_name='positions', fn_paras=int(nft['tokenId'])
@@ -489,10 +490,11 @@ class StateQueryService:
 
         for idx, nft in enumerate(nfts):
             pool_address = nft['poolAddress']
+            pools_in_batch.append(pool_address)
             position = decoded_data.get(f'positions_{nft["nftManagerAddress"]}_{nft["tokenId"]}_{block_number}'.lower())
             if not position or position[7] == 0:
                 continue
-            important_nfts.append(nft['_id'])
+            important_nfts.append(nft)
             if pool_address not in pools:
                 w3_multicall.add(
                     W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
@@ -520,12 +522,11 @@ class StateQueryService:
                 w3_multicall=w3_multicall, data_responses=responses,
                 list_call_id=list_call_id, ignore_error=True, batch_size=batch_size
             ))
-            return decoded_data, important_nfts
+            return decoded_data, important_nfts, pools_in_batch
 
         except Exception as e:
             logger.error(f"Error while send batch to provider: {e}")
-            time.sleep(120)
-            return {}
+            return {}, {}
 
     def get_batch_nft_fee_with_block_number(self, nfts, pools, w3_multicall, block_number='latest', batch_size=2000):
         for idx, nft in enumerate(nfts):
@@ -561,10 +562,10 @@ class StateQueryService:
         add_rpc_multicall(w3_multicall, list_rpc_call=list_rpc_call, list_call_id=list_call_id, batch_size=batch_size)
         try:
             responses = self.client_querier.sent_batch_to_provider(list_rpc_call, batch_size=1)
-            decoded_data.update(decode_multical_response(
+            decoded_data = decode_multical_response(
                 w3_multicall=w3_multicall, data_responses=responses,
                 list_call_id=list_call_id, ignore_error=True, batch_size=batch_size
-            ))
+            )
             return decoded_data
 
         except Exception as e:
