@@ -56,7 +56,7 @@ class NFTInfoEnricherJob(SchedulerJob):
                 ]
 
     def _execute(self, *args, **kwargs):
-        for batch_idx in reversed(range(1, self.number_of_nfts_batch+1)):
+        for batch_idx in range(1, self.number_of_nfts_batch+1):
             # if batch_idx <=37:
             #     continue
             try:
@@ -67,7 +67,7 @@ class NFTInfoEnricherJob(SchedulerJob):
                 # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
                 #     _filter={"flagged": 68, 'liquidity': {"$gt": 0}, 'chainId': self.chain_id, 'poolAddress': "0xaebdca1bc8d89177ebe2308d62af5e74885dccc3"})
                 # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
-                #     {'chainId': self.chain_id, 'tokenId': {"$in": ["2837283"]}})
+                #     {'chainId': self.chain_id, 'tokenId': {"$in": ["3030234"]}})
                 new_batch_cursor = list(batch_cursor)
                 self.get_information_of_batch_cursor(new_batch_cursor)
                 logger.info(f'Time to execute of batch [{batch_idx}] is {time.time() - start_time} seconds')
@@ -91,9 +91,9 @@ class NFTInfoEnricherJob(SchedulerJob):
             nfts=cursor_batch, pools=self.pools_fee, w3_multicall=w3_multicall)
 
         before_decoded_data = {}
-        for idx in range(0, len(important_nfts), 300):
+        for idx in range(0, len(important_nfts), 500):
             w3_multicall.calls = {}
-            nft_batchs = important_nfts[idx: idx + 300]
+            nft_batchs = important_nfts[idx: idx + 500]
             before_decoded_data.update(self.state_querier.get_batch_nft_fee_with_block_number(
                 nfts=nft_batchs, pools=self.pools_fee, w3_multicall=w3_multicall, block_number=self.before_timestamp))
         logger.info(f"Query process toke {time.time() - start_time}")
@@ -121,11 +121,11 @@ class NFTInfoEnricherJob(SchedulerJob):
                     deleted_tokens.append(doc["_id"])
                     continue
 
-                nft.liquidity = positions[7]
+                nft.liquidity = float(positions[7])
                 positions_before = before_data_response.get(
                     f'positions_{nft_manager_contract}_{token_id}_{self.before_timestamp}'.lower())
 
-                if nft.liquidity > 0 and positions_before and abs(positions_before[7] - float(positions[7])) > 0.01:
+                if nft.liquidity > 0 and positions_before and abs(positions_before[7] - float(positions[7])) < 0.01:
                     self.calculate_apr(nft, current_data_response, before_data_response)
                 else:
                     nft.apr_in_month = 0
