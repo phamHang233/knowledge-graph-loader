@@ -108,16 +108,17 @@ class NFT:
         apr = (fee_change_in_usd + investment_change_in_usd) / ref_invest_in_usd / 1 * 365 if ref_invest_in_usd > 1e-03 else 0
         if apr > 10e3:
             print(self.token_id)
-        self.tokens = {
-            token0_address: invest0 / 10 ** decimals0,
-            token1_address: invest1 / 10 ** decimals1,
+        else:
+            self.tokens = {
+                token0_address: invest0 / 10 ** decimals0,
+                token1_address: invest1 / 10 ** decimals1,
 
-        }
-        self.ref_tokens = {
-            token0_address: invest0_before / 10 ** decimals0,
-            token1_address: invest1_before / 10 ** decimals1,
-        }
-        self.current_invest_in_usd = current_invest_in_usd
-        self.apr_in_month = apr
-        self.pnl = investment_change_in_usd
-        self.fee = fee_change_in_usd
+            }
+            self.ref_tokens = {
+                token0_address: invest0_before / 10 ** decimals0,
+                token1_address: invest1_before / 10 ** decimals1,
+            }
+            self.current_invest_in_usd = current_invest_in_usd
+            self.apr_in_month = apr
+            self.pnl = investment_change_in_usd
+            self.fee = fee_change_in_usd

@@ -3,14 +3,16 @@ from typing import Dict
 
 from cli_scheduler.scheduler_job import SchedulerJob
 from defi_services.utils.get_fees import get_fees
+from query_state_lib.client.client_querier import ClientQuerier
 from web3 import Web3
 
+from artifacts.abis.dexes.uniswap_v3_nft_manage_abi import UNISWAP_V3_NFT_MANAGER_ABI
 from src.constants.mongo_constants import DexNFTManagerCollections
 from src.constants.network_constants import MulticallContract
 from src.databases.blockchain_etl import BlockchainETL
 from src.databases.mongodb_dex import MongoDBDex
 from src.models.nfts import NFT
-from src.services.blockchain.multicall import W3Multicall
+from src.services.blockchain.multicall import W3Multicall, add_rpc_multicall, decode_multical_response
 from src.services.blockchain.state_query_service import StateQueryService
 
 from src.utils.logger_utils import get_logger
@@ -30,6 +32,7 @@ class NFTInfoEnricherJob(SchedulerJob):
         self.chain_id = chain_id
         self.state_querier = StateQueryService(provider_uri)
         self._w3 = Web3(Web3.HTTPProvider(provider_uri))
+        self.client_querier = ClientQuerier(provider_url=provider_uri)
 
         super().__init__(scheduler)
 
@@ -70,11 +73,31 @@ class NFTInfoEnricherJob(SchedulerJob):
                 # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
                 #     {'chainId': self.chain_id, 'tokenId': {"$in": ["3030234"]}})
                 new_batch_cursor = list(batch_cursor)
+                self.recheck_liquidity(new_batch_cursor)
+
                 self.get_information_of_batch_cursor(new_batch_cursor)
                 logger.info(f'Time to execute of batch [{batch_idx}] is {time.time() - start_time} seconds')
             except Exception as e:
                 logger.exception(f"[{batch_idx}] has exception-{e}")
                 continue
+
+    def recheck_liquidity(self, nfts):
+        w3_multicall = W3Multicall(self._w3, address=MulticallContract.get_multicall_contract(self.chain_id))
+        for idx, nft in enumerate(nfts):
+            w3_multicall.add(
+                W3Multicall.Call(address=Web3.to_checksum_address(nft['nftManagerAddress']), block_number='latest',
+                             abi=UNISWAP_V3_NFT_MANAGER_ABI, fn_name='positions', fn_paras=int(nft['tokenId'])
+                             ))
+        list_call_id, list_rpc_call = [], []
+        add_rpc_multicall(w3_multicall, list_rpc_call=list_rpc_call, list_call_id=list_call_id, batch_size=1000)
+        responses = self.client_querier.sent_batch_to_provider(list_rpc_call, batch_size=1)
+        decoded_data = decode_multical_response(
+            w3_multicall=w3_multicall, data_responses=responses,
+            list_call_id=list_call_id, ignore_error=True, batch_size=1000
+        )
+        for nft in nfts:
+            if not decoded_data.get(f'positions_{nft["nftManagerAddress"]}_{nft["tokenId"]}_latest'.lower()):
+                self.deleted_tokens.append(nft['_id'])
 
     def get_information_of_batch_cursor(self, nfts):
         current_data_response, before_data_response, pools_in_batch = self.prepare_enrich(nfts)
@@ -91,7 +114,7 @@ class NFTInfoEnricherJob(SchedulerJob):
             pool_address = doc['poolAddress']
             pools_in_batch.append(pool_address)
             liquidity = doc['liquidity']
-            if liquidity > 0:
+            if liquidity > 0 and doc['_id'] not in self.deleted_tokens:
                 nfts.append(doc)
 
         w3_multicall = W3Multicall(self._w3, address=MulticallContract.get_multicall_contract(self.chain_id))
@@ -228,12 +251,12 @@ class NFTInfoEnricherJob(SchedulerJob):
             logger.info(f'Update {len(data)} nfts')
             self.cnt += len(data)
 
-    def _end(self):
         if self.deleted_tokens:
             self._exporter.removed_docs(collection_name=DexNFTManagerCollections.dex_nfts, keys=self.deleted_tokens)
             logger.info(f'Remove {len(self.deleted_tokens)} nfts')
-        
-        cursor = self.dex_nft_db.get_nfts_by_filter({"chainId": self.chain_id, "aprInMonth": {"$gt": 5}})
+
+    def _end(self):
+        cursor = self.dex_nft_db.get_nfts_by_filter({"chainId": self.chain_id, "aprInMonth": {"$gt": 3}})
         cursor = list(cursor)
         self.get_information_of_batch_cursor(cursor)
         logger.info(f'Update total {self.cnt} nfts')
