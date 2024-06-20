@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c7e54e82-91bf-4949-b697-b0122a4a78a0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jobs/update_nft_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/update_nft_job.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +36,7 @@
     "Python.nft_info_enricher_job.executor": "Debug",
     "Python.nft_info_enricher_job_1.executor": "Run",
     "Python.pool_address.executor": "Run",
-    "Python.run.executor": "Run",
+    "Python.run.executor": "Debug",
     "Python.test.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "last_opened_file_path": "/home/hang/Documents/Study/DATN/knowledge-graph-loader-project/src/services/blockchain"
@@ -373,6 +374,26 @@
           <url>file://$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py</url>
           <line>119</line>
           <option name="timeStamp" value="290" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/services/blockchain/state_query_service.py</url>
+          <line>407</line>
+          <option name="timeStamp" value="291" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/services/blockchain/state_query_service.py</url>
+          <line>405</line>
+          <option name="timeStamp" value="292" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/services/blockchain/state_query_service.py</url>
+          <line>535</line>
+          <option name="timeStamp" value="295" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py</url>
+          <line>134</line>
+          <option name="timeStamp" value="296" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

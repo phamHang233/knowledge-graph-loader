@@ -534,6 +534,7 @@ class StateQueryService:
 
         except Exception as e:
             logger.error(f"Error while send batch to provider: {e}")
+            return {}
             time.sleep(120)
 
 

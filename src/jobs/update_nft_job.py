@@ -120,11 +120,11 @@ class UpdateNftInfoJob(BaseJob):
 
         if not nft_info:
             return
-        # if block_number > nft_info.last_called_at:
-        #     if event['event_type'] == "INCREASELIQUIDITY":
-        #         nft_info.liquidity += liquidity
-        #     if event['event_type'] == "DECREASELIQUIDITY":
-        #         nft_info.liquidity -= liquidity
+        if block_number > nft_info.last_called_at:
+            if event['event_type'] == "INCREASELIQUIDITY":
+                nft_info.liquidity += liquidity
+            if event['event_type'] == "DECREASELIQUIDITY":
+                nft_info.liquidity -= liquidity
 
         # nft_info.liquidity_change_logs[str(block_number)] = nft_info.liquidity
         # nft_info.last_interact_at = block_number
