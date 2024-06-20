@@ -471,13 +471,64 @@ class StateQueryService:
         except Exception as ex:
             return {}
 
-    def get_batch_nft_fee_with_block_number(self, nfts, pools, w3_multicall, block_number = 'latest', latest=False,
-                                            batch_size=2000):
+    def get_batch_nft_fee_with_current_block(self, nfts, pools, w3_multicall, block_number='latest', batch_size=2000):
+        important_nfts = []
+        for idx, nft in enumerate(nfts):
+            w3_multicall.add(
+                W3Multicall.Call(address=Web3.to_checksum_address(nft['nftManagerAddress']), block_number=block_number,
+                                 abi=UNISWAP_V3_NFT_MANAGER_ABI, fn_name='positions', fn_paras=int(nft['tokenId'])
+                                 ))
+        list_call_id, list_rpc_call = [], []
+        add_rpc_multicall(w3_multicall, list_rpc_call=list_rpc_call, list_call_id=list_call_id,
+                          batch_size=batch_size)
+        responses = self.client_querier.sent_batch_to_provider(list_rpc_call, batch_size=1)
+        decoded_data = decode_multical_response(
+            w3_multicall=w3_multicall, data_responses=responses,
+            list_call_id=list_call_id, ignore_error=True, batch_size=batch_size
+        )
 
         for idx, nft in enumerate(nfts):
-            # block_number = start_block if start_block else nft['blockNumber']
-            # if not block_number:
-            #     continue
+            pool_address = nft['poolAddress']
+            position = decoded_data.get(f'positions_{nft["nftManagerAddress"]}_{nft["tokenId"]}_{block_number}'.lower())
+            if not position or position[7] == 0:
+                continue
+            important_nfts.append(nft['_id'])
+            if pool_address not in pools:
+                w3_multicall.add(
+                    W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
+                                     abi=UNISWAP_V3_POOL_ABI, fn_name='feeGrowthGlobal0X128'
+                                     ))
+                w3_multicall.add(
+                    W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
+                                     abi=UNISWAP_V3_POOL_ABI, fn_name='feeGrowthGlobal1X128'
+                                     ))
+
+            w3_multicall.add(
+                W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
+                                 abi=UNISWAP_V3_POOL_ABI, fn_name='ticks', fn_paras=nft['tickLower']
+                                 ))
+            w3_multicall.add(
+                W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
+                                 abi=UNISWAP_V3_POOL_ABI, fn_name='ticks', fn_paras=nft['tickUpper']
+                                 ))
+
+        list_call_id, list_rpc_call = [], []
+        add_rpc_multicall(w3_multicall, list_rpc_call=list_rpc_call, list_call_id=list_call_id, batch_size=batch_size)
+        try:
+            responses = self.client_querier.sent_batch_to_provider(list_rpc_call, batch_size=1)
+            decoded_data.update(decode_multical_response(
+                w3_multicall=w3_multicall, data_responses=responses,
+                list_call_id=list_call_id, ignore_error=True, batch_size=batch_size
+            ))
+            return decoded_data, important_nfts
+
+        except Exception as e:
+            logger.error(f"Error while send batch to provider: {e}")
+            time.sleep(120)
+            return {}
+
+    def get_batch_nft_fee_with_block_number(self, nfts, pools, w3_multicall, block_number='latest', batch_size=2000):
+        for idx, nft in enumerate(nfts):
             pool_address = nft['poolAddress']
             if pool_address not in pools:
                 w3_multicall.add(
@@ -488,27 +539,10 @@ class StateQueryService:
                     W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
                                      abi=UNISWAP_V3_POOL_ABI, fn_name='feeGrowthGlobal1X128'
                                      ))
-                # add_rpc_call(
-                #     abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
-                #     fn_name="feeGrowthGlobal0X128", block_number=block_number,
-                #     list_call_id=list_call_id, list_rpc_call=list_rpc_call
-                # )
-                #
-                # add_rpc_call(
-                #     abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
-                #     fn_name="feeGrowthGlobal1X128", block_number=block_number,
-                #     list_call_id=list_call_id, list_rpc_call=list_rpc_call
-                # )
-                if not latest:
-                    w3_multicall.add(
-                        W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
-                                         abi=UNISWAP_V3_POOL_ABI, fn_name='slot0'
-                                         ))
-                    # add_rpc_call(
-                    #     abi=UNISWAP_V3_POOL_ABI, contract_address=pool_address,
-                    #     fn_name="slot0", block_number=block_number,
-                    #     list_call_id=list_call_id, list_rpc_call=list_rpc_call
-                    # )
+                w3_multicall.add(
+                    W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
+                                     abi=UNISWAP_V3_POOL_ABI, fn_name='slot0'
+                                     ))
 
             w3_multicall.add(
                 W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=block_number,
@@ -522,20 +556,21 @@ class StateQueryService:
                 W3Multicall.Call(address=Web3.to_checksum_address(nft['nftManagerAddress']), block_number=block_number,
                                  abi=UNISWAP_V3_NFT_MANAGER_ABI, fn_name='positions', fn_paras=int(nft['tokenId'])
                                  ))
+
         list_call_id, list_rpc_call = [], []
         add_rpc_multicall(w3_multicall, list_rpc_call=list_rpc_call, list_call_id=list_call_id, batch_size=batch_size)
         try:
             responses = self.client_querier.sent_batch_to_provider(list_rpc_call, batch_size=1)
-            decoded_data = decode_multical_response(
+            decoded_data.update(decode_multical_response(
                 w3_multicall=w3_multicall, data_responses=responses,
                 list_call_id=list_call_id, ignore_error=True, batch_size=batch_size
-            )
+            ))
             return decoded_data
 
         except Exception as e:
             logger.error(f"Error while send batch to provider: {e}")
-            return {}
             time.sleep(120)
+            return {}
 
 
 
