@@ -5,16 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7e54e82-91bf-4949-b697-b0122a4a78a0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job/algorthisms/genetic_algorithms.py" beforeDir="false" afterPath="$PROJECT_DIR$/job/algorthisms/genetic_algorithms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cli/calculate_optimized_range.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/calculate_optimized_range.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/pool_address.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/pool_address.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,9 +190,9 @@
       <item itemvalue="Python.run" />
       <item itemvalue="Python.calculate_optimized_range" />
       <item itemvalue="Python.pool_address" />
+      <item itemvalue="Python.arbitrum_nft_info_enricher_job" />
       <item itemvalue="Python.fee_from_strategy" />
       <item itemvalue="Python.histogram" />
-      <item itemvalue="Python.arbitrum_nft_info_enricher_job" />
     </list>
     <recent_temporary>
       <list>
