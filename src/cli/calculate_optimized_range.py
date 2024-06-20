@@ -85,13 +85,12 @@ def calculate_optimized_price_range(chain, max_workers):
     # parallelize_processing(top_pairs=top_pairs,pairs_info=pairs_info,start_timestamp=start_timestamp,end_timestamp=end_timestamp, num_threads=max_workers)
 
 
-def process_pair(chain_id, pair_address, pair_info, start_timestamp, end_timestamp, result_lock, result):
+def process_pair(chain_id, pair_address, pair_info, start_timestamp, end_timestamp, result):
     try:
         ga = GeneticAlgorithms(pool=pair_address, start_timestamp=start_timestamp,
                                end_timestamp=end_timestamp)
         best_apr, best_range = ga.process()
 
-        result_lock.acquire()  # Acquire lock before modifying shared result
         result.append({
             "_id": f"{chain_id}_{pair_address}",
             'address': pair_address,
@@ -100,33 +99,23 @@ def process_pair(chain_id, pair_address, pair_info, start_timestamp, end_timesta
             'bestAPR': best_apr,
             'range': best_range
         })
-        result_lock.release()  # Release lock after modification
     except Exception as e:
         print(f"Error processing pair {pair_address}: {e}")
 
-# def parallelize_processing(pairs_info, start_timestamp, end_timestamp, num_threads=4):
-#     """
-#     Processes multiple pairs concurrently using GeneticAlgorithms and threads.
-#
-#     Args:
-#         top_pairs (dict): Dictionary containing keys for each pair.
-#         pairs_info (dict): Dictionary containing token information for each pair.
-#         start_timestamp (int): Start timestamp for processing.
-#         end_timestamp (int): End timestamp for processing.
-#         num_threads (int, optional): Number of threads to use (default: 4).
-#
-#     Returns:
-#         None
-#     """
-#
-#     result = []
-#
-#     threads = []
-#     for key in top_pairs:
-#         thread = Thread(target=process_pair, args=(key, pairs_info, start_timestamp, end_timestamp, result))
-#         thread.start()
-#         threads.append(thread)
-#
-#     # Wait for all threads to finish
-#     for thread in threads:
-#         thread.join()
+def cal_pool(pool_address):
+    _db = NFTMongoDB()
+    _exporter = NFTMongoDBExporter(_db)
+    _dex_db = MongoDBDex()
+    # project = _dex_db.get_project('uniswap-v3', chain_id=chain_id)
+    # top_pairs = project['topPairs']
+
+    end_timestamp = int(time.time())
+    start_timestamp = end_timestamp - 30 * 24 * 3600
+    pair_info = _dex_db.get_pairs_with_addresses('0x1', [pool_address])[0]
+    result = []
+    process_pair('0x1', pool_address, pair_info,start_timestamp, end_timestamp, result)
+    _exporter.export_pairs(result)
+
+if __name__ == '__main__':
+    cal_pool("0x7bea39867e4169dbe237d55c8242a8f2fcdcc387")
+    cal_pool("0xe0554a476a092703abdb3ef35c80e0d76d32939f")

@@ -17,13 +17,15 @@ logger = get_logger('NFT Info Enricher')
 
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
-@click.option("-nc", "--n-cpu", default=1, show_default=True, type=int, help="Number of CPU")
+# @click.option("-nc", "--n-cpu", default=1, show_default=True, type=int, help="Number of CPU")
 @click.option('-c', '--chain', default='ethereum', show_default=True, type=str, help='Network name example bsc or polygon')
-@click.option("-cpu", default=1, show_default=True, type=int, help="CPU order")
-@click.option('-b', '--batch-size', default=1, show_default=True, type=int, help='NFT Batch size')
+@click.option('--scheduler', default='^false@daily', show_default=True, type=str, help=f'Scheduler with format "{scheduler_format}"')
+
+# @click.option("-cpu", default=1, show_default=True, type=int, help="CPU order")
+# @click.option('-b', '--batch-size', default=1, show_default=True, type=int, help='NFT Batch size')
 # @click.option('--scheduler', default='^false@hourly', show_default=True, type=str, help=f'Scheduler with format "{scheduler_format}"')
-@click.option("-w", "--max-workers", default=1, show_default=True, type=int, help="The number of workers")
-def dex_nft_info_enricher(chain, batch_size, n_cpu, cpu, max_workers):
+# @click.option("-w", "--max-workers", default=1, show_default=True, type=int, help="The number of workers")
+def dex_nft_info_enricher(chain, scheduler):
     chain = str(chain).lower()
     if chain not in Chains.mapping:
         raise click.BadOptionUsage("--chain", f"Chain {chain} is not support. Try {list(Chains.mapping.keys())}")
@@ -41,8 +43,7 @@ def dex_nft_info_enricher(chain, batch_size, n_cpu, cpu, max_workers):
     nfts_batch = flagged_state["batch_idx"]
 
     job = NFTInfoEnricherJob(
-        _db=_db, _exporter=_exporter, nfts_batch=nfts_batch,
-        batch_size=batch_size, n_cpu=n_cpu, cpu=cpu, max_workers=max_workers,
+        _db=_db, _exporter=_exporter, nfts_batch=nfts_batch, scheduler=scheduler,
         chain_id=chain_id, provider_uri=provider_uri, db_prefix=db_prefix)
 
     job.run()

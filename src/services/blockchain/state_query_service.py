@@ -1,4 +1,5 @@
 import itertools
+import time
 
 from query_state_lib.base.mappers.eth_call_balance_of_mapper import EthCallBalanceOf
 from query_state_lib.base.mappers.get_balance_mapper import GetBalance
@@ -523,13 +524,20 @@ class StateQueryService:
                                  ))
         list_call_id, list_rpc_call = [], []
         add_rpc_multicall(w3_multicall, list_rpc_call=list_rpc_call, list_call_id=list_call_id, batch_size=batch_size)
+        try:
+            responses = self.client_querier.sent_batch_to_provider(list_rpc_call, batch_size=1)
+            decoded_data = decode_multical_response(
+                w3_multicall=w3_multicall, data_responses=responses,
+                list_call_id=list_call_id, ignore_error=True, batch_size=batch_size
+            )
+            return decoded_data
 
-        responses = self.client_querier.sent_batch_to_provider(list_rpc_call, batch_size=1)
-        decoded_data = decode_multical_response(
-            w3_multicall=w3_multicall, data_responses=responses,
-            list_call_id=list_call_id, ignore_error=True, batch_size=batch_size
-        )
-        return decoded_data
+        except Exception as e:
+            logger.error(f"Error while send batch to provider: {e}")
+            time.sleep(120)
+
+
+
     # def get_batch_nft_fee_with_block_number(self, nfts, pools, list_rpc_call, list_call_id, start_block=None, latest = False):
     #     for idx, nft in enumerate(nfts):
     #         block_number = start_block if start_block else nft['blockNumber']
