@@ -56,7 +56,7 @@ class NFTInfoEnricherJob(SchedulerJob):
                 ]
 
     def _execute(self, *args, **kwargs):
-        for batch_idx in range(1, self.number_of_nfts_batch+1):
+        for batch_idx in reversed(range(1, self.number_of_nfts_batch+1)):
             # if batch_idx <=37:
             #     continue
             try:
