@@ -6,11 +6,11 @@ from job.crawlers.uni_pool_data import pool_by_id, get_pool_hour_data
 from job.utils.sqrt_price_math import get_token_amount_of_user, convert_price_to_tick
 
 
-def uniswap_strategy_backtest(pool, investment_amount, min_range, max_range, protocol, start_timestamp,
+def uniswap_strategy_backtest(pool, investment_amount, min_tick, max_tick, protocol, start_timestamp,
                               end_timestamp):
-    if min_range >= max_range:
-        return None
-    start_time = time.time()
+    # if min_range >= max_range:
+    #     return None
+    # start_time = time.time()
     pool_data = pool_by_id(pool, protocol)
     hourly_price_data = get_pool_hour_data(pool, start_timestamp, end_timestamp, protocol)
     if pool_data and hourly_price_data and len(hourly_price_data) > 0:
@@ -23,7 +23,8 @@ def uniswap_strategy_backtest(pool, investment_amount, min_range, max_range, pro
 
         # tick_lower = convert_price_to_tick(min_range, decimals0, decimals1)
         # tick_upper = convert_price_to_tick(max_range, decimals0, decimals1)
-        # tick = convert_price_to_tick(entry_price, decimals0, decimals1)
+        min_range = convert_price_to_tick(max_tick, decimals0, decimals1)
+        max_range = convert_price_to_tick(min_tick, decimals0, decimals1)
         # amount0, amount1 = get_token_amount_of_user(liquidity=investment_amount,
         #                                             sqrt_price_x96=math.sqrt(1.0001 ** tick) * 2 ** 96, tick=tick,
         #                                             tick_upper=tick_upper, tick_lower=tick_lower)
@@ -64,12 +65,12 @@ def uniswap_strategy_algorithm(backtest_data, pool_data, investment_amount, min_
 
 #
 # end_timestamp = int(time.time())
-# start_timestamp = int(end_timestamp / 24 /3600) * 24 * 3600 - 3 * 24 * 3600 -1
-# uniswap_strategy_backtest(pool="0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", investment_amount=1000,
-#                                        min_range=3729.3582,
-#                                        max_range=3850.6215,
-#                                        protocol='ethereum', start_timestamp=start_timestamp,end_timestamp=end_timestamp)
-# # print(res, time)
+# start_timestamp = end_timestamp - 24 * 3600 -1
+# print(uniswap_strategy_backtest(pool="0xc473e2aee3441bf9240be85eb122abb059a3b57c", investment_amount=1000,
+#                                        min_tick=-243060,
+#                                        max_tick= -155580,
+#                                        protocol='arbitrum', start_timestamp=start_timestamp,end_timestamp=end_timestamp))
+# print(res, time)
 # print(time.time()-start_time)
 
 # amount0, amount1 = tokens_for_strategy(1 / 1.0001 ** 196920 * 10 ** 12, 1 / 1.0001 ** 193260 * 10 ** 12, 103959.43,

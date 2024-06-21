@@ -22,10 +22,10 @@ class NFT:
         # self.apr = 0
         self.wallet = None
         self.last_updated_fee_at = 0
-        self.pnl = 0
+        # self.pnl = 0
         self.tokens = {}
         self.current_invest_in_usd = 0
-        self.ref_tokens= {}
+        # self.ref_tokens= {}
         self.fee = 0
         # self.invested_asset_in_usd = 0
 
@@ -48,11 +48,11 @@ class NFT:
             "aprInMonth": self.apr_in_month,
             # 'apr': self.apr,
             "lastUpdatedFeeAt": self.last_updated_fee_at,
-            'PnL': self.pnl,
+            # 'PnL': self.pnl,
             'tokens': self.tokens,
             'assetsInUSD': self.current_invest_in_usd,
             # 'investedAssetInUSD': self.invested_asset_in_usd
-            'refTokens': self.ref_tokens,
+            # 'refTokens': self.ref_tokens,
             'feeEarn': self.fee
         }
 
@@ -71,7 +71,7 @@ class NFT:
         self.wallet = json_dict.get("wallet")
         self.last_updated_fee_at = json_dict.get('lastUpdatedFeeAt', 0)
 
-    def cal_apr_in_month(self, start_block, fee0_before, fee1_before, pool_info, tick_before, tick):
+    def cal_apr_in_month(self, start_block, fee0_before, fee1_before, pool_info, tick):
         token0_info = pool_info['tokens'][0]
         token1_info = pool_info['tokens'][1]
         token0_address = token0_info['address']
@@ -93,31 +93,33 @@ class NFT:
         token1_change = self.uncollected_fee[token1_address] - fee1_before + collected_amount1
         fee_change_in_usd = token0_change * token0_price + token1_change * token1_price
 
-        invest0_before, invest1_before = get_token_amount_of_user(
-            liquidity=int(self.liquidity), sqrt_price_x96=math.sqrt(1.0001 ** tick_before) * 2 ** 96, tick=tick_before,
-            tick_upper=self.tick_upper, tick_lower=self.tick_lower)
+        # invest0_before, invest1_before = get_token_amount_of_user(
+        #     liquidity=int(self.liquidity), sqrt_price_x96=math.sqrt(1.0001 ** tick_before) * 2 ** 96, tick=tick_before,
+        #     tick_upper=self.tick_upper, tick_lower=self.tick_lower)
         invest0, invest1 = get_token_amount_of_user(
             liquidity=int(self.liquidity), sqrt_price_x96=math.sqrt(1.0001 ** tick) * 2 ** 96, tick=tick,
             tick_upper=self.tick_upper, tick_lower=self.tick_lower)
 
         current_invest_in_usd = ((invest1 * token1_price / 10 ** decimals1)
                                  + (invest0 * token0_price / 10 ** decimals0))
-        ref_invest_in_usd = ((invest1_before * token1_price / 10 ** decimals1)
-                             + (invest0_before * token0_price / 10 ** decimals0))
-        investment_change_in_usd = current_invest_in_usd - ref_invest_in_usd
-        apr = (fee_change_in_usd + investment_change_in_usd) / ref_invest_in_usd / 1 * 365 if ref_invest_in_usd > 1e-03 else 0
+        # ref_invest_in_usd = ((invest1_before * token1_price / 10 ** decimals1)
+        #                      + (invest0_before * token0_price / 10 ** decimals0))
+        # investment_change_in_usd = current_invest_in_usd - ref_invest_in_usd
+        investment_change_in_usd = 0
+        apr = (fee_change_in_usd + investment_change_in_usd) / current_invest_in_usd / 1 * 365 if current_invest_in_usd > 1e-03 else 0
         if apr > 10e3:
             print(self.token_id)
-        self.tokens = {
-            token0_address: invest0 / 10 ** decimals0,
-            token1_address: invest1 / 10 ** decimals1,
+        else:
+            self.tokens = {
+                token0_address: invest0 / 10 ** decimals0,
+                token1_address: invest1 / 10 ** decimals1,
 
-        }
-        self.ref_tokens = {
-            token0_address: invest0_before / 10 ** decimals0,
-            token1_address: invest1_before / 10 ** decimals1,
-        }
-        self.current_invest_in_usd = current_invest_in_usd
-        self.apr_in_month = apr
-        self.pnl = investment_change_in_usd
-        self.fee = fee_change_in_usd
+            }
+            # self.ref_tokens = {
+            #     token0_address: invest0_before / 10 ** decimals0,
+            #     token1_address: invest1_before / 10 ** decimals1,
+            # }
+            self.current_invest_in_usd = current_invest_in_usd
+            self.apr_in_month = apr
+            # self.pnl = investment_change_in_usd
+            self.fee = fee_change_in_usd

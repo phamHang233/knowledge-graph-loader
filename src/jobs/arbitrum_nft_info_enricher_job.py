@@ -9,7 +9,7 @@ from src.constants.mongo_constants import DexNFTManagerCollections
 from src.constants.network_constants import MulticallContract
 from src.databases.blockchain_etl import BlockchainETL
 from src.databases.mongodb_dex import MongoDBDex
-from src.models.nfts import NFT
+from src.models.arbitrum_nfts import NFT
 from src.services.blockchain.multicall import W3Multicall
 from src.services.blockchain.state_query_service import StateQueryService
 
@@ -68,18 +68,18 @@ class NFTInfoEnricherJob(SchedulerJob):
                 #     _filter={"flagged": 68, 'liquidity': {"$gt": 0}, 'chainId': self.chain_id, 'poolAddress': "0xaebdca1bc8d89177ebe2308d62af5e74885dccc3"})
                 # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
                 #     {'chainId': self.chain_id, 'tokenId': {"$in": ["3030234"]}})
-                new_batch_cursor = list(batch_cursor)
-                self.get_information_of_batch_cursor(new_batch_cursor)
+                # new_batch_cursor = list(batch_cursor)
+                self.get_information_of_batch_cursor(batch_cursor)
                 logger.info(f'Time to execute of batch [{batch_idx}] is {time.time() - start_time} seconds')
             except Exception as e:
                 logger.exception(f"[{batch_idx}] has exception-{e}")
                 continue
 
     def get_information_of_batch_cursor(self, nfts):
-        current_data_response, before_data_response, pools_in_batch = self.prepare_enrich(nfts)
+        current_data_response, before_data_response, pools_in_batch, new_nfts = self.prepare_enrich(nfts)
         cursor = self.dex_db.get_pairs_with_addresses(chain_id=self.chain_id, addresses=list(pools_in_batch))
         self.pools.update({doc['address']: doc for doc in cursor})
-        updated_nfts, deleted_tokens = self.enrich_data(nfts, current_data_response, before_data_response)
+        updated_nfts, deleted_tokens = self.enrich_data(new_nfts, current_data_response, before_data_response)
         self._export(updated_nfts, deleted_tokens)
 
     def prepare_enrich(self, cursor_batch):
@@ -87,18 +87,16 @@ class NFTInfoEnricherJob(SchedulerJob):
 
         w3_multicall = W3Multicall(self._w3, address=MulticallContract.get_multicall_contract(self.chain_id))
 
-        current_decoded_data, important_nfts, pools_in_batch = self.state_querier.get_batch_nft_fee_with_current_block(
+        current_decoded_data, nfts, important_nfts, pools_in_batch = self.state_querier.get_batch_nft_fee_with_current_block(
             nfts=cursor_batch, pools=self.pools_fee, w3_multicall=w3_multicall)
 
         before_decoded_data = {}
-        for idx in range(0, len(important_nfts), 500):
-            w3_multicall.calls = {}
-            nft_batchs = important_nfts[idx: idx + 500]
-            before_decoded_data.update(self.state_querier.get_batch_nft_fee_with_block_number(
-                nfts=nft_batchs, pools=self.pools_fee, w3_multicall=w3_multicall, block_number=self.before_timestamp))
+        w3_multicall.calls = {}
+        before_decoded_data.update(self.state_querier.get_batch_nft_fee_with_block_number(
+            nfts=important_nfts, pools=self.pools_fee, w3_multicall=w3_multicall, block_number=self.before_timestamp))
         logger.info(f"Query process toke {time.time() - start_time}")
 
-        return current_decoded_data, before_decoded_data, pools_in_batch
+        return current_decoded_data, before_decoded_data, pools_in_batch, nfts
 
     def enrich_data(self, batch_cursor, current_data_response, before_data_response):
         deleted_tokens = []
@@ -106,6 +104,10 @@ class NFTInfoEnricherJob(SchedulerJob):
         for doc in batch_cursor:
             try:
                 token_id = doc['tokenId']
+                positions = current_data_response.get(f'positions_{doc["nftManagerAddress"]}_{token_id}_latest'.lower())
+                if not positions:
+                    deleted_tokens.append(doc["_id"])
+                    continue
                 nft = NFT(id=token_id, chain=self.chain_id)
                 nft.from_dict(doc)
                 idx = doc['_id']
@@ -114,11 +116,6 @@ class NFTInfoEnricherJob(SchedulerJob):
                 nft_manager_contract = nft.nft_manager_address
 
                 if not pool_info or not pool_info.get('tick'):
-                    continue
-
-                positions = current_data_response.get(f'positions_{nft_manager_contract}_{token_id}_latest'.lower())
-                if not positions:
-                    deleted_tokens.append(doc["_id"])
                     continue
 
                 nft.liquidity = float(positions[7])
@@ -211,7 +208,7 @@ class NFTInfoEnricherJob(SchedulerJob):
             decimals0=token0_decimals, decimals1=token1_decimals
         )
         nft.cal_apr_in_month(self.before_timestamp, token0_reward_before,
-                             token1_reward_before, pool_info, tick_before, tick)
+                             token1_reward_before, pool_info, tick)
 
     def _export(self, updated_nfts: Dict[str, NFT], deleted_tokens):
         data = [nft.to_dict() for _, nft in updated_nfts.items()]
