@@ -192,10 +192,12 @@ class GeneticAlgorithms:
         best_range = [convert_tick_to_price(tick*10, decimals0, decimals1) for tick in best_chromone]
         print('time toke', time.time() - start_time)
         return data, best_range
-# def convert_tick_to_price(tick, decimals0, decimals1):
-#     return 1 / (1.0001 ** tick / 10 ** (decimals1 - decimals0))
-#
-#
+def convert_tick_to_price(tick, decimals0, decimals1):
+    return (1.0001 ** tick / 10 ** (decimals1 - decimals0))
+
 # def convert_price_to_tick(price, decimals0, decimals1):
 #     return int(math.log(1 / price * 10 ** (decimals1 - decimals0), 1.0001))
-# print(convert_price_to_tick(3590.31, 6,18))
+
+
+print(convert_tick_to_price(83180, 18,18))
+print(convert_tick_to_price(84180, 18,18))

@@ -9,7 +9,9 @@ class Wallet:
         self.total_liquidity = 0
         self.tokens = {}
         self.apr = 0
+        self.total_asset = 0
         self.pnl = 0
+
     def from_dict(self, doc):
         self.nfts = doc.get('nfts', [])
 
@@ -19,5 +21,6 @@ class Wallet:
             'chainId': self.chain_id,
             'nfts': self.nfts,
             'apr': self.apr,
+            'totalAsset': self.total_asset,
             'PnL': self.pnl
         }

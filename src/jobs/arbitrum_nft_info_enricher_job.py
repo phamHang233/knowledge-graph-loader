@@ -41,6 +41,7 @@ class NFTInfoEnricherJob(SchedulerJob):
         self.cnt = 0
         self.end_block = self._etl_db.get_last_block_number()
         current_day_timestamp = int(time.time())
+        self.wrong_apr = []
         cursor = self._etl_db.get_block_by_timestamp(current_day_timestamp - 24 * 1 * 3600 + 3600 - 1)
         if cursor:
             self.before_timestamp = cursor['block_number']
@@ -62,12 +63,12 @@ class NFTInfoEnricherJob(SchedulerJob):
             try:
                 start_time = time.time()
 
-                batch_cursor = self.dex_nft_db.get_nfts_by_filter(
-                    _filter={"flagged": batch_idx, 'chainId': self.chain_id, 'poolAddress': {"$in": self.supported_pool}})
+                # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
+                #     _filter={"flagged": batch_idx, 'chainId': self.chain_id, 'poolAddress': {"$in": self.supported_pool}})
                 # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
                 #     _filter={"flagged": 68, 'liquidity': {"$gt": 0}, 'chainId': self.chain_id, 'poolAddress': "0xaebdca1bc8d89177ebe2308d62af5e74885dccc3"})
-                # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
-                #     {'chainId': self.chain_id, 'tokenId': {"$in": ["3030234"]}})
+                batch_cursor = self.dex_nft_db.get_nfts_by_filter(
+                    {'chainId': self.chain_id, 'tokenId': {"$in": ["2890439", "2871685", "2866338", "2871104", "2837283", "3027254", "3005442"]}})
                 # new_batch_cursor = list(batch_cursor)
                 self.get_information_of_batch_cursor(batch_cursor)
                 logger.info(f'Time to execute of batch [{batch_idx}] is {time.time() - start_time} seconds')
@@ -207,8 +208,10 @@ class NFTInfoEnricherJob(SchedulerJob):
             tick_upper=tick_upper, tick_current=tick_before,
             decimals0=token0_decimals, decimals1=token1_decimals
         )
-        nft.cal_apr_in_month(self.before_timestamp, token0_reward_before,
-                             token1_reward_before, pool_info, tick)
+        accepted_apr = nft.cal_apr_in_month(self.before_timestamp, token0_reward_before,
+                                            token1_reward_before, pool_info, tick)
+        if not accepted_apr:
+            self.wrong_apr.append(nft)
 
     def _export(self, updated_nfts: Dict[str, NFT], deleted_tokens):
         data = [nft.to_dict() for _, nft in updated_nfts.items()]
@@ -223,7 +226,7 @@ class NFTInfoEnricherJob(SchedulerJob):
             logger.info(f'Remove {len(deleted_tokens)} nfts')
 
     def _end(self):
-        cursor = self.dex_nft_db.get_nfts_by_filter({"chainId": self.chain_id, "aprInMonth": {"$gt": 3}})
-        cursor = list(cursor)
-        self.get_information_of_batch_cursor(cursor)
+        # cursor = self.dex_nft_db.get_nfts_by_filter({"chainId": self.chain_id, "aprInMonth": {"$gt": 3}})
+        # cursor = list(cursor)
+        self.get_information_of_batch_cursor(self.wrong_apr)
         logger.info(f'Update total {self.cnt} nfts')

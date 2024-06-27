@@ -40,7 +40,7 @@ class UpdateWalletInfoJob(BaseJob):
             # update_wallets: Dict[str, Wallet] = {}
             try:
                 start_timestamp = time.time()
-                cursor = self._klg_db.get_nfts_by_filter(_filter={'flagged': batch_idx, 'aprInMonth': {"$gt": 0}})
+                cursor = self._klg_db.get_nfts_by_filter(_filter={'flagged': batch_idx, 'aprInMonth': {"$gt": 0}, "chainId": self.chain_id})
 
                 for doc in cursor:
                     wallet_address = doc.get('wallet')
@@ -55,6 +55,7 @@ class UpdateWalletInfoJob(BaseJob):
                     wallet.total_liquidity += liquidity
                     wallet.pnl += doc['PnL']
                     wallet.nfts.append(doc["_id"])
+                    wallet.total_asset += doc['assetsInUSD']
 
                     #
                     # # wallet.from_dict(doc)

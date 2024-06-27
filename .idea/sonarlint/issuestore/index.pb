@@ -159,8 +159,6 @@ R.venv/lib/python3.10/site-packages/query_state_lib/base/mappers/eth_call_mapper
 S
 #job/algorthisms/average_strategy.py,9/1/91920b884dcc69b62f559f8921f51a536eee4b24
 S
-#src/jobs/nft_info_enricher_job_1.py,6/c/6cedb11f1cb98608c68c901ccf397eef61ee4001
-S
 #src/constants/multicall_contract.py,b/2/b25531b735cb13bc702ca525f0572979bd90859e
 R
 "job/constants/network_constants.py,8/8/88dc4657d0aba899821a59eb0431d8ff9346d19f
