@@ -63,12 +63,12 @@ class NFTInfoEnricherJob(SchedulerJob):
             try:
                 start_time = time.time()
 
-                # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
-                #     _filter={"flagged": batch_idx, 'chainId': self.chain_id, 'poolAddress': {"$in": self.supported_pool}})
+                batch_cursor = self.dex_nft_db.get_nfts_by_filter(
+                    _filter={"flagged": batch_idx, 'chainId': self.chain_id, 'poolAddress': {"$in": self.supported_pool}})
                 # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
                 #     _filter={"flagged": 68, 'liquidity': {"$gt": 0}, 'chainId': self.chain_id, 'poolAddress': "0xaebdca1bc8d89177ebe2308d62af5e74885dccc3"})
-                batch_cursor = self.dex_nft_db.get_nfts_by_filter(
-                    {'chainId': self.chain_id, 'tokenId': {"$in": ["2890439", "2871685", "2866338", "2871104", "2837283", "3027254", "3005442"]}})
+                # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
+                #     {'chainId': self.chain_id, 'tokenId': {"$in": ["3103054", "3102824"]}})
                 # new_batch_cursor = list(batch_cursor)
                 self.get_information_of_batch_cursor(batch_cursor)
                 logger.info(f'Time to execute of batch [{batch_idx}] is {time.time() - start_time} seconds')

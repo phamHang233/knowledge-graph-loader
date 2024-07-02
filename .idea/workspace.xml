@@ -5,14 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7e54e82-91bf-4949-b697-b0122a4a78a0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4d209132a2ee64a2e0170cdaae024db342695d75" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4d209132a2ee64a2e0170cdaae024db342695d75" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/8/6/8624c0bf415f8416dd63eb24fdd8a4baa4ce3172" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/8/6/8624c0bf415f8416dd63eb24fdd8a4baa4ce3172" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job/algorthisms/genetic_algorithms.py" beforeDir="false" afterPath="$PROJECT_DIR$/job/algorthisms/genetic_algorithms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/nft_info_enricher.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jobs/update_wallet_info_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/update_wallet_info_job.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/arbitrum_nfts.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/arbitrum_nfts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/wallet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/wallet.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,23 +32,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.arbitrum_nft_info_enricher_job.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.calculate_optimized_range.executor&quot;: &quot;Run&quot;,
-    &quot;Python.fee_from_strategy.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.genetic_algorithms.executor&quot;: &quot;Run&quot;,
-    &quot;Python.histogram.executor&quot;: &quot;Run&quot;,
-    &quot;Python.nft_info_enricher_job.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.nft_info_enricher_job_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.pool_address.executor&quot;: &quot;Run&quot;,
-    &quot;Python.run.executor&quot;: &quot;Run&quot;,
-    &quot;Python.sqrt_price_math.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/hang/Documents/Study/DATN/knowledge-graph-loader-project/src/models&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.arbitrum_nft_info_enricher_job.executor": "Debug",
+    "Python.calculate_optimized_range.executor": "Run",
+    "Python.fee_from_strategy.executor": "Debug",
+    "Python.genetic_algorithms.executor": "Run",
+    "Python.histogram.executor": "Run",
+    "Python.nft_info_enricher_job.executor": "Debug",
+    "Python.nft_info_enricher_job_1.executor": "Run",
+    "Python.pool_address.executor": "Run",
+    "Python.run.executor": "Run",
+    "Python.sqrt_price_math.executor": "Run",
+    "Python.test.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/home/hang/Documents/Study/DATN/knowledge-graph-loader-project/src/models"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/models" />
@@ -62,7 +61,7 @@
       <recent name="$PROJECT_DIR$/src/jobs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.genetic_algorithms">
+  <component name="RunManager" selected="Python.run">
     <configuration name="arbitrum_nft_info_enricher_job" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="knowledge-graph-loader-project" />
       <option name="ENV_FILES" value="" />
@@ -129,7 +128,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="genetic_algorithms" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="genetic_algorithms" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="knowledge-graph-loader-project" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -205,7 +204,6 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.genetic_algorithms" />
         <item itemvalue="Python.arbitrum_nft_info_enricher_job" />
         <item itemvalue="Python.sqrt_price_math" />
         <item itemvalue="Python.fee_from_strategy" />
@@ -278,24 +276,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
-          <line>294</line>
+          <line>247</line>
           <option name="timeStamp" value="148" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/.venv/lib/python3.10/site-packages/web3/_utils/error_formatters_utils.py</url>
           <line>161</line>
           <option name="timeStamp" value="154" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <condition expression="token_id=='681429'" language="Python" />
-          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
-          <line>171</line>
-          <option name="timeStamp" value="166" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
-          <line>289</line>
-          <option name="timeStamp" value="168" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/cli/calculate_optimized_range.py</url>
@@ -370,11 +357,6 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py</url>
-          <line>197</line>
-          <option name="timeStamp" value="286" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py</url>
           <line>84</line>
           <option name="timeStamp" value="289" />
         </line-breakpoint>
@@ -400,11 +382,6 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py</url>
-          <line>82</line>
-          <option name="timeStamp" value="333" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py</url>
           <line>126</line>
           <option name="timeStamp" value="334" />
         </line-breakpoint>
@@ -412,6 +389,11 @@
           <url>file://$PROJECT_DIR$/src/models/arbitrum_nfts.py</url>
           <line>103</line>
           <option name="timeStamp" value="336" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/jobs/nft_info_enricher_job.py</url>
+          <line>56</line>
+          <option name="timeStamp" value="337" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

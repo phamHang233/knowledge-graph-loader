@@ -100,7 +100,7 @@ class NFT:
         current_invest_in_usd = ((invest1 * token1_price / 10 ** decimals1)
                                  + (invest0 * token0_price / 10 ** decimals0))
         investment_change_in_usd = 0
-        apr = (fee_change_in_usd + investment_change_in_usd) / current_invest_in_usd / 1 * 365 if current_invest_in_usd > 1e-03 else 0
+        apr = (fee_change_in_usd + investment_change_in_usd) / current_invest_in_usd / 1 * 365 if current_invest_in_usd > 1e-06 else 0
         if apr > 5:
             return False
         self.tokens = {
