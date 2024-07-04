@@ -127,7 +127,7 @@ class UpdateNftInfoJob(BaseJob):
                 nft_info.liquidity -= liquidity
 
         # nft_info.liquidity_change_logs[str(block_number)] = nft_info.liquidity
-        # nft_info.last_interact_at = block_number
+        nft_info.last_interact_at = max(nft_info.last_interact_at, block_number)
 
     def aggregate_collect_event(self, event, events, data):
         token_id = event['tokenId']

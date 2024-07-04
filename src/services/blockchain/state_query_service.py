@@ -530,8 +530,12 @@ class StateQueryService:
             logger.error(f"Error while send batch to provider: {e}")
             return {}, [], [], {}
 
-    def get_batch_nft_fee_with_block_number(self, nfts, pools, w3_multicall, block_number='latest', batch_size=2000):
+    def get_batch_nft_fee_with_block_number(self, tcv_nfts, nfts, pools, w3_multicall, a_day_ago_block_number='latest', batch_size=2000):
         for nft in nfts:
+            if int(nft['tokenId']) in tcv_nfts and nft["lastInteractAt"] > a_day_ago_block_number:
+                block_number = nft['lastInteractAt']
+            else:
+                block_number = a_day_ago_block_number
             w3_multicall.add(
                 W3Multicall.Call(address=Web3.to_checksum_address(nft['nftManagerAddress']), block_number=block_number,
                                  abi=UNISWAP_V3_NFT_MANAGER_ABI, fn_name='positions', fn_paras=int(nft['tokenId'])
@@ -547,6 +551,11 @@ class StateQueryService:
         w3_multicall.calls = {}
 
         for idx, nft in enumerate(nfts):
+            if int(nft['tokenId']) in tcv_nfts and nft["lastInteractAt"] > a_day_ago_block_number:
+                block_number = nft['lastInteractAt']
+
+            else:
+                block_number = a_day_ago_block_number
             position = decoded_data.get(f'positions_{nft["nftManagerAddress"]}_{nft["tokenId"]}_{block_number}'.lower())
             if not position:
                 continue

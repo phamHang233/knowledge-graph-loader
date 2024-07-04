@@ -2,6 +2,7 @@ import os
 import time
 
 import click
+import requests
 from cli_scheduler.scheduler_job import scheduler_format
 
 from src.constants.blockchain_etl_constants import DBPrefix
