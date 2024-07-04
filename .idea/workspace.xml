@@ -32,23 +32,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.arbitrum_nft_info_enricher_job.executor": "Debug",
-    "Python.calculate_optimized_range.executor": "Run",
-    "Python.fee_from_strategy.executor": "Debug",
-    "Python.genetic_algorithms.executor": "Run",
-    "Python.histogram.executor": "Run",
-    "Python.nft_info_enricher_job.executor": "Debug",
-    "Python.nft_info_enricher_job_1.executor": "Run",
-    "Python.pool_address.executor": "Run",
-    "Python.run.executor": "Debug",
-    "Python.sqrt_price_math.executor": "Run",
-    "Python.test.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/home/hang/Documents/Study/DATN/knowledge-graph-loader-project/src/models"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.arbitrum_nft_info_enricher_job.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.calculate_optimized_range.executor&quot;: &quot;Run&quot;,
+    &quot;Python.fee_from_strategy.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.genetic_algorithms.executor&quot;: &quot;Run&quot;,
+    &quot;Python.histogram.executor&quot;: &quot;Run&quot;,
+    &quot;Python.nft_info_enricher_job.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.nft_info_enricher_job_1.executor&quot;: &quot;Run&quot;,
+    &quot;Python.pool_address.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.sqrt_price_math.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/hang/Documents/Study/DATN/knowledge-graph-loader-project/src/models&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/models" />
@@ -164,7 +164,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
-      <option name="PARAMETERS" value="dex_nft_info_enricher -c arbitrum --scheduler ^true" />
+      <option name="PARAMETERS" value="dex_nft_info_enricher -c arbitrum --scheduler ^true@daily" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -391,9 +391,9 @@
           <option name="timeStamp" value="351" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/databases/blockchain_etl.py</url>
-          <line>419</line>
-          <option name="timeStamp" value="352" />
+          <url>file://$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py</url>
+          <line>48</line>
+          <option name="timeStamp" value="353" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

@@ -46,7 +46,7 @@ class NFTInfoEnricherJob(SchedulerJob):
         self.wrong_apr = []
         cursor = self._etl_db.get_block_by_timestamp(current_day_timestamp - 24 * 1 * 3600 + 3600 - 1)
         self.before_timestamp = cursor['block_number']
-        cursor = self._etl_db.get_block_by_timestamp(current_day_timestamp - 1 * 3600 + 3600 - 1)
+        cursor = self._etl_db.get_block_by_timestamp(current_day_timestamp - 3600 - 1)
         self.a_hour_ago_block_number = cursor['block_number']
         self.supported_pool = [
                     "0xc473e2aee3441bf9240be85eb122abb059a3b57c",
