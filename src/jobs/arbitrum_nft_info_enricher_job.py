@@ -70,7 +70,7 @@ class NFTInfoEnricherJob(SchedulerJob):
 
 
     def _execute(self, *args, **kwargs):
-        for batch_idx in reversed(range(1, 2)):
+        for batch_idx in reversed(range(1, self.number_of_nfts_batch+1)):
             # if batch_idx <=37:
             #     continue
             try:
@@ -233,7 +233,7 @@ class NFTInfoEnricherJob(SchedulerJob):
         accepted_apr = nft.cal_apr_in_month(before_block_number, token0_reward_before,
                                             token1_reward_before, pool_info, tick)
         if not accepted_apr:
-            self.wrong_apr.append(nft)
+            self.wrong_apr.append(nft.to_dict())
 
     def _export(self, updated_nfts: Dict[str, NFT], deleted_tokens):
         data = [nft.to_dict() for _, nft in updated_nfts.items()]
@@ -248,7 +248,5 @@ class NFTInfoEnricherJob(SchedulerJob):
             logger.info(f'Remove {len(deleted_tokens)} nfts')
 
     def _end(self):
-        # cursor = self.dex_nft_db.get_nfts_by_filter({"chainId": self.chain_id, "aprInMonth": {"$gt": 3}})
-        # cursor = list(cursor)
         self.get_information_of_batch_cursor(self.wrong_apr)
-        logger.info(f'Update total {self.cnt} nfts')
+        logger.info(f'Update total {self.wrong_apr} nfts')
