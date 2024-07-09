@@ -5,8 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7e54e82-91bf-4949-b697-b0122a4a78a0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/e/deafdd1187e95291008d9ed0fd57bf5e183f14b5" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job/algorthisms/genetic_algorithms.py" beforeDir="false" afterPath="$PROJECT_DIR$/job/algorthisms/genetic_algorithms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job/constants/network_constant.py" beforeDir="false" afterPath="$PROJECT_DIR$/job/constants/network_constant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job/crawlers/uni_pool_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/job/crawlers/uni_pool_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job/services/fee_from_strategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/job/services/fee_from_strategy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cli/calculate_optimized_range.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cli/calculate_optimized_range.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/databases/dex_nft_manager_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/databases/dex_nft_manager_db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jobs/update_wallet_info_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/update_wallet_info_job.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,16 +40,18 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.arbitrum_nft_info_enricher_job.executor": "Debug",
-    "Python.calculate_optimized_range.executor": "Run",
+    "Python.calculate_optimized_range.executor": "Debug",
     "Python.fee_from_strategy.executor": "Debug",
-    "Python.genetic_algorithms.executor": "Run",
+    "Python.genetic_algorithms.executor": "Debug",
     "Python.histogram.executor": "Run",
     "Python.nft_info_enricher_job.executor": "Debug",
     "Python.nft_info_enricher_job_1.executor": "Run",
     "Python.pool_address.executor": "Run",
     "Python.run.executor": "Run",
     "Python.sqrt_price_math.executor": "Run",
+    "Python.state_query_service.executor": "Debug",
     "Python.test.executor": "Debug",
+    "Python.uni_pool_data.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "last_opened_file_path": "/home/hang/Documents/Study/DATN/knowledge-graph-loader-project/src/models"
   }
@@ -56,7 +68,7 @@
       <recent name="$PROJECT_DIR$/src/jobs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.run">
+  <component name="RunManager" selected="Python.state_query_service">
     <configuration name="arbitrum_nft_info_enricher_job" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="knowledge-graph-loader-project" />
       <option name="ENV_FILES" value="" />
@@ -159,7 +171,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
-      <option name="PARAMETERS" value="dex_nft_info_enricher -c arbitrum --scheduler ^true@daily" />
+      <option name="PARAMETERS" value="dex_wallet_info_enricher" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -167,7 +179,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="sqrt_price_math" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="state_query_service" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="knowledge-graph-loader-project" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -176,11 +188,33 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/job/utils" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/services/blockchain" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/job/utils/sqrt_price_math.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/services/blockchain/state_query_service.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="uni_pool_data" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="knowledge-graph-loader-project" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/job/crawlers" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/job/crawlers/uni_pool_data.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -192,17 +226,19 @@
     <list>
       <item itemvalue="Python.run" />
       <item itemvalue="Python.genetic_algorithms" />
-      <item itemvalue="Python.sqrt_price_math" />
+      <item itemvalue="Python.state_query_service" />
+      <item itemvalue="Python.uni_pool_data" />
       <item itemvalue="Python.calculate_optimized_range" />
       <item itemvalue="Python.arbitrum_nft_info_enricher_job" />
       <item itemvalue="Python.fee_from_strategy" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.arbitrum_nft_info_enricher_job" />
-        <item itemvalue="Python.sqrt_price_math" />
-        <item itemvalue="Python.fee_from_strategy" />
+        <item itemvalue="Python.state_query_service" />
+        <item itemvalue="Python.uni_pool_data" />
         <item itemvalue="Python.calculate_optimized_range" />
+        <item itemvalue="Python.fee_from_strategy" />
+        <item itemvalue="Python.arbitrum_nft_info_enricher_job" />
       </list>
     </recent_temporary>
   </component>
@@ -282,42 +318,7 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/cli/calculate_optimized_range.py</url>
           <line>61</line>
-          <option name="timeStamp" value="177" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/cli/calculate_optimized_range.py</url>
-          <line>52</line>
-          <option name="timeStamp" value="180" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/cli/calculate_optimized_range.py</url>
-          <line>102</line>
-          <option name="timeStamp" value="182" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/job/algorthisms/genetic_algorithms.py</url>
-          <line>132</line>
-          <option name="timeStamp" value="185" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/job/algorthisms/genetic_algorithms.py</url>
-          <line>116</line>
-          <option name="timeStamp" value="186" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/job/algorthisms/genetic_algorithms.py</url>
-          <line>127</line>
-          <option name="timeStamp" value="187" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/cli/calculate_optimized_range.py</url>
-          <line>81</line>
           <option name="timeStamp" value="189" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/jobs/update_wallet_info_job.py</url>
-          <line>80</line>
-          <option name="timeStamp" value="199" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/exporters/nft_mongodb_exporter.py</url>
@@ -362,7 +363,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/services/blockchain/state_query_service.py</url>
-          <line>529</line>
+          <line>530</line>
           <option name="timeStamp" value="295" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -394,6 +395,21 @@
           <url>file://$PROJECT_DIR$/src/jobs/arbitrum_nft_info_enricher_job.py</url>
           <line>250</line>
           <option name="timeStamp" value="354" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/cli/calculate_optimized_range.py</url>
+          <line>96</line>
+          <option name="timeStamp" value="367" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/databases/dex_nft_manager_db.py</url>
+          <line>637</line>
+          <option name="timeStamp" value="375" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/services/blockchain/state_query_service.py</url>
+          <line>705</line>
+          <option name="timeStamp" value="377" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

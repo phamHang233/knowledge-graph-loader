@@ -793,3 +793,12 @@ class NFTMongoDB:
     def get_pairs(self):
         cursor = self._pair_col.find({'bestAPR': {"$exists": True}})
         return cursor
+
+    def replace_pairs(self, data):
+        for item in data:
+            self._pair_col.replace_one({"_id": item["_id"]}, item, upsert=True)
+
+
+    def replace_wallets(self, data):
+        for item in data:
+            self._wallets_col.replace_one({"_id": item["_id"]}, item, upsert=True)

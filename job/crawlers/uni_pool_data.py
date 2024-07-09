@@ -29,7 +29,6 @@ def pool_by_id(id, protocol):
     {
       date
       volumeUSD
-      tvlUSD
       feesUSD
       liquidity
       high
@@ -134,13 +133,15 @@ def get_pool_day_datas(pool, protocol, from_date, to_date):
         return {'error': str(error)}
 
 
-def convert_datetime_to_timestamp(date_time):
-    """Converts a datetime object to a Unix timestamp (seconds since epoch)."""
-    return int(time.mktime(date_time.timetuple()))
 
+# end_timestamp = int(time.time())
+# start_timestamp = end_timestamp - 30 * 24 * 3600
+# hourly_price_data = get_pool_hour_data("0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", start_timestamp, end_timestamp, "ethereum")
+# print(get_pool_day_datas("0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", "ethereum", from_date=start_timestamp, to_date=end_timestamp))
+# print(hourly_price_data)
+# print(pool_by_id("0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", "ethereum"))
 # print(
 #     pool_day_data("0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", 'ethereum',
 #                   convert_datetime_to_timestamp(datetime.datetime.fromtimestamp(1710032101)),
 #                   convert_datetime_to_timestamp(datetime.datetime.fromtimestamp(1712710501))))
 # print(pool_by_id('0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640', 'ethereum'))
-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2

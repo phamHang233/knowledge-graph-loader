@@ -65,11 +65,11 @@ def uniswap_strategy_algorithm(backtest_data, pool_data, investment_amount, min_
 
 #
 # end_timestamp = int(time.time())
-# start_timestamp = end_timestamp - 24 * 3600 -1
-# print(uniswap_strategy_backtest(pool="0xc473e2aee3441bf9240be85eb122abb059a3b57c", investment_amount=1000,
-#                                        min_tick=-243060,
-#                                        max_tick= -155580,
-#                                        protocol='arbitrum', start_timestamp=start_timestamp,end_timestamp=end_timestamp))
+# start_timestamp = end_timestamp - 30 * 24 * 3600
+# print(uniswap_strategy_backtest(pool="0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", investment_amount=1000,
+#                                        min_tick=19699,
+#                                        max_tick= 25844,
+#                                        protocol='ethereum', start_timestamp=start_timestamp,end_timestamp=end_timestamp))
 # print(res, time)
 # print(time.time()-start_time)
 

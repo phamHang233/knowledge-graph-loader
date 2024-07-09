@@ -4,7 +4,8 @@ import time
 
 import numpy as np
 
-from job.crawlers.uni_pool_data import pool_by_id, get_pool_day_datas, get_pool_hour_data
+from job.crawlers.uni_pool_data import get_pool_day_datas, get_pool_hour_data, pool_by_id
+
 from job.services.fee_from_strategy import uniswap_strategy_algorithm
 from job.utils.sqrt_price_math import convert_price_to_tick, convert_tick_to_price
 
@@ -19,13 +20,13 @@ class GeneticAlgorithms:
         self.min_tick = 0
         self.pool = pool
         self.protocol = protocol
-        self.generations = 4 # Số thế hệ
+        self.generations = 5 # Số thế hệ
         self.crossover_rate = 0.8  # Tỷ lệ giao phối
         self.mutation_rate = 0.3  # Tỷ lệ đột biến
-        self.num_parents = 20
+        self.num_parents = 40
         # Tạo quần thể ban đầu
         self.pool_data = pool_by_id(pool, protocol)
-        self.population_size = 100
+        self.population_size = 200
         self.end_timestamp = end_timestamp
         self.start_timestamp = start_timestamp
         self.pool_hour_data = get_pool_hour_data(pool, start_timestamp, end_timestamp, protocol)[::-1]
@@ -51,12 +52,13 @@ class GeneticAlgorithms:
         positive_number = len(positive_fitnesses)
         if positive_number < self.num_parents:
             parents = positive_population
+            sorted_indexes = np.argsort(negative_fitness)
+            sorted_fitness = np.array(negative_fitness)[sorted_indexes]
 
-            abs_negative_fitness = [abs(fit) for fit in negative_fitness]
-            total_negative_fitness = sum(abs_negative_fitness)
-            neg_selection_probs = [1 - (fitness / total_negative_fitness) for fitness in abs_negative_fitness]
-            selected_index = np.random.choice(len(negative_fitness), p=neg_selection_probs, size=self.num_parents-positive_number, replace=False)
-            parents.append([negative_population[id] for id in selected_index])
+            ranking_probs = [(len(sorted_fitness) - i + 1) / sum(range(1, len(sorted_fitness) + 1)) for i in
+                             range(1, len(sorted_fitness) + 1)] #xác suất theo xếp hạng
+            selected_index = np.random.choice(len(sorted_fitness), p=ranking_probs, size=self.num_parents - positive_number, replace=False)
+            parents.extend([negative_population[id] for id in selected_index])
         else:
             # Chọn ngẫu nhiên các cá thể dựa trên xác suất
             selected_index = np.random.choice(len(positive_fitnesses), p=selection_probs, size=self.num_parents,
@@ -64,22 +66,7 @@ class GeneticAlgorithms:
             parents = [positive_population[id] for id in selected_index]
         return parents
 
-    # def crossover(self, parents):
-    #
-    #     # Chọn ngẫu nhiên hai cặp cha mẹ
-    #     selected_parents = random.sample(parents, 2)
-    #
-    #     # Lai hai cặp cha mẹ đã chọn
-    #     parent1 = selected_parents[0]
-    #     parent2 = selected_parents[1]
-    #
-    #     # Lai tuyến tính cho mỗi gen
-    #     # alpha = random.random()
-    #     alpha = 0.5
-    #     new_min_value = int((parent1[0] * (1 - alpha) + alpha * parent2[0]))
-    #     new_max_value = int((parent1[1] * (1 - alpha) + alpha * parent2[1]))
-    #
-    #     return [new_min_value, new_max_value]
+
 
     def generate_offspring(self, parents):
         offspring = []
@@ -93,11 +80,9 @@ class GeneticAlgorithms:
             parent2 = selected_parents[1]
 
             # Lai tuyến tính cho mỗi gen
-            # alpha = random.random()
             alpha = 0.5
             new_min_value = int((parent1[0] * (1 - alpha) + alpha * parent2[0]))
             new_max_value = int((parent1[1] * (1 - alpha) + alpha * parent2[1]))
-            # new_offspring = self.crossover(parents)
             offspring.append([new_min_value, new_max_value])
             if new_min_value > self.current_tick or new_max_value < self.current_tick:
                 print("VUOT QUA CURRENT TICK")
@@ -145,7 +130,7 @@ class GeneticAlgorithms:
 
     def process(self):
         self.pool_info = get_pool_day_datas(self.pool, self.protocol, from_date=self.start_timestamp,
-                                                 to_date=self.end_timestamp)
+                                                 to_date=self.end_timestamp)[:-1]
         population = []
         min_price = min([float(self.pool_info[i]['low']) for i in range(len(self.pool_info))])
         max_price = max([float(self.pool_info[i]['high']) for i in range(len(self.pool_info))])
@@ -192,12 +177,3 @@ class GeneticAlgorithms:
         best_range = [convert_tick_to_price(tick*10, decimals0, decimals1) for tick in best_chromone]
         print('time toke', time.time() - start_time)
         return data, best_range
-def convert_tick_to_price(tick, decimals0, decimals1):
-    return (1.0001 ** tick / 10 ** (decimals1 - decimals0))
-
-# def convert_price_to_tick(price, decimals0, decimals1):
-#     return int(math.log(1 / price * 10 ** (decimals1 - decimals0), 1.0001))
-
-
-print(convert_tick_to_price(83180, 18,18))
-print(convert_tick_to_price(84180, 18,18))

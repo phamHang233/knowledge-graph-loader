@@ -39,7 +39,7 @@ class NFTMongoDBExporter:
             if metadata is not None:
                 wallet.update(metadata)
 
-        self._db.update_docs(MongoDBCollections.wallets, data=data, shard_key='address')
+        self._db.replace_wallets(data=data)
 
     def export_updated_wallets(self, data: List[dict]):
         """Update existed wallets. Mainly for flagging wallets as 'newElite' or 'elite'"""
@@ -53,7 +53,7 @@ class NFTMongoDBExporter:
         self._db.update_docs(collection_name=DexNFTManagerCollections.dex_nfts, data=data)
 
     def export_pairs(self, data: List[dict]):
-        self._db.update_docs(collection_name=DexNFTManagerCollections.pairs, data=data)
+        self._db.replace_pairs(data=data)
 
     def export_tokens_holders(self, data: List[dict]):
         """Update top holders for top tokens

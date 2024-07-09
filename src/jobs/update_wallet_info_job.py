@@ -33,7 +33,7 @@ class UpdateWalletInfoJob(BaseJob):
 
     # def _start(self):
     def _end(self):
-        self._export(self.updated_wallets)
+        self._export()
 
     def _execute_batch(self, nfts_batch_indicates):
         for batch_idx in nfts_batch_indicates:
@@ -75,8 +75,8 @@ class UpdateWalletInfoJob(BaseJob):
             except Exception as e:
                 raise e
 
-    def _export(self, updated_wallets: Dict[str, Wallet]):
-        data = [w.to_dict() for _, w in updated_wallets.items()]
+    def _export(self):
+        data = [w.to_dict() for _, w in self.updated_wallets.items()]
         if data:
             self._exporter.export_wallets(data, chain_id = self.chain_id)
 

@@ -23,7 +23,7 @@ logger = get_logger('NFT Info Enricher Job')
 class NFTInfoEnricherJob(SchedulerJob):
     def __init__(
             self, _db, _exporter, nfts_batch,
-            chain_id, provider_uri, db_prefix,  scheduler=None):
+            chain_id, provider_uri, db_prefix, scheduler=None):
         self.dex_nft_db = _db
         self._exporter = _exporter
         self.db_prefix = db_prefix
@@ -49,15 +49,15 @@ class NFTInfoEnricherJob(SchedulerJob):
         cursor = self._etl_db.get_block_by_timestamp(current_day_timestamp - 3600 - 1)
         self.a_hour_ago_block_number = cursor['block_number']
         self.supported_pool = [
-                    "0xc473e2aee3441bf9240be85eb122abb059a3b57c",
-                    "0xaebdca1bc8d89177ebe2308d62af5e74885dccc3",
-                    "0x92c63d0e701caae670c9415d91c474f686298f00",
-                    "0xc6962004f452be9203591991d15f6b388e09e8d0",
-                    "0x2f5e87c9312fa29aed5c179e456625d79015299c",
-                    "0xc31e54c7a869b9fcbecc14363cf510d1c41fa443",
-                    "0x641c00a822e8b671738d32a431a4fb6074e5c79d",
-                    "0xc6f780497a95e246eb9449f5e4770916dcd6396a"
-                ]
+            "0xc473e2aee3441bf9240be85eb122abb059a3b57c",
+            "0xaebdca1bc8d89177ebe2308d62af5e74885dccc3",
+            "0x92c63d0e701caae670c9415d91c474f686298f00",
+            "0xc6962004f452be9203591991d15f6b388e09e8d0",
+            "0x2f5e87c9312fa29aed5c179e456625d79015299c",
+            "0xc31e54c7a869b9fcbecc14363cf510d1c41fa443",
+            "0x641c00a822e8b671738d32a431a4fb6074e5c79d",
+            "0xc6f780497a95e246eb9449f5e4770916dcd6396a"
+        ]
         response = requests.get(f'https://api.tcvault.xyz/api/tcv/vault/?chainId={int(self.chain_id, 16)}')
         result = response.json()
 
@@ -68,16 +68,16 @@ class NFTInfoEnricherJob(SchedulerJob):
             token_id = contract.functions.rangeToTokenIds(0).call()
             self.tcv_token.append(token_id)
 
-
     def _execute(self, *args, **kwargs):
-        for batch_idx in reversed(range(1, self.number_of_nfts_batch+1)):
+        for batch_idx in reversed(range(1, self.number_of_nfts_batch + 1)):
             # if batch_idx <=37:
             #     continue
             try:
                 start_time = time.time()
 
                 batch_cursor = self.dex_nft_db.get_nfts_by_filter(
-                    _filter={"flagged": batch_idx, 'chainId': self.chain_id, 'poolAddress': {"$in": self.supported_pool}})
+                    _filter={"flagged": batch_idx, 'chainId': self.chain_id,
+                             'poolAddress': {"$in": self.supported_pool}})
                 # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
                 #     _filter={"flagged": 68, 'liquidity': {"$gt": 0}, 'chainId': self.chain_id, 'poolAddress': "0xaebdca1bc8d89177ebe2308d62af5e74885dccc3"})
                 # batch_cursor = self.dex_nft_db.get_nfts_by_filter(
@@ -107,7 +107,10 @@ class NFTInfoEnricherJob(SchedulerJob):
         before_decoded_data = {}
         w3_multicall.calls = {}
         before_decoded_data.update(self.state_querier.get_batch_nft_fee_with_block_number(tcv_nfts=self.tcv_token,
-            nfts=important_nfts, pools=self.pools_fee, w3_multicall=w3_multicall, a_day_ago_block_number=self.before_timestamp))
+                                                                                          nfts=important_nfts,
+                                                                                          pools=self.pools_fee,
+                                                                                          w3_multicall=w3_multicall,
+                                                                                          a_day_ago_block_number=self.before_timestamp))
         logger.info(f"Query process toke {time.time() - start_time}")
 
         return current_decoded_data, before_decoded_data, pools_in_batch, nfts

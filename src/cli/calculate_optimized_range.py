@@ -38,28 +38,8 @@ def calculate_optimized_price_range(chain, max_workers):
 
     end_timestamp = int(time.time())
     start_timestamp = end_timestamp - 30 * 24 * 3600
-    # pairs_address = [key.split("_")[1] for key in top_pairs]
     cursor = _dex_db.get_top_pairs(chain_id=chain_id, project='uniswap-v3')
     pairs_info = {doc['address']: doc for doc in cursor}
-
-    # result = []
-    # for pair_address, pair_info in pairs_info.items():
-    #     try:
-    #         # pair_address = key.split("_")[1]
-    #         ga = GeneticAlgorithms(pool=pair_address, start_timestamp=start_timestamp,
-    #                                end_timestamp=end_timestamp)
-    #         best_apr, best_range = ga.process()
-    #
-    #         result.append({
-    #             "_id": f"{chain_id}_{pair_address}",
-    #             'address': pair_address,
-    #             'token0': pair_info['tokens'][0]['address'],
-    #             'token1': pair_info['tokens'][1]['address'],
-    #             'bestAPR': best_apr,
-    #             'range': best_range
-    #         })
-    #     except Exception as e:
-    #         logger.exception(e)
 
     result = []
     result_lock = threading.Lock()  # Create a lock to protect shared data
@@ -100,7 +80,7 @@ def process_pair(chain_id, pair_address, pair_info, start_timestamp, end_timesta
             'range': best_range
         })
     except Exception as e:
-        print(f"Error processing pair {pair_address}: {e}")
+        logger.exception(f"Error processing pair {pair_address}: {e}")
 
 def cal_pool(pool_address):
     _db = NFTMongoDB()
@@ -117,5 +97,5 @@ def cal_pool(pool_address):
     _exporter.export_pairs(result)
 
 if __name__ == '__main__':
-    cal_pool("0x7bea39867e4169dbe237d55c8242a8f2fcdcc387")
-    cal_pool("0xe0554a476a092703abdb3ef35c80e0d76d32939f")
+    cal_pool("0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640")
+    # cal_pool("0xe0554a476a092703abdb3ef35c80e0d76d32939f")

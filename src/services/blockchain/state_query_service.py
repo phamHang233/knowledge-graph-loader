@@ -11,7 +11,7 @@ from artifacts.abis.dexes.uniswap_v3_nft_manage_abi import UNISWAP_V3_NFT_MANAGE
 from artifacts.abis.dexes.uniswap_v3_pool_abi import UNISWAP_V3_POOL_ABI
 from artifacts.abis.erc20_abi import ERC20_ABI
 from artifacts.abis.dexes.uniswap_v3_factory_abi import UNISWAP_V3_FACTORY_ABI
-from src.constants.network_constants import NATIVE_TOKEN
+from src.constants.network_constants import NATIVE_TOKEN, MulticallContract, Networks, Chains
 from src.services.blockchain.batch_queries_service import add_rpc_call, decode_data_response_ignore_error, \
     decode_data_response
 from src.services.blockchain.multicall import W3Multicall, add_rpc_multicall, decode_multical_response
@@ -471,7 +471,8 @@ class StateQueryService:
         except Exception as ex:
             return {}
 
-    def get_batch_nft_fee_with_current_block(self, nfts, pools, w3_multicall: W3Multicall, block_number='latest', batch_size=2000):
+    def get_batch_nft_fee_with_current_block(self, nfts, pools, w3_multicall: W3Multicall, block_number='latest',
+                                             batch_size=2000):
         list_nfts = []
         important_nfts = []
         pools_in_batch = set()
@@ -530,7 +531,8 @@ class StateQueryService:
             logger.error(f"Error while send batch to provider: {e}")
             return {}, [], [], {}
 
-    def get_batch_nft_fee_with_block_number(self, tcv_nfts, nfts, pools, w3_multicall, a_day_ago_block_number='latest', batch_size=2000):
+    def get_batch_nft_fee_with_block_number(self, tcv_nfts, nfts, pools, w3_multicall, a_day_ago_block_number='latest',
+                                            batch_size=2000):
         for nft in nfts:
             if int(nft['tokenId']) in tcv_nfts and nft["lastInteractAt"] > a_day_ago_block_number:
                 block_number = nft['lastInteractAt']
@@ -597,8 +599,6 @@ class StateQueryService:
             logger.error(f"Error while send batch to provider: {e}")
             time.sleep(120)
             return {}
-
-
 
     # def get_batch_nft_fee_with_block_number(self, nfts, pools, list_rpc_call, list_call_id, start_block=None, latest = False):
     #     for idx, nft in enumerate(nfts):
@@ -667,4 +667,48 @@ class StateQueryService:
     #         #     list_call_id=list_call_id, list_rpc_call=list_rpc_call
     #         # )
     #
-    #     return list_rpc_call, list_call_id
+    #     return list_rpc_call, list_call_idD
+    def get_fee_generate(self, ):
+        w3_multicall = W3Multicall(self._w3, address=MulticallContract.get_multicall_contract('0xa4b1'))
+        pool_address = "0x2f5e87c9312fa29aed5c179e456625d79015299c"
+        start_block = 229969954
+        w3_multicall.add(
+            W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number="latest",
+                             abi=UNISWAP_V3_POOL_ABI, fn_name='feeGrowthGlobal0X128'
+                             ))
+        w3_multicall.add(
+            W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number="latest",
+                             abi=UNISWAP_V3_POOL_ABI, fn_name='feeGrowthGlobal1X128'
+                             ))
+        w3_multicall.add(
+            W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=start_block,
+                             abi=UNISWAP_V3_POOL_ABI, fn_name='feeGrowthGlobal0X128'
+                             ))
+        w3_multicall.add(
+            W3Multicall.Call(address=Web3.to_checksum_address(pool_address), block_number=start_block,
+                             abi=UNISWAP_V3_POOL_ABI, fn_name='feeGrowthGlobal1X128'
+                             ))
+
+        list_call_id, list_rpc_call = [], []
+        add_rpc_multicall(w3_multicall, list_rpc_call=list_rpc_call, list_call_id=list_call_id)
+        responses = self.client_querier.sent_batch_to_provider(list_rpc_call, batch_size=1)
+        decoded_data = decode_multical_response(
+            w3_multicall=w3_multicall, data_responses=responses,
+            list_call_id=list_call_id, ignore_error=True
+        )
+        fee_growth_global_0 = decoded_data.get(f'feeGrowthGlobal0X128_{pool_address}_latest'.lower())
+        fee_growth_global_1 = decoded_data.get(f'feeGrowthGlobal1X128_{pool_address}_latest'.lower())
+        fee_growth_global_0_before = decoded_data.get(f'feeGrowthGlobal0X128_{pool_address}_{start_block}'.lower())
+        fee_growth_global_1_before = decoded_data.get(f'feeGrowthGlobal1X128_{pool_address}_{start_block}'.lower())
+        fee_generate0 = (fee_growth_global_0 - fee_growth_global_0_before) / 2 ** 128
+        fee_generate1 = (fee_growth_global_1 - fee_growth_global_1_before) / 2 ** 128
+        fee = fee_generate0 * 57302 + fee_generate1 * 3063.18
+        tvl = 38571331.76437378
+        return fee / tvl * 100
+
+
+if __name__ == '__main__':
+    provider_uri = Networks.archive_node.get(Chains.names["0xa4b1"])
+
+    job = StateQueryService(provider_uri=provider_uri)
+    print(job.get_fee_generate())
