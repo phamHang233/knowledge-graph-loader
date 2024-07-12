@@ -12,7 +12,7 @@ logger = get_logger('Update Wallet Info Enricher Job')
 class UpdateWalletInfoJob(BaseJob):
     def __init__(
             self, _db, _exporter, max_workers, batch_size, num_nft_flagged,
-            chain_id, db_prefix, n_cpu=1, cpu=1, ):
+            chain_id, n_cpu=1, cpu=1, ):
         self.n_cpu = n_cpu
         self.cpu = cpu - 1
 

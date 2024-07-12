@@ -134,10 +134,10 @@ def get_pool_day_datas(pool, protocol, from_date, to_date):
 
 
 
-# end_timestamp = int(time.time())
-# start_timestamp = end_timestamp - 30 * 24 * 3600
+end_timestamp = int(time.time())
+start_timestamp = end_timestamp - 30 * 1 * 3600
 # hourly_price_data = get_pool_hour_data("0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", start_timestamp, end_timestamp, "ethereum")
-# print(get_pool_day_datas("0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", "ethereum", from_date=start_timestamp, to_date=end_timestamp))
+print(get_pool_day_datas("0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", "ethereum", from_date=start_timestamp, to_date=end_timestamp))
 # print(hourly_price_data)
 # print(pool_by_id("0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", "ethereum"))
 # print(

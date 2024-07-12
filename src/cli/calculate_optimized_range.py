@@ -49,7 +49,7 @@ def calculate_optimized_price_range(chain, max_workers):
 
     for pair_address, pair_info in pairs_info.items():
         thread = threading.Thread(target=process_pair, args=(
-            chain_id, pair_address, pair_info, start_timestamp, end_timestamp, result_lock, result))
+            chain_id, pair_address, pair_info, start_timestamp, end_timestamp, result))
         thread.start()
         threads.append(thread)
         cnt += 1
@@ -89,13 +89,29 @@ def cal_pool(pool_address):
     # project = _dex_db.get_project('uniswap-v3', chain_id=chain_id)
     # top_pairs = project['topPairs']
 
-    end_timestamp = int(time.time())
-    start_timestamp = end_timestamp - 30 * 24 * 3600
+    # end_timestamp =
+    start_timestamp = int(time.time()) - 60 * 24 * 3600
+    end_timestamp = int(time.time()) -  30 * 24 * 3600
     pair_info = _dex_db.get_pairs_with_addresses('0x1', [pool_address])[0]
     result = []
     process_pair('0x1', pool_address, pair_info,start_timestamp, end_timestamp, result)
     _exporter.export_pairs(result)
 
 if __name__ == '__main__':
+    # cal_pool("0xCBCdF9626bC03E24f779434178A73a0B4bad62eD")
+    # cal_pool("0x517F9dD285e75b599234F7221227339478d0FcC8")
     cal_pool("0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640")
-    # cal_pool("0xe0554a476a092703abdb3ef35c80e0d76d32939f")
+    # cal_pool("0x0d4a11d5EEaaC28EC3F61d100daF4d40471f1852")
+    # cal_pool("0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc")
+    # cal_pool("0x4e68Ccd3E89f51C3074ca5072bbAC773960dFa36")
+    # cal_pool("0xc63B0708E2F7e69CB8A1df0e1389A98C35A76D52")
+    # cal_pool("0x4585FE77225b41b697C938B018E2Ac67Ac5a20c0")
+    # cal_pool("0x8ad599c3A0ff1De082011EFDDc58f1908eb6e6D8")
+    # cal_pool("0x5777d92f208679DB4b9778590Fa3CAB3aC9e2168")
+    # cal_pool("0x7A415B19932c0105c82FDB6b720bb01B0CC2CAe3")
+    # cal_pool("0x11b815efB8f581194ae79006d24E0d814B7697F6")
+'''
+
+the best apr in generation 4st: 1.1138073477089587 - 68.05022864484285
+the best range in generation 4st: [19373, 19483]
+'''

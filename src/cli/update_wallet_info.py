@@ -42,6 +42,6 @@ def dex_wallet_info_enricher(chain, batch_size, n_cpu, cpu, max_workers):
     job = UpdateWalletInfoJob(
         _db=_db, _exporter=_exporter, num_nft_flagged=num_flagged_state,
         batch_size=batch_size, n_cpu=n_cpu, cpu=cpu, max_workers=max_workers,
-        chain_id=chain_id, db_prefix=db_prefix)
+        chain_id=chain_id)
 
     job.run()

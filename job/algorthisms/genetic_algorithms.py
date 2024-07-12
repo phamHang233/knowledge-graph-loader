@@ -174,6 +174,6 @@ class GeneticAlgorithms:
 
             # Tạo quần thể mới
             population = offspring + parents
-        best_range = [convert_tick_to_price(tick*10, decimals0, decimals1) for tick in best_chromone]
+        best_range = [convert_tick_to_price(tick*10, decimals0, decimals1) for tick in reversed(best_chromone)]
         print('time toke', time.time() - start_time)
         return data, best_range

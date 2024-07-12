@@ -160,5 +160,7 @@ def convert_price_to_tick(price, decimals0, decimals1):
 def convert_tick_to_price(tick, decimals0, decimals1):
     return 1 / (1.0001 ** tick * 10 ** (decimals0 - decimals1))
 
-# print(1/convert_tick_to_price(83560, 18,18))
+print(1/convert_tick_to_price(19364, 6,18))
 # print(1/convert_tick_to_price(84010, 18,18))
+3897
+3459
